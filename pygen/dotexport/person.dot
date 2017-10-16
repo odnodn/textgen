@@ -1,0 +1,69 @@
+
+    digraph xtext {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+43548912 -> 43725432 [label="entities:0" arrowtail=diamond dir=both]
+43725432 -> 43815656 [label="properties:0" arrowtail=diamond dir=both]
+43815656 -> 42509536 [label="type" ]
+42509536[label="{string:SimpleType|}"]
+43815656[label="{name:Property|many:bool=False\lref:bool=False\l}"]
+43725432 -> 43815824 [label="properties:1" arrowtail=diamond dir=both]
+43815824 -> 42509536 [label="type" ]
+43815824[label="{notes:Property|many:bool=False\lref:bool=False\l}"]
+43725432[label="{Experiment:Entity|}"]
+43548912 -> 43770656 [label="entities:1" arrowtail=diamond dir=both]
+43770656 -> 43815936 [label="properties:0" arrowtail=diamond dir=both]
+43815936 -> 42509536 [label="type" ]
+43815936[label="{name:Property|many:bool=False\lref:bool=False\l}"]
+43770656 -> 43817336 [label="properties:1" arrowtail=diamond dir=both]
+43817336 -> 42509536 [label="type" ]
+43817336[label="{notes:Property|many:bool=False\lref:bool=False\l}"]
+43770656 -> 43815992 [label="properties:2" arrowtail=diamond dir=both]
+43815992 -> 43725432 [label="type" ]
+43815992[label="{experiment:Property|many:bool=False\lref:bool=False\l}"]
+43770656 -> 43815432 [label="properties:3" arrowtail=diamond dir=both]
+43815432 -> 43815600 [label="type" ]
+43815600 -> 46011728 [label="properties:0" arrowtail=diamond dir=both]
+46011728 -> 42509536 [label="type" ]
+46011728[label="{name:Property|many:bool=False\lref:bool=False\l}"]
+43815600[label="{Group:Entity|}"]
+43815432[label="{groups:Property|many:bool=True\lref:bool=False\l}"]
+43770656 -> 46011672 [label="properties:4" arrowtail=diamond dir=both]
+46011672 -> 46011840 [label="type" ]
+46011840 -> 46012176 [label="properties:0" arrowtail=diamond dir=both]
+46012176 -> 46012008 [label="type" ]
+46012008 -> 46012456 [label="properties:0" arrowtail=diamond dir=both]
+46012456 -> 42509536 [label="type" ]
+46012456[label="{username:Property|many:bool=False\lref:bool=False\l}"]
+46012008[label="{MyUser:Entity|}"]
+46012176[label="{user:Property|many:bool=False\lref:bool=False\l}"]
+46011840 -> 46012400 [label="properties:1" arrowtail=diamond dir=both]
+46012400 -> 42511272 [label="type" ]
+42511272[label="{bool:SimpleType|}"]
+46012400[label="{success:Property|many:bool=False\lref:bool=False\l}"]
+46011840[label="{Result:Entity|}"]
+46011672[label="{result:Property|many:bool=True\lref:bool=False\l}"]
+43770656[label="{ExperimentRun:Entity|}"]
+43548912 -> 43815600 [label="entities:2" arrowtail=diamond dir=both]
+43548912 -> 43815880 [label="entities:3" arrowtail=diamond dir=both]
+43815880 -> 46011952 [label="properties:0" arrowtail=diamond dir=both]
+46011952 -> 43815600 [label="type" ]
+46011952[label="{group:Property|many:bool=False\lref:bool=False\l}"]
+43815880 -> 46012120 [label="properties:1" arrowtail=diamond dir=both]
+46012120 -> 46012008 [label="type" ]
+46012120[label="{user:Property|many:bool=False\lref:bool=False\l}"]
+43815880[label="{UserGroup:Entity|}"]
+43548912 -> 46011840 [label="entities:4" arrowtail=diamond dir=both]
+43548912 -> 46012008 [label="entities:5" arrowtail=diamond dir=both]
+43548912[label="{:EntityModel|types:list=[]\l}"]
+
+}

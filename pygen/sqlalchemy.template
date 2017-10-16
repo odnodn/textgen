@@ -1,0 +1,22 @@
+{% for entity in model.entities  %}
+
+class {{entity.name}}(db.Model):
+    __tablename__ = '{{entity.name}}'
+    id = db.Column(db.Integer, primary_key=True)
+    {% for property in entity.properties %}
+    {% if genUtils.isSimple(property) %}
+    {{property.name}} = db.Column(db.{{property.type|altype}}, nullable=False)
+    {% endif %}
+    {% if not genUtils.isSimple(property) and not property.many %}
+    {{property.name}}_id = Column(Integer, ForeignKey('{{property.type.name}}.id'))
+    {% endif %}
+    {% endfor %}
+
+    {% for property in entity.properties  %}
+     {% if not genUtils.isSimple(property) %}
+    {{property.name}} = db.relationship('{{genUtils.toFirstLower(property.type.name)}}', back_populates='{{property.parent.name}}', lazy='dynamic')
+     {% endif %}
+    {% endfor %}
+
+{% endfor %}
+

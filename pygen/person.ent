@@ -1,0 +1,30 @@
+entity Experiment {
+    name : string       // A comment is everyting after // to the end of line
+    notes : string
+}
+
+entity ExperimentRun {
+    name : string
+    notes : string
+    experiment : Experiment
+    groups: Group many
+    result : Result many
+}
+
+entity Group {
+    name: string
+}
+
+entity UserGroup {
+        group: Group
+        user : MyUser
+}
+
+entity Result {
+    user : MyUser
+    success: bool
+}
+
+entity MyUser {
+    username: string
+}
