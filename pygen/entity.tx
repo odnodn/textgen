@@ -5,6 +5,7 @@
 EntityModel:
     types*=SimpleType       // At the beginning of model we can define
                             // zero or more simple types.
+    enums+=Enum
     entities+=Entity        // Each model has one or more entities.
 ;
 
@@ -14,18 +15,31 @@ Entity:
     '}'
 ;
 
+defValue:  STRING|INT;
+
+Validator:
+	name='min' ':' value=INT|name='max' ':' value=INT|name='opt'|name='pattern' ':' svalue=STRING ;
+
 Property:
-    name=ID ':' type=[Type]   (many?='many')?  (ref?='ref')
+    name=ID ':' type=[Type] ('='defaultVal=defValue)?   (opt?='opt')? (many?='many')?  (ref?='ref')?  (unique?='unique')?  (bi?='bi')?  (valdiators+=Validator)*
 ;
 
 // Type can be SimpleType or Entity
 Type:
-    SimpleType | Entity
+    SimpleType | Entity | Enum
 ;
 
 SimpleType:
     'type' name=ID
 ;
+
+EnumLiteral: name=ID ;
+
+Enum: 'enum' name=ID '{'
+        literals+=EnumLiteral  // Each entity has one or more properties.
+    '}'
+;
+
 
 // Special rule for comments. Comments start with //
 Comment:

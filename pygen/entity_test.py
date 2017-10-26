@@ -24,6 +24,7 @@ class SimpleType(object):
 
 
 def get_entity_mm(debug=False):
+
     """
     Builds and returns a meta-model for Entity language.
     """
@@ -31,7 +32,7 @@ def get_entity_mm(debug=False):
     # Each model will have this simple types during reference resolving but
     # these will not be a part of `types` list of EntityModel.
     type_builtins = {
-            'integer': SimpleType(None, 'integer'),
+            'int': SimpleType(None, 'int'),
             'string': SimpleType(None, 'string'),
             'bool': SimpleType(None, 'bool'),
             'date': SimpleType(None, 'date'),
@@ -41,6 +42,8 @@ def get_entity_mm(debug=False):
                                     classes=[SimpleType],
                                     builtins=type_builtins,
                                     debug=debug)
+
+
 
     return entity_mm
 
@@ -55,8 +58,8 @@ def main(debug=False):
         os.mkdir(dot_folder)
     metamodel_export(entity_mm, join(dot_folder, 'entity_meta.dot'))
 
-    # Build Person model from person.ent file
-    person_model = entity_mm.model_from_file(join(this_folder, 'person.ent'))
+    # Build Person model from experiments.ent file
+    person_model = entity_mm.model_from_file(join(this_folder, 'ecomm.ent'))
 
     # Export to .dot file for visualization
     model_export(person_model, join(dot_folder, 'person.dot'))

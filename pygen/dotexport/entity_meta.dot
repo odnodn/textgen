@@ -11,46 +11,46 @@
     edge[dir=black,arrowtail=empty]
 
 
-39151432 -> 39142936[arrowtail=diamond, dir=both, headlabel="types 0..*"]
-39151432 -> 39152376[arrowtail=diamond, dir=both, headlabel="entities 1..*"]
-39151432[ label="{EntityModel|}"]
+41386296 -> 41374648[arrowtail=diamond, dir=both, headlabel="types 0..*"]
+41386296 -> 41387240[arrowtail=diamond, dir=both, headlabel="entities 1..*"]
+41386296[ label="{EntityModel|}"]
 
-39152376 -> 39358200[arrowtail=diamond, dir=both, headlabel="properties 1..*"]
-39152376[ label="{Entity|+name:ID\l}"]
+41387240 -> 41388184[arrowtail=diamond, dir=both, headlabel="properties 1..*"]
+41387240[ label="{Entity|+name:ID\l}"]
 
-39358200 -> 39359144[headlabel="type "]
-39358200[ label="{Property|+name:ID\lmany:BOOL\lref:BOOL\l}"]
+41388184 -> 41389128[headlabel="type "]
+41388184[ label="{Property|+name:ID\lmany:BOOL\lref:BOOL\lunique:BOOL\lbi:BOOL\l}"]
 
-39359144[ label="{*Type|}"]
-39359144 -> 39142936 [dir=back]
-39359144 -> 39152376 [dir=back]
+41389128[ label="{*Type|}"]
+41389128 -> 41374648 [dir=back]
+41389128 -> 41387240 [dir=back]
 
-39142936[ label="{SimpleType|+name:ID\l}"]
+41374648[ label="{SimpleType|+name:ID\l}"]
 
-39360088[ label="{Comment|\\/\\/.*$}"]
+41390072[ label="{Comment|\\/\\/.*$}"]
 
-39143880[ label="{ID|}"]
+41375592[ label="{ID|}"]
 
-39144824[ label="{STRING|}"]
+41376536[ label="{STRING|}"]
 
-39145768[ label="{BOOL|}"]
+41377480[ label="{BOOL|}"]
 
-39146712[ label="{INT|}"]
+41378424[ label="{INT|}"]
 
-39147656[ label="{FLOAT|}"]
+41382520[ label="{FLOAT|}"]
 
-39148600[ label="{NUMBER|}"]
-39148600 -> 39147656 [dir=back]
-39148600 -> 39146712 [dir=back]
+41383464[ label="{NUMBER|}"]
+41383464 -> 41382520 [dir=back]
+41383464 -> 41378424 [dir=back]
 
-39149544[ label="{BASETYPE|}"]
-39149544 -> 39148600 [dir=back]
-39149544 -> 39145768 [dir=back]
-39149544 -> 39143880 [dir=back]
-39149544 -> 39144824 [dir=back]
+41384408[ label="{BASETYPE|}"]
+41384408 -> 41383464 [dir=back]
+41384408 -> 41377480 [dir=back]
+41384408 -> 41375592 [dir=back]
+41384408 -> 41376536 [dir=back]
 
-39150488[ label="{*OBJECT|}"]
-39150488 -> 39149544 [dir=back]
+41385352[ label="{*OBJECT|}"]
+41385352 -> 41384408 [dir=back]
 
 
 }

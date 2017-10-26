@@ -1,0 +1,9 @@
+entity  User{
+    fname: string
+    addresses : Address many bi
+}
+
+entity Address {
+    email : string
+    user  : User
+}

@@ -1,0 +1,26 @@
+import sqlalchemy
+
+from pygen.srcgen import common
+from pygen.srcgen.models import *
+from pygen.srcgen import factories
+
+
+def runTests():
+    engine = sqlalchemy.create_engine('sqlite:///:memory:', echo=True)
+    # It's a scoped_session, and now is the time to configure it.
+    common.Session.configure(bind=engine)
+    Model.metadata.create_all(engine)
+
+
+{% for entity in model.entities  %}
+
+def test{{entity.name}}():
+    u = factories.{{entity.name}}Factory()
+    assert([u] == common.Session.query({{entity.name}}).all())
+{% endfor %}
+
+runTests()
+{% for entity in model.entities  %}
+test{{entity.name}}()
+{% endfor %}
+

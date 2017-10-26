@@ -1,0 +1,38 @@
+
+enum Status{
+     RCVD
+    ORDRD
+DLVRD
+        }
+
+entity Customer{
+    firstName: string
+    lastName: string
+    orders : CustOrder  many
+    email : string unique
+}
+
+entity Product {
+    name :  string unique
+    price: currency
+}
+
+entity Category {
+    name: string  max:15
+}
+
+entity  CustOrder{
+    notes: text opt
+    customer: Customer
+    items : Item many bi
+    dateDelivered: date
+    isValid: bool
+    status:Status
+}
+
+
+entity Item {
+    product : Product
+    qty : int =1 opt  max:10
+    custOrder: CustOrder
+}
