@@ -1,16 +1,28 @@
+import typing
 class GenUtils:
 
     def __init__(self):
         self.myvar = 'sample_var'
 
+    def displayName(self, entity):
+        for p in entity.properties:
+            if self.isPropOfType(p, 'string'):
+                return p
+        return entity.properties[0]
+
+    def isPropOfType(self, property, name):
+        return type(property.type).__name__ == name
+
+    def isPropInTypes(self, property, names):
+        return type(property.type).__name__ in names
+
     def isSimple (self, property):
-        name = type(property.type).__name__
-        return name == 'SimpleType' or name == 'Enum'
+        return self.isPropInTypes( property, ['SimpleType','Enum'] )
 
     def isEnum (self, property):
         return type(property.type).__name__ == 'Enum'
 
-    def prefix(self): return 'db.'
+    def prefix(self): return ''
 
 
     def toFirstLower(self, name):

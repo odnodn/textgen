@@ -34,7 +34,7 @@ class {{entity.name}}({{genUtils.prefix()}}Model):
     {% endif %}{% endfor %}
 
     def __repr__(self):
-        return '<{{entity.name}} %r>' % self.username
+        return '<{{entity.name}} %r>' % self.{{ genUtils.displayName(entity).name }}
 
 {% endfor %}
 
