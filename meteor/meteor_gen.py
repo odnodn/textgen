@@ -8,13 +8,16 @@ from os.path import exists, dirname, join
 import jinja2
 import copy
 #from textx.metamodel import Property
-from GenUtils import GenUtils
+from commons.GenUtils import GenUtils
 
 from textx.metamodel import metamodel_from_file
 
 
 this_folder = dirname(__file__)
+
 modelFile = '../model/ecomm.ent'
+metaModel = '../metamodel/entity.tx'
+ex = 'js'
 
 
 class SimpleType(object):
@@ -49,7 +52,7 @@ def get_entity_mm(debug=False):
         'dateTime': SimpleType(None, 'dateTime'),
         'currency': SimpleType(None, 'currency')
     }
-    entity_mm = metamodel_from_file(join(this_folder, '../metamodel/entity.tx'),
+    entity_mm = metamodel_from_file(join(this_folder, metaModel),
                                     classes=[SimpleType],
                                     builtins=type_builtins,
                                     debug=debug)
@@ -137,7 +140,7 @@ def writeFile(this_folder, srcgen_folder, person_model, templates):
         template = jinja_env.get_template('templates/' + t + '.jinja2')
 
         with open(join(srcgen_folder,
-                       "%s.py" % t), 'w') as f:
+                       "%s.%s" % (t, ex)), 'w') as f:
             f.write(template.render(model=person_model, genUtils = GenUtils() ))
 
 
