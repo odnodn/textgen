@@ -4,6 +4,16 @@ class GenUtils:
     def __init__(self):
         self.myvar = 'sample_var'
 
+    def typeSelect(self, parent, name):
+        return [e for e in parent.elements if type(e).__name__ == name]
+
+    def getEnums(self, parent):
+        return self.typeSelect(parent, 'Enum')
+
+    def getEntities(self, parent):
+        return self.typeSelect(parent, 'Entity')
+
+
     def displayName(self, entity):
         for p in entity.properties:
             if self.isPropOfType(p, 'string'):

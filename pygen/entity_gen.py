@@ -8,13 +8,17 @@ from os.path import exists, dirname, join
 import jinja2
 import copy
 #from textx.metamodel import Property
-from GenUtils import GenUtils
+from commons.GenUtils import GenUtils
 
 from textx.metamodel import metamodel_from_file
 
 
 this_folder = dirname(__file__)
+
 modelFile = '../model/ecomm.ent'
+metaModel = '../metamodel/entity.tx'
+ex = 'py'
+utils = GenUtils()
 
 
 class SimpleType(object):
@@ -49,7 +53,7 @@ def get_entity_mm(debug=False):
         'dateTime': SimpleType(None, 'dateTime'),
         'currency': SimpleType(None, 'currency')
     }
-    entity_mm = metamodel_from_file(join(this_folder, '../metamodel/entity.tx'),
+    entity_mm = metamodel_from_file(join(this_folder, metaModel),
                                     classes=[SimpleType],
                                     builtins=type_builtins,
                                     debug=debug)
@@ -68,62 +72,63 @@ def main(debug=False):
     entity_mm = get_entity_mm(debug)
 
     # Build Person model from experiments.ent file
-    person_model = entity_mm.model_from_file(join(this_folder, modelFile))
+    model = entity_mm.model_from_file(join(this_folder, modelFile))
 
-    # for entity in person_model.entities:
-    #     for prop in entity.properties:
-    #         if prop.defVal:
-    #             print (prop.defVal)
+    for pck in model.elements:
+        for entity in  utils.typeSelect(pck, 'Entity'):
+            print (type(entity).__name__)
+            for p in entity.properties:
+                pass
 
-
-    for entity in person_model.entities:
-             for encmp in [encmp for encmp in person_model.entities if encmp is not entity]:
+    for pck in model.elements:
+        for entity in  utils.typeSelect(pck, 'Entity'):
+            for encmp in [encmp for encmp in utils.typeSelect(pck, 'Entity') if encmp is not entity]:
                 for propcmp in encmp.properties:
                     if propcmp.type == entity:
                         print ("found " + propcmp.name + " -> " + encmp.name + " " + entity.name)
-                        # x = EntityModel()
-                        # x.parent = entity
-                        # x.type = encmp
-                        # entity.properties.append(x)
-                        #
-                        # x.type  =
-                        # entity.properties.append(x)
+                    # x = EntityModel()
+                    # x.parent = entity
+                    # x.type = encmp
+                    # entity.properties.append(x)
+                    #
+                    # x.type  =
+                    # entity.properties.append(x)
 
     # Create output folder
     srcgen_folder = join(this_folder, 'srcgen')
     if not exists(srcgen_folder):
         mkdir(srcgen_folder)
 
-    writeFile(this_folder, srcgen_folder, person_model, ['models','factories', 'model_tests'])
+    writeFile(this_folder, srcgen_folder, model, ['models','factories', 'model_tests'])
 
 
 def alchemyTypes(s):
-        """
-        Maps type names from PrimitiveType to Java.
-        """
-        #print (s.name )
-        # if(s.name  is not 'SimpleType'):
-        #     print (s.type.name
-        #
-        # if s.type and s.type.name == 'enum' :
-        #     return 'Enum(' + s.type.name + ')'
+    """
+    Maps type names from PrimitiveType to Java.
+    """
+    #print (s.name )
+    # if(s.name  is not 'SimpleType'):
+    #     print (s.type.name
+    #
+    # if s.type and s.type.name == 'enum' :
+    #     return 'Enum(' + s.type.name + ')'
 
-        types =  {
-            'integer': 'Integer',
-            'int' : 'Integer',
-            'string': 'String',
-            'date' : 'Date',
-            'bool' : 'Boolean',
-            'text' : 'Text',
-            'currency': 'Numeric'
-        }
+    types =  {
+        'integer': 'Integer',
+        'int' : 'Integer',
+        'string': 'String',
+        'date' : 'Date',
+        'bool' : 'Boolean',
+        'text' : 'Text',
+        'currency': 'Numeric'
+    }
 
-        if(type(s).__name__ == 'Enum'): #its an enum
-            return 'Enum(' + s.name + ')'
+    if(type(s).__name__ == 'Enum'): #its an enum
+        return 'Enum(' + s.name + ')'
 
-        return types.get(s.name, s.name)
+    return types.get(s.name, s.name)
 
-def writeFile(this_folder, srcgen_folder, person_model, templates):
+def writeFile(this_folder, srcgen_folder, model, templates):
     # Initialize template engine.
     jinja_env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(this_folder),
@@ -135,10 +140,10 @@ def writeFile(this_folder, srcgen_folder, person_model, templates):
 
     for t in templates:
         template = jinja_env.get_template('templates/' + t + '.jinja2')
-
-        with open(join(srcgen_folder,
-                       "%s.py" % t), 'w') as f:
-            f.write(template.render(model=person_model, genUtils = GenUtils() ))
+        for pck in model.elements:
+            with open(join(srcgen_folder,
+                           "%s.%s" % (t, ex)), 'w') as f:
+                f.write(template.render(model=pck, genUtils=utils ))
 
 
 

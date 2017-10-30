@@ -12,7 +12,7 @@ def runTests():
     Model.metadata.create_all(engine)
 
 
-{% for entity in model.entities  %}
+{% for entity in genUtils.getEntities(model)  %}
 
 def test{{entity.name}}():
     u = factories.{{entity.name}}Factory()

@@ -8,7 +8,7 @@ from . import models
 from faker import Faker
 faker = Faker()
 
-{% for entity in model.entities  %}
+{% for entity in genUtils.getEntities(model)  %}
 
 class {{entity.name}}Factory (factory.alchemy.SQLAlchemyModelFactory):
     class Meta:

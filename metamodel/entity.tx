@@ -1,10 +1,27 @@
-/*
-  Entity DSL grammar.
-*/
+
 
 EntityModel:
+    (elements+=PackageDeclaration)*;
+
+AbstractElement:
+    PackageDeclaration | Type | Import;
+
+PackageDeclaration:
+    'package' name=QualifiedName '{'
+        (elements+=AbstractElement)*
+    '}';
+
+Import:
+    'import' importedNamespace=QualifiedNameWithWildcard;
+
+QualifiedNameWithWildcard:
+    QualifiedName '.*'?;
+
+QualifiedName:
+    ID ('.' ID)*;
+
+EntityModelOld:
     types*=SimpleType       // At the beginning of model we can define
-                            // zero or more simple types.
     enums+=Enum
     entities+=Entity        // Each model has one or more entities.
 ;

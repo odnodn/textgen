@@ -1,4 +1,4 @@
-
+package comm {
 enum Status{
      RCVD
     ORDRD
@@ -36,3 +36,5 @@ entity Item {
     qty : int =1 opt  max:10
     custOrder: CustOrder
 }
+
+}//end of package comm
