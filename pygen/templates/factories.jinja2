@@ -8,6 +8,28 @@ from . import models
 from faker import Faker
 faker = Faker()
 
+{% macro genProps(entity) %}
+    {% for prop in genUtils.allProps(entity) if genUtils.isSimple(prop) -%}
+        {%  if prop.type.name == 'string' -%}
+            {{prop.name}} = factory.Sequence(lambda n: "{{entity.name}}-{{prop.name}} %d" % n)
+        {%  elif prop.type.name == 'int' or  prop.type.name == 'currency' -%}
+            {{prop.name}} = factory.Sequence(lambda n:  n)
+        {%  elif prop.type.name == 'text' -%}
+            {{prop.name}} = faker.sentence()
+        {%  elif prop.type.name == 'date' -%}
+            {{prop.name}} = factory.LazyFunction(datetime.now)
+        {%  elif prop.type.name == 'bool' -%}
+            {{prop.name}} = True # always true for now
+        {%  elif genUtils.isEnum(prop) -%}
+            {{prop.name}} = models.{{prop.type.name}}.{{prop.type.literals[0].name}}
+        {% endif %}
+
+        {% if not genUtils.isSimple(prop) and not prop.many -%}
+            {{prop.name}} = factory.SubFactory({{prop.type.name}}Factory)
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
 {% for entity in genUtils.getEntities(model)  %}
 
 class {{entity.name}}Factory (factory.alchemy.SQLAlchemyModelFactory):
@@ -15,28 +37,7 @@ class {{entity.name}}Factory (factory.alchemy.SQLAlchemyModelFactory):
         model = models.{{entity.name}}
         sqlalchemy_session = common.Session
 
-    {% for prop in entity.properties %}
-    {% if genUtils.isSimple(prop) %}
-    {%  if prop.type.name == 'string' %}
-    {{prop.name}} = factory.Sequence(lambda n: "{{entity.name}}-{{prop.name}} %d" % n)
-    {%  elif prop.type.name == 'int' or  prop.type.name == 'currency' %}
-    {{prop.name}} = factory.Sequence(lambda n:  n)
-    {%  elif prop.type.name == 'text' %}
-    {{prop.name}} = faker.sentence()
-    {%  elif prop.type.name == 'date' %}
-    {{prop.name}} = factory.LazyFunction(datetime.now)
-    {%  elif prop.type.name == 'bool' %}
-    {{prop.name}} = True # always true for now
-    {%  elif genUtils.isEnum(prop) %}
-    {{prop.name}} = models.{{prop.type.name}}.{{prop.type.literals[0].name}}
-    {% endif %}
-    {% endif %}
-
-
-    {% if not genUtils.isSimple(prop) and not prop.many %}
-    {{prop.name}} = factory.SubFactory({{prop.type.name}}Factory)
-    {% endif %}
-    {% endfor %}
+    {{   genProps(entity) | indent }}
 
 {% endfor %}
 

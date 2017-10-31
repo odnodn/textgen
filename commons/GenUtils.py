@@ -16,6 +16,17 @@ class GenUtils:
     def getAbstractEntities(self, parent):
         return [e for e in self.typeSelect(parent, 'Entity') if e.abs == True ]
 
+    def allProps(self, e):
+        ps = []
+        def recProps(e, ps):
+            if(e.superType):
+                 ps += e.superType.properties
+                 return recProps(e.superType, ps)
+            else:
+                return ps
+        ps =  recProps(e, ps)
+        return ps + e.properties
+
 
     def displayName(self, entity):
         for p in entity.properties:
