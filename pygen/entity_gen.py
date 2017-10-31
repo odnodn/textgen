@@ -132,6 +132,9 @@ def alchemyTypes(s):
 
     return types.get(s.name, s.name)
 
+def optFilter(prop):
+    return True if prop.opt else False
+
 def writeFile(this_folder, srcgen_folder, model, templates):
     # Initialize template engine.
     jinja_env = jinja2.Environment(
@@ -141,6 +144,8 @@ def writeFile(this_folder, srcgen_folder, model, templates):
 
     # Register filter for mapping Entity type names to Java type names.
     jinja_env.filters['altype'] = alchemyTypes
+    jinja_env.filters['opt'] = optFilter
+
 
     for t in templates:
         template = jinja_env.get_template('templates/' + t + '.jinja2' )

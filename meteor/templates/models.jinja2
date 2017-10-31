@@ -1,37 +1,51 @@
+//models
+{% macro genSimpleProp(prop) %}
+    {{prop.name}}: {
+        type: {{prop.type|altype}},
+        label: "{{prop.name}}",
+        optional:{%- if prop.opt -%}true {% else %}false{% endif %},
+        {% if prop.defaultVal %}default:{{ prop.defaultVal}},{% endif %}
+    },
+{%  endmacro %}
 
-{#
-{% for enum in model.enums  %}
-class {{ enum.name}}(enum.Enum):
-   {% for literal in enum.literals  %}
-    {{literal.name}} = '{{literal.name|capitalize}}'
-   {%  endfor %}
-{%  endfor %}
-#}
 
-{%- for entity in model.entities  -%}{{entity.name}}Schema = new SimpleSchema([BaseSchema, {
-
-    {% for prop in entity.properties %}
-    {% if genUtils.isSimple(prop) %}
-        {{prop.name}}: {
-            type: {{prop.type|altype}},
-            label: "{{prop.name}}",
-            optional:{%- if prop.opt -%}true {% else %}false{% endif %},
-            {% if prop.defaultVal %}default:{{ prop.defaultVal}},{% endif %}
-        },
-    {% endif %}
-
-    {% if not genUtils.isSimple(prop) and not prop.many %}
+{% macro modelBody(entity) -%}
+    {% for prop in entity.properties  if genUtils.isSimple(prop) -%}
+        {{  genSimpleProp(prop) |indent }}
+    {% endfor %}
+    {# fk #}
+    {% for prop in entity.properties  if not genUtils.isSimple(prop) and not prop.many -%}
         {{prop.name}}_id = {{genUtils.prefix()}}Column({{genUtils.prefix()}}Integer, {{genUtils.prefix()}}ForeignKey('{{prop.type.name}}.id'))
-    {% endif %}
     {% endfor %}
 
-    {# Relationships
-    {% for prop in entity.properties  %}{% if not genUtils.isSimple(prop) %}
-         {% set backref = genUtils.findBackRef( prop) %}
-    {{prop.name}} = {{genUtils.prefix()}}relationship('{{prop.type.name}}', {%- if prop.bi -%} back_populates='{{backref.name}}',{% endif %} )
-    {% endif %}{% endfor %}
-    #}
+    {# Relationships #}
+{#    {% for prop in entity.properties if not genUtils.isSimple(prop)  -%}#}
+{#        {% set backref = genUtils.findBackRef( prop) -%}#}
+{#        {{prop.name}} = {{genUtils.prefix()}}relationship('{{prop.type.name}}', {%- if prop.bi -%} back_populates='{{backref.name}}',{% endif %} )#}
+{#    {% endfor %}#}
 
-    }])
+{%- endmacro %}
+
+
+{#{% for enum in genUtils.getEnums(model)  %}#}
+{#    class {{ enum.name}}(enum.Enum):#}
+{#    {% for literal in enum.literals  %}#}
+{#        {{literal.name}} = '{{literal.name|capitalize}}'#}
+{#    {%  endfor %}#}
+{#{%  endfor %}#}
+
+
+
+{% for entity in genUtils.getAbstractEntities(model)  %} {{entity.name}}Schema = new SimpleSchema([{{ entity | parent }}, {
+    {{  modelBody(entity) |indent }}
+}])
+{%  endfor %}
+
+{% for entity in genUtils.getEntities(model)  %} {{entity.name}}Schema = new SimpleSchema([{{ entity | parent }}, {
+
+    {{  modelBody(entity) |indent }}
+}])
 {% endfor %}
+
+
 
