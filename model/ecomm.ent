@@ -1,13 +1,17 @@
 package comm {
+
 enum Status{
      RCVD
     ORDRD
-DLVRD
-        }
+    DLVRD
+}
 
-entity Customer{
+abs entity Person {
     firstName: string
     lastName: string
+}
+
+entity Customer extends Person{
     orders : CustOrder  many
     email : string unique
 }

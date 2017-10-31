@@ -14,12 +14,6 @@ class CustomerFactory (factory.alchemy.SQLAlchemyModelFactory):
         model = models.Customer
         sqlalchemy_session = common.Session
 
-    firstName = factory.Sequence(lambda n: "Customer-firstName %d" % n)
-
-
-    lastName = factory.Sequence(lambda n: "Customer-lastName %d" % n)
-
-
 
 
     email = factory.Sequence(lambda n: "Customer-email %d" % n)

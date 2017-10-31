@@ -34,3 +34,8 @@ def testItem():
     assert([u] == common.Session.query(Item).all())
 
 runTests()
+testCustomer()
+testProduct()
+testCategory()
+testCustOrder()
+testItem()

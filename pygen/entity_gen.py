@@ -75,6 +75,10 @@ def main(debug=False):
     model = entity_mm.model_from_file(join(this_folder, modelFile))
 
     for pck in model.elements:
+        for entity in  pck.elements:
+            print (type(entity).__name__)
+
+    for pck in model.elements:
         for entity in  utils.typeSelect(pck, 'Entity'):
             print (type(entity).__name__)
             for p in entity.properties:
@@ -132,14 +136,14 @@ def writeFile(this_folder, srcgen_folder, model, templates):
     # Initialize template engine.
     jinja_env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(this_folder),
-        trim_blocks=True,
-        lstrip_blocks=True)
+        trim_blocks=True, #strip lines
+        lstrip_blocks=True)  #strip whitespace
 
     # Register filter for mapping Entity type names to Java type names.
     jinja_env.filters['altype'] = alchemyTypes
 
     for t in templates:
-        template = jinja_env.get_template('templates/' + t + '.jinja2')
+        template = jinja_env.get_template('templates/' + t + '.jinja2' )
         for pck in model.elements:
             with open(join(srcgen_folder,
                            "%s.%s" % (t, ex)), 'w') as f:

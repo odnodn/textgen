@@ -11,7 +11,10 @@ class GenUtils:
         return self.typeSelect(parent, 'Enum')
 
     def getEntities(self, parent):
-        return self.typeSelect(parent, 'Entity')
+        return [e for e in self.typeSelect(parent, 'Entity') if e.abs == False ]
+
+    def getAbstractEntities(self, parent):
+        return [e for e in self.typeSelect(parent, 'Entity') if e.abs == True ]
 
 
     def displayName(self, entity):

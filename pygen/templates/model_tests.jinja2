@@ -20,7 +20,7 @@ def test{{entity.name}}():
 {% endfor %}
 
 runTests()
-{% for entity in model.entities  %}
+{% for entity in genUtils.getEntities(model)  %}
 test{{entity.name}}()
 {% endfor %}
 
