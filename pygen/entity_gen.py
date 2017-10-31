@@ -145,11 +145,15 @@ def writeFile(this_folder, srcgen_folder, model, templates):
     for t in templates:
         template = jinja_env.get_template('templates/' + t + '.jinja2' )
         for pck in model.elements:
-            with open(join(srcgen_folder,
+            dir = join(srcgen_folder, pck.name)
+            md(dir)
+            with open(join(dir,
                            "%s.%s" % (t, ex)), 'w') as f:
                 f.write(template.render(model=pck, genUtils=utils ))
 
-
+def md(directory):
+    if not exists(directory):
+        mkdir(directory)
 
 if __name__ == "__main__":
     main()

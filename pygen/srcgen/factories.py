@@ -1,11 +1,11 @@
 import factory
 import factory.alchemy
 from datetime import datetime
+from faker import Faker
 
-from pygen.srcgen import common
+from pygen.srcgen.comm import common
 from . import models
 
-from faker import Faker
 faker = Faker()
 
 
