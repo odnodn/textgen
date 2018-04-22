@@ -1,0 +1,16 @@
+
+
+import {Injectable} from '@angular/core';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import {environment} from '../../environments/environment';
+import {Observable} from 'rxjs';
+import { {{name}} } from './{{lname}}';
+import { BaseService } from '../base/base.service';
+
+@Injectable()
+export class {{name}}Service extends BaseService<{{name}}>{
+
+  constructor(protected _http: Http ) {
+    super(_http, '{{lname}}s')
+  }
+}

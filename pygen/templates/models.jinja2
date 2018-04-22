@@ -5,36 +5,47 @@ import enum
 
 Model = declarative_base()
 
-{% for enum in genUtils.getEnums(model)  %}
-class {{ enum.name}}(enum.Enum):
-   {% for literal in enum.literals  %}
-    {{literal.name}} = '{{literal.name|capitalize}}'
-   {%  endfor %}
-{%  endfor %}
-
-
-{% for entity in genUtils.getEntities(model)  %}
-
-class {{entity.name}}({{genUtils.prefix()}}Model):
-    __tablename__ = '{{entity.name}}'
-    id = {{genUtils.prefix()}}Column({{genUtils.prefix()}}Integer, primary_key=True)
-    {% for prop in entity.properties %}
-    {% if genUtils.isSimple(prop) %}
-    {{prop.name}} = {{genUtils.prefix()}}Column({{genUtils.prefix()}}{{prop.type|altype}}, nullable= {%- if prop.opt -%}True {% else %}False {% endif %},  {%- if prop.defaultVal -%}default={{ prop.defaultVal}}{% endif %})
+class test:
+{% set x = '    ' %}
+{% for i in ['1','2','3','4'] -%}
+    {% if True -%}
+        {{ x }}{{ i }}
     {% endif %}
-    {% if not genUtils.isSimple(prop) and not prop.many %}
-    {{prop.name}}_id = {{genUtils.prefix()}}Column({{genUtils.prefix()}}Integer, {{genUtils.prefix()}}ForeignKey('{{prop.type.name}}.id'))
-    {% endif %}
+{% endfor %}
+
+{% for enum in genUtils.getEnums(model) -%}
+    class {{ enum.name }}(enum.Enum):
+    {% for literal in enum.literals -%}
+        {{ x }} {{ literal.name }} = '{{ literal.name|capitalize }}'
     {% endfor %}
+{% endfor %}
+
+
+{% for entity in genUtils.getEntities(model) -%}
+    class {{ entity.name }}({{ genUtils.prefix() }}Model):
+        __tablename__ = '{{ entity.name -}}'
+        id = {{ genUtils.prefix() }}Column({{ genUtils.prefix() -}}Integer, primary_key=True)
+        {% for prop in entity.properties -%}
+            {% if genUtils.isSimple(prop) -%}
+                {{ x }}{{ prop.name }} = {{ genUtils.prefix() }}Column({{ genUtils.prefix() }}{{ prop.type|altype }}, nullable=
+                {%- if prop.opt -%}True {% else %}False {% endif %},  {%- if prop.defaultVal -%}default=
+                {{ prop.defaultVal }}{% endif %})
+            {% endif %}
+            {% if not genUtils.isSimple(prop) and not prop.many %}
+                {{ prop.name }}_id = {{ genUtils.prefix() }}Column({{ genUtils.prefix() }}Integer, {{ genUtils.prefix() }}
+                ForeignKey('{{ prop.type.name }}.id'))
+            {% endif %}
+        {% endfor %}
 
     {# Relationships #}
-    {% for prop in entity.properties  %}{% if not genUtils.isSimple(prop) %}
-         {% set backref = genUtils.findBackRef( prop) %}
-    {{prop.name}} = {{genUtils.prefix()}}relationship('{{prop.type.name}}', {%- if prop.bi -%} back_populates='{{backref.name}}',{% endif %} )
+    {% for prop in entity.properties %}{% if not genUtils.isSimple(prop) %}
+        {% set backref = genUtils.findBackRef( prop) %}
+        {{ prop.name }} = {{ genUtils.prefix() }}relationship('{{ prop.type.name }}', {%- if prop.bi -%}
+            back_populates='{{ backref.name }}',{% endif %} )
     {% endif %}{% endfor %}
 
     def __repr__(self):
-        return '<{{entity.name}} %r>' % self.{{ genUtils.displayName(entity).name }}
+    return '<{{ entity.name }} %r>' % self.{{ genUtils.displayName(entity).name }}
 
 {% endfor %}
 

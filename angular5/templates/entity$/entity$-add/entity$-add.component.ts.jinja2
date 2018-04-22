@@ -1,0 +1,23 @@
+
+
+
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { {{name}}} from "../{{lname}}";
+import { {{name}}Service} from "../{{lname}}.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import { BaseAdd } from '../../base/base-add';
+
+
+@Component({
+selector: 'app-{{lname}}-add',
+templateUrl: './{{lname}}-add.component.html',
+styleUrls: ['./{{lname}}-add.component.css']
+})
+export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
+    {{lname}}: {{name}};
+    errorMessage: string;
+
+    constructor(protected {{lname}}Service: {{name}}Service, protected router: Router,) {
+        super({{lname}}Service, router, '{{lname}}s')
+    }
+}
