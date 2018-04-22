@@ -1,8 +1,8 @@
 import sqlalchemy
 
-from pygen.srcgen import common
-from pygen.srcgen.models import *
 from pygen.srcgen import factories
+from pygen.srcgen.comm import common
+from pygen.srcgen.models import *
 
 
 def runTests():
@@ -34,3 +34,8 @@ def testItem():
     assert([u] == common.Session.query(Item).all())
 
 runTests()
+testCustomer()
+testProduct()
+testCategory()
+testCustOrder()
+testItem()

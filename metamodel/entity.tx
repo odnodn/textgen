@@ -26,11 +26,19 @@ EntityModelOld:
     entities+=Entity        // Each model has one or more entities.
 ;
 
-Entity:
-    'entity' name=ID '{'
+cls:
+       ('extends' superType=[Entity|QualifiedName])? '{'
         properties+=Property // Each entity has one or more properties.
     '}'
 ;
+
+Entity:  (abs?='abs')? 'entity' name=ID ('extends' superType=[Entity|QualifiedName])? '{'
+                                 properties+=Property // Each entity has one or more properties.
+                             '}';
+
+AbsEntity : 'abs_entity' name=ID ('extends' superType=[Entity|QualifiedName])? '{'
+                                         properties+=Property // Each entity has one or more properties.
+                                     '}';
 
 defValue:  STRING|INT;
 
@@ -43,7 +51,7 @@ Property:
 
 // Type can be SimpleType or Entity
 Type:
-    SimpleType | Entity | Enum
+    SimpleType | Entity  | Enum
 ;
 
 SimpleType:

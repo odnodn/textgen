@@ -1,12 +1,13 @@
 import factory
 import factory.alchemy
 from datetime import datetime
+from faker import Faker
 
-from pygen.srcgen import common
+from pygen.srcgen.comm import common
 from . import models
 
-from faker import Faker
 faker = Faker()
+
 
 
 class CustomerFactory (factory.alchemy.SQLAlchemyModelFactory):
@@ -15,16 +16,11 @@ class CustomerFactory (factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = common.Session
 
     firstName = factory.Sequence(lambda n: "Customer-firstName %d" % n)
-
-
+    
     lastName = factory.Sequence(lambda n: "Customer-lastName %d" % n)
-
-
-
-
+    
     email = factory.Sequence(lambda n: "Customer-email %d" % n)
-
-
+    
 
 
 class ProductFactory (factory.alchemy.SQLAlchemyModelFactory):
@@ -33,11 +29,9 @@ class ProductFactory (factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = common.Session
 
     name = factory.Sequence(lambda n: "Product-name %d" % n)
-
-
+    
     price = factory.Sequence(lambda n:  n)
-
-
+    
 
 
 class CategoryFactory (factory.alchemy.SQLAlchemyModelFactory):
@@ -46,8 +40,7 @@ class CategoryFactory (factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = common.Session
 
     name = factory.Sequence(lambda n: "Category-name %d" % n)
-
-
+    
 
 
 class CustOrderFactory (factory.alchemy.SQLAlchemyModelFactory):
@@ -56,22 +49,13 @@ class CustOrderFactory (factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = common.Session
 
     notes = faker.sentence()
-
-
-
-
-    customer = factory.SubFactory(CustomerFactory)
-
-
+    
     dateDelivered = factory.LazyFunction(datetime.now)
-
-
+    
     isValid = True # always true for now
-
-
+    
     status = models.Status.RCVD
-
-
+    
 
 
 class ItemFactory (factory.alchemy.SQLAlchemyModelFactory):
@@ -79,13 +63,6 @@ class ItemFactory (factory.alchemy.SQLAlchemyModelFactory):
         model = models.Item
         sqlalchemy_session = common.Session
 
-
-
-    product = factory.SubFactory(ProductFactory)
     qty = factory.Sequence(lambda n:  n)
-
-
-
-
-    custOrder = factory.SubFactory(CustOrderFactory)
+    
 
