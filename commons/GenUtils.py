@@ -52,6 +52,9 @@ class GenUtils:
     def toFirstLower(self, name):
         return name[0].lower() + name[1:]
 
+    def toFirstUpper(self, name):
+        return name[0].upper() + name[1:]
+
     def findBackRef(self, property):
         print(property.__class__.__name__)
         container = property.parent
@@ -60,3 +63,7 @@ class GenUtils:
             if propcmp.type == container:
                 #print ("found " + propcmp.name + " -> " + encmp.name + " " + entity.name)
                 return propcmp
+
+    def getPackName(self, topLevelPackage, pck,stem, entity):
+        return f'{topLevelPackage}.{pck.name}.{stem}.{entity.name}{toFirstUpper(stem)}'
+

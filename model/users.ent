@@ -1,9 +1,13 @@
-entity  User{
-    fname: string
-    addresses : Address many bi
+package pets {
+
+entity  Pet{
+    name: string
+    price: int
+    type : PetType
 }
 
-entity Address {
-    email : string
-    user  : User
+entity PetType {
+    name : string
+}
+
 }

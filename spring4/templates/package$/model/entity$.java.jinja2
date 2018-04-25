@@ -1,0 +1,63 @@
+package {{ pck }};
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import base.BaseEntity;  //TODO: replace top level package
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
+import org.springframework.format.annotation.DateTimeFormat;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Table(name = "{{lname}}s")
+public class {{name}} extends BaseEntity{
+
+{% for prop in entity.properties -%}
+    {% if genUtils.isSimple(prop) -%}
+        @NotEmpty
+        {{ prop.type|altype }} {{ prop.name }};
+    {% else -%}
+        {% if prop.many -%}
+            @OneToMany(cascade = CascadeType.ALL, mappedBy = "{{ lname }}", fetch = FetchType.EAGER)
+            Set<{{ prop.type.name -}}> {{ prop.name -}}  ;
+        {% else -%}
+            @ManyToOne
+            @JoinColumn(name = "{{ prop.name }}_id")
+            {{ prop.type.name }} {{ prop.name }}  ;
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+}

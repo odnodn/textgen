@@ -18,7 +18,7 @@ from textx.metamodel import metamodel_from_file
 
 this_folder = dirname(__file__)
 
-modelFile = '../model/ecomm.ent'
+modelFile = '../model/users.ent'
 metaModel = '../metamodel/entity.tx'
 ex = 'ts'
 utils = GenUtils()
@@ -60,7 +60,7 @@ class SimpleType(object):
         return self.name
 
 
-def get_entity_mm(debug=False):
+def get_entity_mm( metaModel, debug=False,):
 
     """
     Builds and returns a meta-model for Entity language.
@@ -93,7 +93,7 @@ def main(debug=False):
 
     this_folder = dirname(__file__)
 
-    entity_mm = get_entity_mm(debug)
+    entity_mm = get_entity_mm( metaModel, debug)
 
     # Build Person model from experiments.ent file
     model = entity_mm.model_from_file(join(this_folder, modelFile))
