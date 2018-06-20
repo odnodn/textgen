@@ -70,12 +70,15 @@ class GenUtils:
 
     def prefix(self): return ''
 
-
+    #todo - change these to pipe
     def toFirstLower(self, name):
         return name[0].lower() + name[1:]
 
     def toFirstUpper(self, name):
         return name[0].upper() + name[1:]
+
+    def asCollection(self, prop):
+        return self.toFirstLower(prop.type.name) + 's'
 
     def findBackRef(self, property):
         print(property.__class__.__name__)

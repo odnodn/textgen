@@ -170,6 +170,11 @@ def writeFile(this_folder, srcgen_folder, model, templates):
                 out = template.render(entity=entity, name=entity.name, lname= lname, genUtils=utils )
                 writeToFile(f'srcgen/{tname}',filename , out)
 
+        for enum in utils.getEnums(model):
+            print(enum.name)
+            for t in lstTemplates:
+                self.temlateToFile(t, enum, pck, 'enum' , ['model'])
+
 
 if __name__ == "__main__":
     main()

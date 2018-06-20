@@ -3,14 +3,33 @@
         <h2 class="text-center">Add/Edit {{ name }} </h2>
         <form [formGroup]="{{ genUtils.toFirstLower(name) }}Form" (submit)="submit()" novalidate>
             {% for prop in entity.properties -%}
+                {% if genUtils.isManyEmbedded(prop) %}
+                    <card>
+                        <button (click)="add{{ prop.name }}()">Add {{ prop.name }}</button>
+                        <ul>
+                            <li>
+                            < *ngFor=" let {{ prop.name }} of 'entity.{{ prop.name }}'; let i = index">
+                                <{{ prop.type.name }}-detail ></{{ prop.type.name }}-detail>
+                                <button (click)="remove{{ prop.name }}(i)">Remove</button>
+                            </li>
+                        </ul>
+                    </card>
+                {% endif %}
+
+                {% if not prop.many %}
                 <div class="form-group">
                     <label for="{{ prop.name }}-input">{{ prop.name }}</label>
-                {% if genUtils.isSimple(prop) -%}
+                    {% if genUtils.isSimple(prop) -%}
                         {% if genUtils.isEnum(prop) -%}
-                            {{ prop.name }} : {{ prop.type.name }}
+                            <ng-select formControlName="{{ prop.name }}">
+                                {% for literal in prop.type.literals -%}
+                                    <ng-option [value]="{{ literal.name|capitalize }}">{{ literal.name }}</ng-option>
+                                {% endfor %}
+                            </ng-select>
+
                         {% elif genUtils.isPropOfType(prop, "date") -%}
                             <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy"
-                                   formControlName="{{ prop.name }}"  id="{{ prop.name }}-input" />
+                                   formControlName="{{ prop.name }}" id="{{ prop.name }}-input"/>
                         {% elif genUtils.isPropOfType(prop, "Boolean") -%}
                             <input radio class="form-control" id="{{ prop.name }}-input"
                                    formControlName="{{ prop.name }}">
@@ -18,29 +37,34 @@
                             <input type="number" class="form-control" id="{{ prop.name }}-input"
                                    formControlName="{{ prop.name }}">
                         {% elif genUtils.isPropOfType(prop, "text") -%}
-                            <textarea id="{{ prop.name }}-input" formControlName="{{ prop.name }}"  [(ngModel)]="entity.{{ prop.name }}"></textarea>
+                            <textarea id="{{ prop.name }}-input" formControlName="{{ prop.name }}"
+                                      [(ngModel)]="entity.{{ prop.name }}"></textarea>
                         {% else -%}
                             <input type="text" class="form-control" id="{{ prop.name }}-input"
                                    formControlName="{{ prop.name }}">
                         {% endif -%}
-                        <p class="error_message"
-                           *ngIf="{{ genUtils.toFirstLower(name) }}.get('{{ prop.name }}').invalid && ({{ genUtils.toFirstLower(name) }}.submitted || {{ genUtils.toFirstLower(name) }}.get('{{ prop.name }}').dirty)">
-                            This is required</p>
-                    </div>
-                {% else -%}
 
-                    {% if genUtils.isReference(prop) %}
-                        <ng-select [items]="people" bindLabel="name">
-                        </ng-select>
+                    {% else -%}
+
+                        {% if genUtils.isReference(prop) %}
+                            <ng-select [items]="{{ genUtils.asCollection( prop ) }}$ | async"
+                                       bindLabel="name"
+                                       bindValue="id"
+                                       [(ngModel)]="entity.{{ prop.name }}">
+                            </ng-select>
+                        {% endif %}
+
+
                     {% endif %}
+                    <p class="error_message"
+                       *ngIf="{{ genUtils.toFirstLower(name) }}.get('{{ prop.name }}').invalid && ({{ genUtils.toFirstLower(name) }}.submitted || {{ genUtils.toFirstLower(name) }}.get('{{ prop.name }}').dirty)">
+                        This is required</p>
+                </div>
+                {%  endif %}
 
-                    {% if genUtils.isManyEmbedded(prop) %}
-                        MANY
-                    {% endif %}
-
-                {% endif %}
             {% endfor %}
             <button type="submit" class="btn btn-primary">Submit</button>
+
         </form>
     </div>
 </div>
