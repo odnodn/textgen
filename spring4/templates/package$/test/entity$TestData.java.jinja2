@@ -1,0 +1,56 @@
+
+package «getFixturePackage()»;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import br.com.six2six.fixturefactory.Fixture;
+import br.com.six2six.fixturefactory.Rule;
+import br.com.six2six.fixturefactory.loader.TemplateLoader;
+
+import org.witchcraft.base.test.BaseFixtureFactory;
+
+import {{ fqn }};
+
+//create test data for {{name}}
+public class {{name}}Fixture extends BaseFixtureFactory<{{name}}> implements TemplateLoader {
+
+    public {{name}}Fixture() {
+        load();
+    }
+    
+    @Override
+    protected String getName() {
+        return "{{lname}}";
+    }
+    
+    @Override
+    public void load() {
+    
+        Fixture.of({{name}}.class).addTemplate(getName(), new Rule() {
+            {
+                {% for prop in entity.properties -%}
+
+                {%  endfor %}
+                «FOREACH getMineAndParentsAttributes().select(a| a.association == null && !a.isFile()) AS a-»
+                add("{{  a.name}}", {{ utils.getTestData(a) }});
+                «ENDFOREACH»
+                
+                «FOREACH getNonRecursiveOutgoingAssociations().select(a| !( a.type.isEmbeddable() || a.isContainedAssoc() || isCircular(a) ) ) AS a»
+                add("«a.name»", new «a.type.getFixture()»().getOneRecord());
+                «ENDFOREACH»
+            }
+        });
+    }
+    
+    protected Class<{{name}}> getMyClass(){
+        return {{name}}.class;
+    }
+    
+    public static void main(String[] args) {
+        new {{name}}Fixture().getRecords(5).forEach(System.out::println);
+    }
+}
+
+«ENDFILE»
+«ENDDEFINE»

@@ -19,5 +19,21 @@ export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
 
     constructor(protected {{lname}}Service: {{name}}Service, protected router: Router,) {
         super({{lname}}Service, router, '{{lname}}s')
+        this.createForm();
+
+    }
+
+    private createForm(): void {
+        this.loginForm = this.fb.group({
+        {% for prop in entity.properties -%}
+            {% if genUtils.isSimple(prop) -%}
+                {{ prop.name }} : ['', [Validators.required]],
+            {% else -%}
+                //{{ prop.name }} : {{ prop.type.name }}
+            {% endif %}
+        {% endfor %}
+        email: ['', [Validators.required, Validators.email]],
+        //password: ['', [Validators.required, Validators.minLength(8)]]
+        });
     }
 }

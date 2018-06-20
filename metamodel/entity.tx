@@ -46,7 +46,7 @@ Validator:
 	name='min' ':' value=INT|name='max' ':' value=INT|name='opt'|name='pattern' ':' svalue=STRING ;
 
 Property:
-    name=ID ':' type=[Type] ('='defaultVal=defValue)?   (opt?='opt')? (many?='many')?  (ref?='ref')?  (unique?='unique')?  (bi?='bi')?  (valdiators+=Validator)*
+    name=ID ':' type=[Type] ('='defaultVal=defValue)?   (opt?='opt')? (many?='many')?  (embedded?='embedded')?  (ref?='ref')?  (unique?='unique')?  (bi?='bi')?  (valdiators+=Validator)*
 ;
 
 // Type can be SimpleType or Entity

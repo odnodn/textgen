@@ -139,8 +139,8 @@ def alchemyTypes(s):
         'currency': 'number'
     }
 
-    if(type(s).__name__ == 'Enum'): #its an enum
-        return  s.name
+    if type(s).__name__ == 'Enum': #its an enum
+        return s.name
 
     return types.get(s.name, s.name)
 

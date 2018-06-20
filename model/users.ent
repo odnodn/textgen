@@ -1,9 +1,26 @@
 package pets {
 
+        enum Status {
+            RCVD
+            ORDRD
+            DLVRD
+        }
+
 entity  Pet{
     name: string
-    price: int
+    price: currency
     type : PetType
+    dob: date
+    weight: int
+    neutered: bool
+    description: text
+    status: Status
+    skills : Skill many embedded
+}
+
+entity Skill {
+    name: string
+    level : int
 }
 
 entity PetType {

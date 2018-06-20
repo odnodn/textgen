@@ -1,0 +1,6 @@
+
+enum {{ enum.name }}{
+    {% for literal in enum.literals -%}
+         '{{ literal.name|capitalize }}',
+    {% endfor %}
+}

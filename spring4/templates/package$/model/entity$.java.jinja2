@@ -15,17 +15,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.math.BigDecimal;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
@@ -37,16 +29,21 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Data
-@Entity
+
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+{% if not entity.abs -%}
+    @Entity
 @Table(name = "{{lname}}s")
-public class {{name}} extends BaseEntity{
+{% else -%}
+ @MappedSuperclass
+{% endif -%}
+public class {{name}} extends {% if entity.superType -%} {{  entity.superType.name }} {% else -%} BaseEntity {% endif %} {
 
 {% for prop in entity.properties -%}
     {% if genUtils.isSimple(prop) -%}
-        @NotEmpty
+        //@NotEmpty
         {{ prop.type|altype }} {{ prop.name }};
     {% else -%}
         {% if prop.many -%}
