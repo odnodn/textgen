@@ -1,12 +1,22 @@
 
-
-
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import {ActivatedRoute, Router} from "@angular/router";
+
 import { {{name}}} from "../{{lname}}";
 import { {{name}}Service} from "../{{lname}}.service";
-import {ActivatedRoute, Router} from "@angular/router";
 import { BaseAdd } from '../../base/base-add';
 
+{% for t in genUtils.getOutgoingRefs(entity) |map(attribute='type.name') | unique-%}
+    import {{ t }} from "../../{{ t| fLower }}/{{ t | fLower }}";
+{% endfor %}
+
+{% for t in genUtils.getContained(entity) |map(attribute='type.name') | unique-%}
+    import {{ t }} from "../../{{ t| fLower }}/{{ t | fLower }}";
+{% endfor %}
+
+
+{% autoescape false %}
 
 @Component({
 selector: 'app-{{lname}}-add',
@@ -14,26 +24,46 @@ templateUrl: './{{lname}}-add.component.html',
 styleUrls: ['./{{lname}}-add.component.css']
 })
 export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
+
     {{lname}}: {{name}};
     errorMessage: string;
 
-    constructor(protected {{lname}}Service: {{name}}Service, protected router: Router,) {
+    {% for prop in genUtils.getOutgoingRefs(entity) -%}
+        {{ prop.name }} : {{ prop.type.name }}[]
+    {% endfor %}
+
+    constructor(protected {{lname}}Service: {{name}}Service, protected router: Router, private fb: FormBuilder) {
         super({{lname}}Service, router, '{{lname}}s')
         this.createForm();
-
     }
 
     private createForm(): void {
-        this.loginForm = this.fb.group({
-        {% for prop in entity.properties -%}
-            {% if genUtils.isSimple(prop) -%}
+        this.{{ entity.name | fLower }}Form = this.fb.group({
+        {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
                 {{ prop.name }} : ['', [Validators.required]],
-            {% else -%}
-                //{{ prop.name }} : {{ prop.type.name }}
-            {% endif %}
         {% endfor %}
-        email: ['', [Validators.required, Validators.email]],
+        //email: ['', [Validators.required, Validators.email]],
         //password: ['', [Validators.required, Validators.minLength(8)]]
         });
     }
+
+    {% for prop in genUtils.getContained(entity) -%}
+        {{ prop.name }} : {{ prop.type.name }}[]
+
+        add{{  prop.name }}(){
+            this.entity.{{ prop.name }}.push(new {{ prop.type.name }}());
+        }
+
+        remove{{ prop.name }}(index:number){
+            this.entity.{{ prop.name }}.splice(index, 1);
+        }
+
+{#        on{{ e.name.toFirstUpper() }}Changed(newValu{{ e.name }}e, index) {#}
+{#        console.log(newValue);#}
+{#        }#}
+    {% endfor %}
+
 }
+
+
+{% endautoescape %}

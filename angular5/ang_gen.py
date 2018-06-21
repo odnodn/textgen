@@ -153,6 +153,10 @@ def writeFile(this_folder, srcgen_folder, model, templates):
 
     # Register filter for mapping Entity type names to Java type names.
     jinja_env.filters['altype'] = alchemyTypes
+    jinja_env.filters['fLower'] = GenUtils.toFirstLower
+    jinja_env.filters['fUpper'] = GenUtils.toFirstUpper
+    jinja_env.filters['plural'] = GenUtils.asCollection
+
 
     lstTemplates = searching_all_files('templates')
 

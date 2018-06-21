@@ -31,8 +31,13 @@ class GenUtils:
         return ps + e.properties
 
     def getAllSimpleProps(self, e):
-        return [a for a in self.allProps(e, 'Entity') if self.isSimple(a) or self.isEnum(a) ]
+        return [a for a in self.allProps(e) if self.isSimple(a) or self.isEnum(a) ]
 
+    def getOutgoingRefs(self, e):
+        return [a for a in self.allProps(e) if self.isReference(a) ]
+
+    def getContained(self, e):
+        return [a for a in self.allProps(e) if self.isManyEmbedded(a) ]
 
     def displayName(self, entity):
         for p in entity.properties:
@@ -71,14 +76,17 @@ class GenUtils:
     def prefix(self): return ''
 
     #todo - change these to pipe
-    def toFirstLower(self, name):
+    @staticmethod
+    def toFirstLower( name):
         return name[0].lower() + name[1:]
 
-    def toFirstUpper(self, name):
+    @staticmethod
+    def toFirstUpper( name):
         return name[0].upper() + name[1:]
 
-    def asCollection(self, prop):
-        return self.toFirstLower(prop.type.name) + 's'
+    @staticmethod
+    def asCollection(prop):
+        return GenUtils.toFirstLower(prop.type.name) + 's'
 
     def findBackRef(self, property):
         print(property.__class__.__name__)

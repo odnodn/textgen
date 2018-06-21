@@ -10,6 +10,7 @@ entity  Pet{
     name: string
     price: currency
     type : PetType
+    parentType : PetType
     dob: date
     weight: int
     neutered: bool
