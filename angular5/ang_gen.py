@@ -3,6 +3,7 @@ An example how to generate java code from textX model using jinja2
 template engine (http://jinja.pocoo.org/docs/dev/)
 """
 from os import mkdir
+import os
 from os.path import exists, dirname, join
 #from entity_test import  get_entity_mm
 import jinja2
@@ -182,3 +183,5 @@ def writeFile(this_folder, srcgen_folder, model, templates):
 
 if __name__ == "__main__":
     main()
+    cmd = 'cp -r srcgen/ ~/dev/angforms/src/app'
+    os.system(cmd)

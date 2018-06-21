@@ -30,11 +30,14 @@ class GenUtils:
         ps =  recProps(e, ps)
         return ps + e.properties
 
+    def getEnumProps(self, e):
+        return [a for a in self.allProps(e) if self.isEnum(a)]
+
     def getAllSimpleProps(self, e):
-        return [a for a in self.allProps(e) if self.isSimple(a) or self.isEnum(a) ]
+        return [a for a in self.allProps(e) if self.isSimple(a) or self.isEnum(a)]
 
     def getOutgoingRefs(self, e):
-        return [a for a in self.allProps(e) if self.isReference(a) ]
+        return [a for a in self.allProps(e) if self.isReference(a)]
 
     def getContained(self, e):
         return [a for a in self.allProps(e) if self.isManyEmbedded(a) ]
@@ -75,7 +78,7 @@ class GenUtils:
 
     def prefix(self): return ''
 
-    #todo - change these to pipe
+
     @staticmethod
     def toFirstLower( name):
         return name[0].lower() + name[1:]
