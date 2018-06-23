@@ -7,12 +7,8 @@ import { {{name}}} from "../{{lname}}";
 import { {{name}}Service} from "../{{lname}}.service";
 import { BaseAdd } from '../../base/base-add';
 
-{% for t in genUtils.getOutgoingRefs(entity) |map(attribute='type.name') | unique-%}
-    import {{ t }} from "../../{{ t| fLower }}/{{ t | fLower }}";
-{% endfor %}
-
-{% for t in genUtils.getContained(entity) |map(attribute='type.name') | unique-%}
-    import {{ t }} from "../../{{ t| fLower }}/{{ t | fLower }}";
+{% for t in (genUtils.getOutgoingRefs(entity) + genUtils.getContained(entity) ) |map(attribute='type.name') | unique-%}
+    import {{ '{' + t + '}'}} from "@app/{{ t| fLower }}/{{ t | fLower }}";
 {% endfor %}
 
 
@@ -27,6 +23,7 @@ export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
 
     {{lname}}: {{name}};
     errorMessage: string;
+    public {{ entity.name | fLower }}Form: FormGroup;
 
     {% for prop in genUtils.getOutgoingRefs(entity) -%}
         {{ prop.name }} : {{ prop.type.name }}[]
@@ -51,7 +48,7 @@ export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
         {{ prop.name }} : {{ prop.type.name }}[]
 
         add{{  prop.name }}(){
-            this.entity.{{ prop.name }}.push(new {{ prop.type.name }}());
+            this.entity.{{ prop.name }}.push(<{{ prop.type.name }}>{});
         }
 
         remove{{ prop.name }}(index:number){

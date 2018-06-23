@@ -1,24 +1,23 @@
 <div class="container-wrapper container d-flex justify-content-center align-items-center">
     <div class="form-wrapper text-center" style="width: 80%; background-color: #eef ; padding: 1.5em">
         <h2 class="text-center">Add/Edit {{ name }} </h2>
-        <form [formGroup]="{{ genUtils.toFirstLower(name) }}Form" (submit)="submit()" novalidate>
+        <form [formGroup]="{{ lname }}Form" (submit)="submit()" novalidate>
             {% for prop in entity.properties -%}
                 {% if genUtils.isManyEmbedded(prop) %}
-                    <card>
+                    <div class="card">
                         <button (click)="add{{ prop.name }}()">Add {{ prop.name }}</button>
                         <ul>
-                            <li>
-                            < *ngFor=" let {{ prop.name }} of 'entity.{{ prop.name }}'; let i = index">
-                                <{{ prop.type.name }}-detail ></{{ prop.type.name }}-detail>
-                                <button (click)="remove{{ prop.name }}(i)">Remove</button>
+                            <li *ngFor=" let {{ prop.name }} of entity.{{ prop.name }}; let i = index">
+                                <app-{{ prop.type.name | fLower }}-add ></app-{{ prop.type.name | fLower }}-add>
+                                <button (click)="remove{{ prop.name }}(i)">X</button>
                             </li>
                         </ul>
-                    </card>
+                    </div>
                 {% endif %}
 
                 {% if not prop.many %}
                 <div class="form-group">
-                    <label for="{{ prop.name }}-input">{{ prop.name }}</label>
+                    <label for="{{ prop.name }}-input"><span translate>{{ prop.name }}</span></label>
                     {% if genUtils.isSimple(prop) -%}
                         {% if genUtils.isEnum(prop) -%}
                             <ng-select formControlName="{{ prop.name }}">
@@ -28,11 +27,26 @@
                             </ng-select>
 
                         {% elif genUtils.isPropOfType(prop, "date") -%}
-                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy"
-                                   formControlName="{{ prop.name }}" id="{{ prop.name }}-input"/>
-                        {% elif genUtils.isPropOfType(prop, "Boolean") -%}
-                            <input radio class="form-control" id="{{ prop.name }}-input"
-                                   formControlName="{{ prop.name }}">
+                            <div class="input-group">
+                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                       formControlName="{{ prop.name }}"  id="{{ prop.name }}-input" ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                        <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                                    </button>
+                                </div>
+                            </div>
+                        {% elif genUtils.isPropOfType(prop, "bool") -%}
+                            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
+                                 formControlName="{{ prop.name }}">
+                                <label ngbButtonLabel class="btn-primary">
+                                    <input ngbButton type="radio" [value]="true"> <span translate>Yes</span>
+                                </label>
+                                <label ngbButtonLabel class="btn-primary">
+                                    <input ngbButton type="radio" [value]="false"> <span translate>No</span>
+                                </label>
+                            </div>
+
                         {% elif genUtils.isNumeric(prop) -%}
                             <input type="number" class="form-control" id="{{ prop.name }}-input"
                                    formControlName="{{ prop.name }}">
@@ -54,11 +68,11 @@
                             </ng-select>
                         {% endif %}
 
-
                     {% endif %}
-                    <p class="error_message"
-                       *ngIf="{{ genUtils.toFirstLower(name) }}.get('{{ prop.name }}').invalid && ({{ genUtils.toFirstLower(name) }}.submitted || {{ genUtils.toFirstLower(name) }}.get('{{ prop.name }}').dirty)">
-                        This is required</p>
+                    <div class="alert alert-danger" *ngIf="{{ lname }}Form.get('{{ prop.name }}').errors && {{ lname }}Form.get('{{ prop.name }}').touched">
+                        <p *ngIf="petForm.get('name').errors.required">Required !</p>
+                        <p *ngIf="petForm.get('name').errors.pattern">Invalid input!</p>
+                    </div>
                 </div>
                 {%  endif %}
 

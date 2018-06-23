@@ -1,4 +1,6 @@
 import typing
+import stringcase
+
 class GenUtils:
 
     def __init__(self):
@@ -74,10 +76,13 @@ class GenUtils:
         return type(property.type).__name__ == 'Enum'
 
     def isNumeric(self , property):
-        return self.isPropInTypes( property, ['int','Currency', 'Double'] )
+        return self.isPropInTypes( property, ['int','currency', 'double'] )
 
     def prefix(self): return ''
 
+    @staticmethod
+    def humanize( str):
+        return stringcase.sentencecase(str)
 
     @staticmethod
     def toFirstLower( name):

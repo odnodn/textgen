@@ -1,0 +1,17 @@
+
+{
+{%  for pck in mdl.elements %}
+    //{{  pck.name }}
+{% for entity in genUtils.getEntities(pck) -%}
+{% for prop in entity.properties -%}
+
+        "{{ entity.name }}_{{ prop.name }}": "{{  prop.name | humanize }}",
+
+{% endfor %}
+{% endfor %}
+{% endfor %}
+}
+
+
+
+
