@@ -63,6 +63,29 @@ class BaseGen:
         self.jinja_env.filters['plural'] = GenUtils.asCollection
         self.jinja_env.filters['humanize'] = GenUtils.humanize
 
+        #todo: merger this with java gen
+    def doGenerate(self,  model):
+
+        self.createJinjaEnv(self.currentFolder())
+
+        lstTemplates = searching_all_files('templates')
+
+        for pck in model.elements:
+
+            for entity in utils.getAbstractEntities(pck):
+                #print(f'-------{entity.name} --------')
+                for t in lstTemplates:
+                    self.temlateToFile(t, entity, pck, 'entity', ['model'])
+
+            for entity in utils.getEntities(pck):
+                for t in lstTemplates:
+                    self.temlateToFile(t, entity, pck, 'entity')
+
+            for enum in utils.getEnums(pck):
+                print(enum.name)
+                for t in lstTemplates:
+                    self.temlateToFile(t, enum, pck, 'enum' )
+
     def temlateToFile(self, t, entity, pck, typename='entity', filterPacks=[]):
 
         lname= GenUtils.toFirstLower(entity.name)
@@ -95,7 +118,7 @@ class BaseGen:
                                   fqnRepo = createFqn('repository'),
                                   fqnService = createFqn('service'),
                                   name=entity.name, lname= lname, genUtils=GenUtils() )
-            writeToFile(f'srcgen/{tname}',filename , out)
+            writeToFile(f'srcgen/{tname}',self.massageOutputFileName(filename) , out)
 
     def getGeneratedFileName(self, entity, filename, lname, pck, t, typename):
         tname = str(t.parent).replace(typename + '$', lname)
@@ -103,14 +126,18 @@ class BaseGen:
         tname = tname.replace('package$', pck.name)
         return tname
 
-    @abstractmethod
-    def doGenerate(self):
-        pass
+
 
     @abstractmethod
     def getModelFile(self):
         pass
 
     @abstractmethod
-    def getMyFolder(self):
+    def currentFolder(self):
         pass
+
+    @abstractmethod
+    def massageOutputFileName(self, opFileName):
+        return opFileName
+
+

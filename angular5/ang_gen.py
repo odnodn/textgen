@@ -31,30 +31,11 @@ class AngGen(BaseGen):
     def getMyPath(self):
         return dirname(__file__)
 
-    #todo: merger this with java gen
-    def doGenerate(self,  model):
-        this_folder = dirname(__file__)
-        self.createJinjaEnv(this_folder)
+    def currentFolder(self):
+        return dirname(__file__)
 
-        lstTemplates = searching_all_files('templates')
-
-        for pck in model.elements:
-
-            for entity in utils.getAbstractEntities(pck):
-                #print(f'-------{entity.name} --------')
-                for t in lstTemplates:
-                    self.temlateToFile(t, entity, pck, 'entity', ['model'])
-
-            for entity in utils.getEntities(pck):
-                for t in lstTemplates:
-                    self.temlateToFile(t, entity, pck, 'entity')
-
-            for enum in utils.getEnums(pck):
-                print(enum.name)
-                for t in lstTemplates:
-                    self.temlateToFile(t, enum, pck, 'enum' )
-
-
+    def massageOutputFileName(self, opFileName):
+        return GenUtils.toFirstLower(opFileName)
 
 
 if __name__ == "__main__":
