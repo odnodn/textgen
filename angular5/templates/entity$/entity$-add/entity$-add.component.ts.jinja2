@@ -1,6 +1,6 @@
 
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 
 import { {{name}}} from "../{{lname}}";
@@ -34,10 +34,15 @@ export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
         this.createForm();
     }
 
+    {% set formName = 'this.' +  (entity.name | fLower ) +'Form'  %}
+
     private createForm(): void {
-        this.{{ entity.name | fLower }}Form = this.fb.group({
+        {{ formName }}= this.fb.group({
         {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
-                {{ prop.name }} : ['', [Validators.required]],
+            {{ prop.name }} : ['', [ {% if not prop.opt %} Validators.required {% endif %}]],
+        {% endfor %}
+        {% for prop in genUtils.getContained(entity) -%}
+            {{ prop.name }} : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])
         {% endfor %}
         //email: ['', [Validators.required, Validators.email]],
         //password: ['', [Validators.required, Validators.minLength(8)]]
@@ -45,20 +50,37 @@ export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
     }
 
     {% for prop in genUtils.getContained(entity) -%}
-        {{ prop.name }} : {{ prop.type.name }}[]
-
-        add{{  prop.name }}(){
-            this.entity.{{ prop.name }}.push(<{{ prop.type.name }}>{});
-        }
-
-        remove{{ prop.name }}(index:number){
-            this.entity.{{ prop.name }}.splice(index, 1);
-        }
-
-{#        on{{ e.name.toFirstUpper() }}Changed(newValu{{ e.name }}e, index) {#}
-{#        console.log(newValue);#}
-{#        }#}
+    create{{ prop.name | fUpper }}Controls(){
+        return this.fb.group({
+            {% for prop in genUtils.getAllSimpleProps(prop.type) + genUtils.getOutgoingRefs(prop.type) -%}
+                {{ prop.name }} : ['', [Validators.required]],
+            {% endfor %}
+{#            TODO: how to call recursively in jinja{% for prop in genUtils.getContained(entity) -%}#}
+{#                {{ prop.name }} : : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])#}
+{#            {% endfor %}#}
+            //email: ['', [Validators.required, Validators.email]],
+            //password: ['', [Validators.required, Validators.minLength(8)]]
+            });
+    }
     {% endfor %}
+
+    {% for prop in genUtils.getContained(entity) -%}
+        add{{  prop.name | fUpper }}(): void {
+            ({{ formName }}.get('{{ prop.name }}') as FormArray).push(this.create{{ prop.name | fUpper }}Controls());
+        }
+
+        remove{{  prop.name | fUpper }}(index:number){
+            ({{ formName }}.get('{{ prop.name }}') as FormArray ).removeAt(index);
+        }
+    {% endfor %}
+
+    submit(){
+        Object.keys({{ formName }}.controls).forEach(field =>
+            {{ formName }}.get(field).markAsTouched()
+        );
+        console.log({{ formName }}.value)
+        //console.log("entity", this.entity)
+    }
 
 }
 

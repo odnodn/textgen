@@ -8,6 +8,7 @@ import { {{name}}EditComponent } from './{{lname}}-edit/{{lname}}-edit.component
 import { {{name}}RoutingModule} from './{{lname}}-routing.module';
 import { NgSelectModule,NG_SELECT_DEFAULT_CONFIG } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpModule } from '@angular/http';
 
 //import { JsonSchemaFormModule }               from 'angular2-json-schema-form';
 @NgModule({
@@ -18,6 +19,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgSelectModule,
     NgbModule,
     {{name}}RoutingModule,
+    HttpModule
   ],
   declarations: [
     {{name}}ListComponent,

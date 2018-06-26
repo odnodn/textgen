@@ -1,84 +1,92 @@
+{% set formName =  (entity.name | fLower ) +'Form'  %}
+
+{% macro renderEntityProps(entity, containerForm) %}
+    {% for prop in entity.properties -%}
+        {% if genUtils.isManyEmbedded(prop) %}
+            <div class="card card-block">
+                <h4 class="card-title">{{ prop.name | fUpper }}</h4>
+                <button type="button" (click)="add{{ prop.name | fUpper }}()">Add {{ prop.name | fUpper }}</button>
+                <div formArrayName="{{ prop.name }}"
+                     *ngFor="let item of {{ formName }}.get('{{  prop.name }}').controls; let i = index;">
+                    <div [formGroupName]="i">
+                        {{ renderEntityProps(prop.type , "item") }}
+                    </div>
+                    <button (click)="remove{{ prop.name | fUpper }}(i)">Remove</button>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if not prop.many %}
+            <div class="form-group">
+                <label for="{{ prop.name }}-input"><span translate>{{ prop.name }}</span></label>
+                {% if genUtils.isSimple(prop) -%}
+                    {% if genUtils.isEnum(prop) -%}
+                        <ng-select formControlName="{{ prop.name }}">
+                            {% for literal in prop.type.literals -%}
+                                <ng-option [value]="{{ literal.name|capitalize }}">{{ literal.name }}</ng-option>
+                            {% endfor %}
+                        </ng-select>
+
+                    {% elif genUtils.isPropOfType(prop, "date") -%}
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd"
+                                   formControlName="{{ prop.name }}"  id="{{ prop.name }}-input" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                    <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                                </button>
+                            </div>
+                        </div>
+                    {% elif genUtils.isPropOfType(prop, "bool") -%}
+                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
+                             formControlName="{{ prop.name }}">
+                            <label ngbButtonLabel class="btn-primary">
+                                <input ngbButton type="radio" [value]="true"> <span translate>Yes</span>
+                            </label>
+                            <label ngbButtonLabel class="btn-primary">
+                                <input ngbButton type="radio" [value]="false"> <span translate>No</span>
+                            </label>
+                        </div>
+
+                    {% elif genUtils.isNumeric(prop) -%}
+                        <input type="number" class="form-control" id="{{ prop.name }}-input"
+                               formControlName="{{ prop.name }}">
+                    {% elif genUtils.isPropOfType(prop, "text") -%}
+                        <textarea id="{{ prop.name }}-input" formControlName="{{ prop.name }}"
+                                  [(ngModel)]="entity.{{ prop.name }}"></textarea>
+                    {% else -%}
+                        <input type="text" class="form-control" id="{{ prop.name }}-input"
+                               formControlName="{{ prop.name }}">
+                    {% endif -%}
+
+                {% else -%}
+
+                    {% if genUtils.isReference(prop) %}
+                        <ng-select [items]="{{ genUtils.asCollection( prop ) }}$ | async"
+                                   bindLabel="name"
+                                   bindValue="id"
+                                   >
+                        </ng-select>
+                    {% endif %}
+
+                {% endif %}
+                <div class="alert alert-danger" *ngIf="{{ containerForm }}.get('{{ prop.name }}').errors && {{ containerForm }}.get('{{ prop.name }}').touched">
+                    <p *ngIf="{{ containerForm }}.get('{{ prop.name }}').errors.required">Required !</p>
+                    <p *ngIf="{{ containerForm }}.get('{{ prop.name }}').errors.pattern">Invalid input!</p>
+                </div>
+            </div>
+        {%  endif %}
+
+
+    {% endfor %}
+{% endmacro %}
+
 <div class="container-wrapper container d-flex justify-content-center align-items-center">
     <div class="form-wrapper text-center" style="width: 80%; background-color: #eef ; padding: 1.5em">
         <h2 class="text-center">Add/Edit {{ name }} </h2>
-        <form [formGroup]="{{ lname }}Form" (submit)="submit()" novalidate>
-            {% for prop in entity.properties -%}
-                {% if genUtils.isManyEmbedded(prop) %}
-                    <div class="card">
-                        <button (click)="add{{ prop.name }}()">Add {{ prop.name }}</button>
-                        <ul>
-                            <li *ngFor=" let {{ prop.name }} of entity.{{ prop.name }}; let i = index">
-                                <app-{{ prop.type.name | fLower }}-add ></app-{{ prop.type.name | fLower }}-add>
-                                <button (click)="remove{{ prop.name }}(i)">X</button>
-                            </li>
-                        </ul>
-                    </div>
-                {% endif %}
-
-                {% if not prop.many %}
-                <div class="form-group">
-                    <label for="{{ prop.name }}-input"><span translate>{{ prop.name }}</span></label>
-                    {% if genUtils.isSimple(prop) -%}
-                        {% if genUtils.isEnum(prop) -%}
-                            <ng-select formControlName="{{ prop.name }}">
-                                {% for literal in prop.type.literals -%}
-                                    <ng-option [value]="{{ literal.name|capitalize }}">{{ literal.name }}</ng-option>
-                                {% endfor %}
-                            </ng-select>
-
-                        {% elif genUtils.isPropOfType(prop, "date") -%}
-                            <div class="input-group">
-                                <input class="form-control" placeholder="yyyy-mm-dd"
-                                       formControlName="{{ prop.name }}"  id="{{ prop.name }}-input" ngbDatepicker #d="ngbDatepicker">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                                        <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
-                                    </button>
-                                </div>
-                            </div>
-                        {% elif genUtils.isPropOfType(prop, "bool") -%}
-                            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
-                                 formControlName="{{ prop.name }}">
-                                <label ngbButtonLabel class="btn-primary">
-                                    <input ngbButton type="radio" [value]="true"> <span translate>Yes</span>
-                                </label>
-                                <label ngbButtonLabel class="btn-primary">
-                                    <input ngbButton type="radio" [value]="false"> <span translate>No</span>
-                                </label>
-                            </div>
-
-                        {% elif genUtils.isNumeric(prop) -%}
-                            <input type="number" class="form-control" id="{{ prop.name }}-input"
-                                   formControlName="{{ prop.name }}">
-                        {% elif genUtils.isPropOfType(prop, "text") -%}
-                            <textarea id="{{ prop.name }}-input" formControlName="{{ prop.name }}"
-                                      [(ngModel)]="entity.{{ prop.name }}"></textarea>
-                        {% else -%}
-                            <input type="text" class="form-control" id="{{ prop.name }}-input"
-                                   formControlName="{{ prop.name }}">
-                        {% endif -%}
-
-                    {% else -%}
-
-                        {% if genUtils.isReference(prop) %}
-                            <ng-select [items]="{{ genUtils.asCollection( prop ) }}$ | async"
-                                       bindLabel="name"
-                                       bindValue="id"
-                                       [(ngModel)]="entity.{{ prop.name }}">
-                            </ng-select>
-                        {% endif %}
-
-                    {% endif %}
-                    <div class="alert alert-danger" *ngIf="{{ lname }}Form.get('{{ prop.name }}').errors && {{ lname }}Form.get('{{ prop.name }}').touched">
-                        <p *ngIf="petForm.get('name').errors.required">Required !</p>
-                        <p *ngIf="petForm.get('name').errors.pattern">Invalid input!</p>
-                    </div>
-                </div>
-                {%  endif %}
-
-            {% endfor %}
+        <form [formGroup]="{{ formName }}" (submit)="submit()" novalidate>
+            {{ renderEntityProps(entity, formName) }}
             <button type="submit" class="btn btn-primary">Submit</button>
-
         </form>
     </div>
 </div>

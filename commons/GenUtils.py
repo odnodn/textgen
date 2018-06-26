@@ -41,7 +41,7 @@ class GenUtils:
     def getOutgoingRefs(self, e):
         return [a for a in self.allProps(e) if self.isReference(a)]
 
-    def getContained(self, e):
+    def getContained(self, e):  #e.g orderItems in an order or drugs in a prescription
         return [a for a in self.allProps(e) if self.isManyEmbedded(a) ]
 
     def displayName(self, entity):

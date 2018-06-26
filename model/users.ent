@@ -7,12 +7,12 @@ package pets {
     }
 
     entity  Pet{
-        name: string
+        name: string pattern:'^[\w\s-]+$'
         price: currency
-        type : PetType
-        parentType : PetType
+        type : PetType opt
+        parentType : PetType opt
         dob: date
-        weight: int
+        weight: int max:10
         neutered: bool
         description: text
         status: Status
