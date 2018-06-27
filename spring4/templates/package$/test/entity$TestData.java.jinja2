@@ -29,16 +29,18 @@ public class {{name}}Fixture extends BaseFixtureFactory<{{name}}> implements Tem
     
         Fixture.of({{name}}.class).addTemplate(getName(), new Rule() {
             {
-                {% for prop in entity.properties -%}
-
+                {% for a in genUtils.getAllSimpleProps(entity) -%}
+                    add("{{  a.name}}", {{ genUtils.getTestData(a) }});
                 {%  endfor %}
-                «FOREACH getMineAndParentsAttributes().select(a| a.association == null && !a.isFile()) AS a-»
-                add("{{  a.name}}", {{ utils.getTestData(a) }});
-                «ENDFOREACH»
-                
-                «FOREACH getNonRecursiveOutgoingAssociations().select(a| !( a.type.isEmbeddable() || a.isContainedAssoc() || isCircular(a) ) ) AS a»
-                add("«a.name»", new «a.type.getFixture()»().getOneRecord());
-                «ENDFOREACH»
+
+
+{#                «FOREACH getMineAndParentsAttributes().select(a| a.association == null && !a.isFile()) AS a-»#}
+{#                add("{{  a.name}}", {{ utils.getTestData(a) }});#}
+{#                «ENDFOREACH»#}
+{#                #}
+{#                «FOREACH getNonRecursiveOutgoingAssociations().select(a| !( a.type.isEmbeddable() || a.isContainedAssoc() || isCircular(a) ) ) AS a»#}
+{#                add("«a.name»", new «a.type.getFixture()»().getOneRecord());#}
+{#                «ENDFOREACH»#}
             }
         });
     }
@@ -51,6 +53,3 @@ public class {{name}}Fixture extends BaseFixtureFactory<{{name}}> implements Tem
         new {{name}}Fixture().getRecords(5).forEach(System.out::println);
     }
 }
-
-«ENDFILE»
-«ENDDEFINE»

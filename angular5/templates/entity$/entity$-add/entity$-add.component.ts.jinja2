@@ -11,6 +11,15 @@ import { BaseAdd } from '../../base/base-add';
     import {{ '{' + t + '}'}} from "@app/{{ t| fLower }}/{{ t | fLower }}";
 {% endfor %}
 
+{% macro genFormControls(entity) %}
+    {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
+        {{ prop.name }} : ['', [ {% if not prop.opt %} Validators.required {% endif %}]],
+    {% endfor %}
+    {% for prop in genUtils.getContained(entity) -%}
+        {{ prop.name }} : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])
+    {% endfor %}
+{%  endmacro %}
+
 
 {% autoescape false %}
 
@@ -38,28 +47,14 @@ export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
 
     private createForm(): void {
         {{ formName }}= this.fb.group({
-        {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
-            {{ prop.name }} : ['', [ {% if not prop.opt %} Validators.required {% endif %}]],
-        {% endfor %}
-        {% for prop in genUtils.getContained(entity) -%}
-            {{ prop.name }} : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])
-        {% endfor %}
-        //email: ['', [Validators.required, Validators.email]],
-        //password: ['', [Validators.required, Validators.minLength(8)]]
+        {{ genFormControls(entity) }}
         });
     }
 
     {% for prop in genUtils.getContained(entity) -%}
     create{{ prop.name | fUpper }}Controls(){
         return this.fb.group({
-            {% for prop in genUtils.getAllSimpleProps(prop.type) + genUtils.getOutgoingRefs(prop.type) -%}
-                {{ prop.name }} : ['', [Validators.required]],
-            {% endfor %}
-{#            TODO: how to call recursively in jinja{% for prop in genUtils.getContained(entity) -%}#}
-{#                {{ prop.name }} : : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])#}
-{#            {% endfor %}#}
-            //email: ['', [Validators.required, Validators.email]],
-            //password: ['', [Validators.required, Validators.minLength(8)]]
+        {{ genFormControls(prop.type) }}
             });
     }
     {% endfor %}

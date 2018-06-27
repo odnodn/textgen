@@ -1,40 +1,27 @@
-package pets {
+package travelquote {
 
-    enum Status {
-        RCVD
-        ORDRD
-        DLVRD
-    }
 
-    entity  Pet{
-        name: string pattern:'^[\w\s-]+$'
-        price: currency
-        type : PetType opt
-        parentType : PetType opt
-        dob: date
-        weight: int max:10
-        neutered: bool
-        description: text
-        status: Status
-        skills : Skill many embedded
-    }
+enum CoverageLevel {
+    ONE
+    TWO
+    TWOTHOSUAND_PLUS
 
-    enum CoverageLevel {
-        ONE
-        TWO
-        TWOTHOSUAND_PLUS
+}
 
-    }
+enum PlanType  {
+    SINGLE
+    MULTI
+}
 
-    enum PlanType  {
-        SINGLE
-        MULTI
-    }
+enum WhosTravelling  {
+    SINGLE
+    FAMILY
+}
 
-    enum WhosTravelling  {
-        SINGLE
-        FAMILY
-    }
+entity Traveler{
+    firstName: string
+    lastName: string
+}
 
 entity QuoteData{
     haveCare: bool
@@ -61,15 +48,8 @@ entity QuoteData{
     ninetyDayStable: bool 
     planTotal: currency
     trn: int
+    traveler : Traveler many embedded
 }
 
-entity Skill {
-    name: string
-    level : int
-}
-
-entity PetType {
-    name : string
-}
 
 }

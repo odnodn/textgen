@@ -1,10 +1,20 @@
 import typing
 import stringcase
 
+import configparser
+import os
+config = configparser.ConfigParser()
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(ROOT_DIR, 'config.ini')
+
 class GenUtils:
 
     def __init__(self):
-        self.myvar = 'sample_var'
+        config.read(CONFIG_PATH)
+        for key in config: print(key)
+        print(config)
+
 
     def typeSelect(self, parent, name):
         return [e for e in parent.elements if type(e).__name__ == name]
@@ -37,6 +47,9 @@ class GenUtils:
 
     def getAllSimpleProps(self, e):
         return [a for a in self.allProps(e) if self.isSimple(a) or self.isEnum(a)]
+
+    def allSingleProps(self, e):
+        return [a for a in self.allProps(e) if not a.many]
 
     def getOutgoingRefs(self, e):
         return [a for a in self.allProps(e) if self.isReference(a)]
@@ -86,11 +99,11 @@ class GenUtils:
 
     @staticmethod
     def toFirstLower( name):
-        return name[0].lower() + name[1:]
+        return name if name == '' else name[0].lower() + name[1:]
 
     @staticmethod
     def toFirstUpper( name):
-        return name[0].upper() + name[1:]
+        return name if name == ''  else name[0].upper() + name[1:]
 
     @staticmethod
     def asCollection(prop):
@@ -105,22 +118,28 @@ class GenUtils:
                 #print ("found " + propcmp.name + " -> " + encmp.name + " " + entity.name)
                 return propcmp
 
+    def getTopLevelPackage(self):
+        return 'com.abc.travelquote'
+        #TODO return config['DEFAULT']['topLevelPackage']
+
     def getPackName(self, topLevelPackage, pck,stem, entity):
         return f'{topLevelPackage}.{pck.name}.{stem}.{entity.name}{toFirstUpper(stem)}'
 
+    def getFqn(self, entity, stem=""):
+        return f'{self.getTopLevelPackage()}.{entity.parent.name}.{entity.name}{self.toFirstUpper(stem)}'
 
-    def getTestData( prop):
-        if prop.type.isEnum() :
-            return "random(" + prop.type.fqn() + ".class)"
-        elif (prop.isType("Date")) :
+    def getTestData(self, prop):
+        if self.isEnum(prop) :
+            return "random(" + self.getFqn(prop.type) + ".class)"
+        elif (self.isPropOfType(prop ,"date")) :
             return 'randomDate("2011-04-15", "2011-11-07", new SimpleDateFormat("yyyy-MM-dd"))'
-        elif ( prop.isType("boolean") or prop.isType("Boolean") ):
+        elif(self.isPropOfType(prop ,"bool")):
              "random(true, false)"
-        elif (prop.isCurrency() or prop.isType("Double")) :
+        elif(self.isPropOfType(prop ,"currency")) :
             return "random(Long.class, range(1, 10))" #todo should return bigdecimal
-        elif  prop.isType("Integer") :
+        elif(self.isPropOfType(prop ,"int")):
               return  "random(Integer.class, range(1, 200))"
-        elif ( prop.isType("long")):
-          "random(Long.class, range(1L, 100L))"
+        # elif(self.isPropOfType(prop ,"date"))   :
+        #   "random(Long.class, range(1L, 100L))"
         else :	    #"string  #todo should return blurb for  large text
             "random(getUniqueNames())";

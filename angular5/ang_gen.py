@@ -15,7 +15,7 @@ import os
 
 class AngGen(BaseGen):
 
-    types =  {
+    types = {
             'integer': 'number',
             'int' : 'number',
             'string': 'string',

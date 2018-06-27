@@ -1,1 +1,72 @@
-<p> {{ fname }} - {{ lname }}</p>
+<div>
+    <h2>
+        <span translate>Travel Quotes</span>
+        <button class="btn btn-primary float-right" [routerLink]="['/', { outlets: { popup: ['travel-quote-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  translate>
+            Create new Travel Quote
+            </span>
+        </button>
+    </h2>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="travelQuotes">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                {% for prop in genUtils.allSingleProps(entity) -%}
+                    <th><span translate>{{ prop.name }}</span> <span class="fa fa-sort"></span></th>
+                {% endfor %}
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let record of records ;trackBy: trackId">
+                <td><a [routerLink]="['../travel-quote', travelQuote.id ]"> entity.id </a></td>
+                {% for prop in genUtils.allSingleProps(entity) -%}
+                    <td> {{ '{{' }}record {{ '}}' }}.{{ prop.name }}</td>
+                {% endfor %}
+                <td class="text-right">
+                    <!--
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../travel-quote', travelQuote.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'travel-quote/'+ travelQuote.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'travel-quote/'+ travelQuote.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                    -->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+<!--
+    <div *ngIf="travelQuotes && travelQuotes.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+    -->
+</div>
