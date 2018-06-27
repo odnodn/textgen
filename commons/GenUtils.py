@@ -134,12 +134,12 @@ class GenUtils:
         elif (self.isPropOfType(prop ,"date")) :
             return 'randomDate("2011-04-15", "2011-11-07", new SimpleDateFormat("yyyy-MM-dd"))'
         elif(self.isPropOfType(prop ,"bool")):
-             "random(true, false)"
+            return"random(true, false)"
         elif(self.isPropOfType(prop ,"currency")) :
             return "random(Long.class, range(1, 10))" #todo should return bigdecimal
         elif(self.isPropOfType(prop ,"int")):
-              return  "random(Integer.class, range(1, 200))"
+            return  "random(Integer.class, range(1, 200))"
         # elif(self.isPropOfType(prop ,"date"))   :
         #   "random(Long.class, range(1L, 100L))"
         else :	    #"string  #todo should return blurb for  large text
-            "random(getUniqueNames())";
+            return  "random(getUniqueNames())";
