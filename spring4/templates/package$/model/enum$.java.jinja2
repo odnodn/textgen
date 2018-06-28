@@ -1,6 +1,7 @@
+package {{ pck }};
 
 enum {{ entity.name }}{
     {% for literal in entity.literals -%}
-         '{{ literal.name|capitalize }}',
+         {{ literal.name|capitalize }},
     {% endfor %}
 }

@@ -9,7 +9,7 @@ this_folder = dirname(__file__)
 metaModel = '../metamodel/entity.tx'
 
 #TODO: pass into functions
-topLevelPackage = 'com.bfwg'
+#topLevelPackage = 'com.bfwg'
 
 import jinja2
 
@@ -108,11 +108,11 @@ class BaseGen:
         if(len(filterPacks) == 0 or stemPackName in filterPacks ) :
             #print('trying to load template ' + str(t))
             template = self.jinja_env.get_template(str(t))
-            packageName = f'{topLevelPackage}.{pck.name}.{stemPackName}'
+            packageName = f'{utils.getTopLevelPackage()}.{pck.name}.{stemPackName}'
 
             def createFqn(  extension, fileExtension = None):
                 fileExtension = f'{GenUtils.toFirstUpper(extension)}' if not fileExtension else fileExtension
-                return f'{topLevelPackage}.{pck.name}.{extension}.{entity.name}{fileExtension}'
+                return f'{utils.getTopLevelPackage()}.{pck.name}.{extension}.{entity.name}{fileExtension}'
 
             out = template.render(mdl = pck.parent, pck = packageName, entity=entity, fqn = createFqn('model',' '),
                                   fqnRepo = createFqn('repository'),

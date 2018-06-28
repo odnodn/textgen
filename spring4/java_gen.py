@@ -14,8 +14,7 @@ from commons.BaseGen import  BaseGen
 
 
 utils = GenUtils()
-topLevelPackage = 'com.bfwg'
-import jinja2
+
 import os
 
 
@@ -44,5 +43,5 @@ class JavaGen(BaseGen):
 
 if __name__ == "__main__":
     JavaGen().main()
-    cmd = 'cp -r srcgen/ ~/dev/ionic/angular-spring-starter/server/src/main/java/com/bfwg'
+    cmd = 'cp -r srcgen/ ' + utils.getConfig('outputJava')  + utils.getTopLevelPackage().replace('.','/')
     os.system(cmd)

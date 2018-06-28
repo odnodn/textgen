@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 import { {{name}}} from "../{{lname}}";
 import { {{name}}Service} from "../{{lname}}.service";
-import { BaseAdd } from '../../base/base-add';
+import { BaseEditComponent } from '@app/base/base-edit.component';
 
 {% for t in (genUtils.getOutgoingRefs(entity) + genUtils.getContained(entity) ) |map(attribute='type.name') | unique-%}
     import {{ '{' + t + '}'}} from "@app/{{ t| fLower }}/{{ t | fLower }}";
@@ -28,7 +28,7 @@ selector: 'app-{{lname}}-add',
 templateUrl: './{{lname}}-add.component.html',
 styleUrls: ['./{{lname}}-add.component.css']
 })
-export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
+export class {{name}}AddComponent  extends BaseEditComponent<{{name}}> implements OnInit {
 
     {{lname}}: {{name}};
     errorMessage: string;
@@ -38,8 +38,9 @@ export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
         {{ prop.name }} : {{ prop.type.name }}[]
     {% endfor %}
 
-    constructor(protected {{lname}}Service: {{name}}Service, protected router: Router, private fb: FormBuilder) {
-        super({{lname}}Service, router, '{{lname}}s')
+
+    constructor(protected {{lname}}Service: {{name}}Service, protected route:ActivatedRoute, protected router: Router, private fb: FormBuilder) {
+        super({{lname}}Service, route, router, '{{lname}}s')
         this.createForm();
     }
 
@@ -75,6 +76,7 @@ export class {{name}}AddComponent  extends BaseAdd<{{name}}> implements OnInit {
         );
         console.log({{ formName }}.value)
         //console.log("entity", this.entity)
+        super.onSubmit(this.entity);
     }
 
 }

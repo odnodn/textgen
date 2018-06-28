@@ -1,17 +1,17 @@
 <div>
     <h2>
         <span translate>Travel Quotes</span>
-        <button class="btn btn-primary float-right" [routerLink]="['/', { outlets: { popup: ['travel-quote-new'] } }]">
+        <button class="btn btn-primary float-right" (click)="showAdd()">
             <span class="fa fa-plus"></span>
             <span  translate>
-            Create new Travel Quote
+            Create new
             </span>
         </button>
     </h2>
     <div class="row">
     </div>
     <br/>
-    <div class="table-responsive" *ngIf="travelQuotes">
+    <div class="table-responsive" *ngIf="entities">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -22,12 +22,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let record of records ;trackBy: trackId">
+            <tr *ngFor="let e of entities ">
+            <!--
                 <td><a [routerLink]="['../travel-quote', travelQuote.id ]"> entity.id </a></td>
+                -->
                 {% for prop in genUtils.allSingleProps(entity) -%}
-                    <td> {{ '{{' }}record {{ '}}' }}.{{ prop.name }}</td>
+                    <td> {{ '{{' }}e.{{ prop.name }}{{ '}}' }}</td>
                 {% endfor %}
                 <td class="text-right">
+                    <button class="btn btn-default" (click)="showEdit(e)">Edit</button>
+                    <button class="btn btn-default" (click)="delete(e)">Delete</button>
                     <!--
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

@@ -12,8 +12,7 @@ class GenUtils:
 
     def __init__(self):
         config.read(CONFIG_PATH)
-        for key in config: print(key)
-        print(config)
+
 
 
     def typeSelect(self, parent, name):
@@ -119,8 +118,11 @@ class GenUtils:
                 return propcmp
 
     def getTopLevelPackage(self):
-        return 'com.abc.travelquote'
-        #TODO return config['DEFAULT']['topLevelPackage']
+        #return 'com.abc.travelquote'
+        return config['DEFAULT']['topLevelPackage']
+
+    def getConfig(self, str):
+        return config['DEFAULT'][str]
 
     def getPackName(self, topLevelPackage, pck,stem, entity):
         return f'{topLevelPackage}.{pck.name}.{stem}.{entity.name}{toFirstUpper(stem)}'

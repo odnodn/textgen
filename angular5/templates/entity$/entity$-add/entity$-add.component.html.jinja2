@@ -1,5 +1,9 @@
 {% set formName =  (entity.name | fLower ) +'Form'  %}
 
+{% macro propCommons(prop) %}
+    formControlName="{{ prop.name }}"  id="{{ prop.name }}-input"  [(ngModel)]="entity.{{ prop.name }}"
+{% endmacro %}
+
 {% macro renderEntityProps(entity, containerForm) %}
     {% for prop in entity.properties -%}
         {% if genUtils.isManyEmbedded(prop) %}
@@ -21,25 +25,25 @@
                 <label for="{{ prop.name }}-input"><span translate>{{ prop.name }}</span></label>
                 {% if genUtils.isSimple(prop) -%}
                     {% if genUtils.isEnum(prop) -%}
-                        <ng-select formControlName="{{ prop.name }}">
+                        <ng-select {{ propCommons(prop) }}>
                             {% for literal in prop.type.literals -%}
-                                <ng-option [value]="{{ literal.name|capitalize }}">{{ literal.name }}</ng-option>
+                                <ng-option value="{{ literal.name|capitalize }}">{{ literal.name }}</ng-option>
                             {% endfor %}
                         </ng-select>
 
                     {% elif genUtils.isPropOfType(prop, "date") -%}
                         <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd"
-                                   formControlName="{{ prop.name }}"  id="{{ prop.name }}-input" ngbDatepicker #d="ngbDatepicker">
+                            <input class="form-control" placeholder="yyyy-mm-dd" {{ propCommons(prop) }}
+                                     ngbDatepicker #d_{{ prop.name }}="ngbDatepicker">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                                <button class="btn btn-outline-secondary" (click)="d_{{ prop.name }}.toggle()" type="button">
                                     <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
                                 </button>
                             </div>
                         </div>
                     {% elif genUtils.isPropOfType(prop, "bool") -%}
                         <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
-                             formControlName="{{ prop.name }}">
+                                {{ propCommons(prop) }}>
                             <label ngbButtonLabel class="btn-primary">
                                 <input ngbButton type="radio" [value]="true"> <span translate>Yes</span>
                             </label>
@@ -49,14 +53,12 @@
                         </div>
 
                     {% elif genUtils.isNumeric(prop) -%}
-                        <input type="number" class="form-control" id="{{ prop.name }}-input"
-                               formControlName="{{ prop.name }}">
+                        <input type="number" class="form-control" {{ propCommons(prop) }}>
                     {% elif genUtils.isPropOfType(prop, "text") -%}
-                        <textarea id="{{ prop.name }}-input" formControlName="{{ prop.name }}"
-                                  [(ngModel)]="entity.{{ prop.name }}"></textarea>
+                        <textarea formControlName="{{ prop.name }}"
+                                  ></textarea>
                     {% else -%}
-                        <input type="text" class="form-control" id="{{ prop.name }}-input"
-                               formControlName="{{ prop.name }}">
+                        <input type="text" class="form-control" {{ propCommons(prop) }}>
                     {% endif -%}
 
                 {% else -%}
