@@ -4,7 +4,7 @@
         <button class="btn btn-primary float-right" (click)="showAdd()">
             <span class="fa fa-plus"></span>
             <span  translate>
-            Create new
+            Create
             </span>
         </button>
     </h2>
@@ -30,8 +30,13 @@
                     <td> {{ '{{' }}e.{{ prop.name }}{{ '}}' }}</td>
                 {% endfor %}
                 <td class="text-right">
-                    <button class="btn btn-default" (click)="showEdit(e)">Edit</button>
-                    <button class="btn btn-default" (click)="delete(e)">Delete</button>
+                    <button class="btn btn-default" (click)="showEdit(e)">
+                        <span class="fa fa-pencil"></span>
+                        https://fontawesome.com/v4.7.0/icon/pencil
+                    </button>
+                    <button class="btn btn-default" (click)="delete(e)">
+                        <span class="fa fa-delete"></span>
+                    </button>
                     <!--
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
