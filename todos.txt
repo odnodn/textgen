@@ -1,0 +1,7 @@
+1. multiple file imports
+2. referencing entity
+3. move common form generation code to a jinja module
+4. formgorups ?
+5. validators
+6. Test for validators
+7. Interface class member functions

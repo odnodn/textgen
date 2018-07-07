@@ -23,19 +23,19 @@ selector: '{{cname}}',
 templateUrl: './{{lname}}.component.html',
 styleUrls: ['./{{lname}}.component.css']
 })
-export class {{name}}Component  extends BaseEditComponent<{{entityNameTODO}}> implements OnInit {
+export class {{name}}Component  extends BaseWizardStep<{{entityNameTODO}}> implements OnInit {
 
-    {{lname}}: {{name}};
-    errorMessage: string;
     public {{ entity.name | fLower }}Form: FormGroup;
 
     {% for prop in genUtils.getOutgoingRefs(entity) -%}
         {{ prop.name }} : {{ prop.type.name }}[]
     {% endfor %}
 
+    ngOnInit(){}
 
-    constructor(protected {{lname}}Service: {{name}}Service, protected route:ActivatedRoute, protected router: Router, private fb: FormBuilder) {
-        super({{lname}}Service, route, router, '{{lname}}s')
+
+    constructor(private fb: FormBuilder) {
+        super()
         this.createForm();
     }
 
@@ -65,14 +65,7 @@ export class {{name}}Component  extends BaseEditComponent<{{entityNameTODO}}> im
         }
     {% endfor %}
 
-    submit(){
-        Object.keys({{ formName }}.controls).forEach(field =>
-            {{ formName }}.get(field).markAsTouched()
-        );
-        console.log({{ formName }}.value)
-        //console.log("entity", this.entity)
-        super.onSubmit(this.entity);
-    }
+
 
 }
 

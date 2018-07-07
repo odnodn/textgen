@@ -1,0 +1,27 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
+{% for e in genUtils.getEntities(entity) -%}
+import { {{ e.name }}Component } from './{{ e.name }}/{{ e.name }}.component';
+{% endfor %}
+
+import { {{ entity.name}}Component } from './{{ entity.name}}.component';
+
+import { NavigatorComponent } from './navigator/navigator.component';
+import { FinalMessageComponent } from './final-message/final-message.component';
+
+
+@NgModule({
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    declarations: [ {% for e in genUtils.getEntities(entity) -%} {{ e.name }}Component, {% endfor %} {{entity.name}}Component, NavigatorComponent, FinalMessageComponent]
+,exports:[
+    {{entity.name}}Component
+],
+providers: []
+})
+export class {{entity.name}}Module { }
