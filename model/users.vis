@@ -29,13 +29,13 @@ package SingleTravelWizard{
     }
 
     entity Trip{
-        firstName:string
-        lastName:string
+        firstName:string opt min:5
+        lastName:string pattern:'^[\w\s-]+$'
         haveCare: bool
-        alreadyDeparted: bool
-        over60: bool
-        departure: date
-        returnDate: date
+        alreadyDeparted: bool requiredFalse
+        over60: bool requiredFalse
+        departure: date future
+        returnDate: date future
     }
 
     entity Options{
