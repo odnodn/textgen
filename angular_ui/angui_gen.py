@@ -1,3 +1,16 @@
+
+from commons.GenUtils import GenUtils
+from commons.helpers import *
+import shutil
+
+
+utils = GenUtils()
+topLevelPackage = 'com.bfwg'
+
+import jinja2
+import os
+
+
 from commons.GenUtils import GenUtils
 from commons.helpers import *
 from abc import ABC, abstractmethod
@@ -16,7 +29,7 @@ import jinja2
 utils = GenUtils()
 
 
-class BaseGen:
+class BaseUIGen:
     def __init__(self):
         # self.jinja_env = jinja2.Environment(
         #     loader=jinja2.FileSystemLoader(self.getMyFolder()),
@@ -89,6 +102,7 @@ class BaseGen:
                 for t in lstTemplates:
                     self.temlateToFile(t, enum, pck, 'enum' )
 
+
     def temlateToFile(self, t, entity, pck, typename='entity', filterPacks=[]):
 
         lname= GenUtils.toFirstLower(entity.name)
@@ -102,6 +116,7 @@ class BaseGen:
         print(tname)
 
         if not filename.startswith(typename) and '$' in filename:
+            print("ret " + filename + " " + typename)
             return
 
         stemPackName = tname.split('/')[len(tname.split('/')) - 1]  #TODO : wont work on windows
@@ -133,7 +148,7 @@ class BaseGen:
 
     #@abstractmethod
     def getModelFile(self)-> str :
-       return  utils.getConfig('modelFile')
+        return  utils.getConfig('modelFile')
 
     @abstractmethod
     def currentFolder(self):
@@ -142,5 +157,36 @@ class BaseGen:
     @abstractmethod
     def massageOutputFileName(self, opFileName):
         return opFileName
+
+
+class AngGen(BaseUIGen):
+
+    types = {
+        'integer': 'number',
+        'int' : 'number',
+        'string': 'string',
+        'date' : 'Date',
+        'bool' : 'boolean',
+        'text' : 'string',
+        'currency': 'number'
+    }
+
+
+    def getMyPath(self):
+        return dirname(__file__)
+
+    def currentFolder(self):
+        return dirname(__file__)
+
+    def massageOutputFileName(self, opFileName):
+        return GenUtils.toFirstLower(opFileName)
+
+
+if __name__ == "__main__":
+    AngGen().main()
+    cmd = 'cp -r srcgen/ ~/dev/angforms/src/app'
+    os.system(cmd)
+
+
 
 

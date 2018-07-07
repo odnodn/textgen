@@ -16,17 +16,16 @@ import os
 class AngGen(BaseGen):
 
     types = {
-            'integer': 'number',
-            'int' : 'number',
-            'string': 'string',
-            'date' : 'Date',
-            'bool' : 'boolean',
-            'text' : 'string',
-            'currency': 'number'
-        }
+        'integer': 'number',
+        'int' : 'number',
+        'string': 'string',
+        'date' : 'Date',
+        'bool' : 'boolean',
+        'text' : 'string',
+        'currency': 'number'
+    }
 
-    def getModelFile(self):
-        return modelFile
+
 
     def getMyPath(self):
         return dirname(__file__)
@@ -36,6 +35,23 @@ class AngGen(BaseGen):
 
     def massageOutputFileName(self, opFileName):
         return GenUtils.toFirstLower(opFileName)
+
+    def doGenerate(self,  model):
+
+        self.createJinjaEnv(self.currentFolder())
+
+        lstTemplates = searching_all_files('templates')
+
+        for pck in model.elements:
+
+            for entity in utils.getAbstractEntities(pck):
+                #print(f'-------{entity.name} --------')
+                for t in lstTemplates:
+                    self.temlateToFile(t, entity, pck, 'entity', ['model'])
+
+            for entity in utils.getEntities(pck):
+                for t in lstTemplates:
+                    self.temlateToFile(t, entity, pck, 'entity')
 
 
 if __name__ == "__main__":

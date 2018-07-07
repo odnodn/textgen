@@ -1,0 +1,65 @@
+package SingleTravelWizard{
+
+    enum CoverageLevel {
+        ONE
+        TWO
+        TWOTHOSUAND_PLUS
+    }
+
+    enum PlanType  {
+        SINGLE
+        MULTI
+    }
+
+    enum WhosTravelling  {
+        SINGLE
+        FAMILY
+    }
+
+
+    enum Gender  {
+        MALE
+        FEMALE
+        TRANSGENDER
+    }
+
+    enum Relation{
+        SPOUSE
+        DEPENDANT
+    }
+
+    entity Trip{
+        firstName:string
+        lastName:string
+        haveCare: bool
+        alreadyDeparted: bool
+        over60: bool
+        departure: date
+        returnDate: date
+    }
+
+    entity Options{
+        dobOldest: date
+        planMember: bool
+        groupNumber: int
+        idNumber: string
+        planType : PlanType
+        interestedExtra: bool
+    }
+
+    entity Medical{
+        travellingForMedical: bool
+        travellingAgainstAdvice: bool
+        twoOrMoreStrokes: bool
+        icd : bool
+        homeOxygen : bool
+        terminal: bool
+        ninetyDayStable: bool
+     }
+
+     entity Travelers{
+        traveler : string //Traveler many embedded
+     }
+}
+
+
