@@ -3,10 +3,11 @@ import stringcase
 
 import configparser
 import os
+from pathlib import Path
 config = configparser.ConfigParser()
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-CONFIG_PATH = os.path.join(ROOT_DIR, 'config.ini')
+CONFIG_PATH = os.path.join(str(Path(ROOT_DIR).parent), 'config.ini')
 
 class GenUtils:
 

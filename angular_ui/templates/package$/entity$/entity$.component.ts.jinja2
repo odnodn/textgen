@@ -1,14 +1,17 @@
 
-import { BaseWizardStep } from '@app/base/base-wizardstep';
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
+
+import { DataInputWidget } from '@app/base/DataInputWidget';
+import { CustomValidators } from '@app/base/custom-validators';
+
 
 {%  macro getValidators(prop) %}
     {% if not prop.opt %} Validators.required, {% endif %}
     {% for v in prop.validators %}
         {% if  v.name in ['requiredFalse','future','past'] %} CustomValidators.{{ v.name }}, {% endif %}
         {% if  v.name == 'min' or  v.name == 'max' %}
-            Validators.{{ v.name }}Lenght({{  v.value }}),
+            Validators.{{ v.name }}Length({{  v.value }}),
         {% endif %}
     {% endfor %}
 {% endmacro %}
@@ -33,9 +36,11 @@ selector: '{{cname}}',
 templateUrl: './{{lname}}.component.html',
 styleUrls: ['./{{lname}}.component.css']
 })
-export class {{name}}Component  extends BaseWizardStep<{{entityNameTODO}}> implements OnInit {
+export class {{name}}Component extends DataInputWidget implements OnInit  {
+
 
     public {{ entity.name | fLower }}Form: FormGroup;
+    {% set formName = 'this.' +  (entity.name | fLower ) +'Form'  %}
 
     {% for prop in genUtils.getOutgoingRefs(entity) -%}
         {{ prop.name }} : {{ prop.type.name }}[]
@@ -43,13 +48,12 @@ export class {{name}}Component  extends BaseWizardStep<{{entityNameTODO}}> imple
 
     ngOnInit(){}
 
+    getTheForm():FormGroup  { return  {{ formName }} }
 
     constructor(private fb: FormBuilder) {
         super()
         this.createForm();
     }
-
-    {% set formName = 'this.' +  (entity.name | fLower ) +'Form'  %}
 
     private createForm(): void {
         {{ formName }}= this.fb.group({
@@ -74,8 +78,6 @@ export class {{name}}Component  extends BaseWizardStep<{{entityNameTODO}}> imple
             ({{ formName }}.get('{{ prop.name }}') as FormArray ).removeAt(index);
         }
     {% endfor %}
-
-
 
 }
 

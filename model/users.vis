@@ -28,38 +28,73 @@ package SingleTravelWizard{
         DEPENDANT
     }
 
-    entity Trip{
-        firstName:string opt min:5
-        lastName:string pattern:'^[\w\s-]+$'
+    entity GettingStarted{
+
         haveCare: bool
         alreadyDeparted: bool requiredFalse
         over60: bool requiredFalse
-        departure: date future
-        returnDate: date future
+
     }
 
-    entity Options{
-        dobOldest: date
-        planMember: bool
-        groupNumber: int
-        idNumber: string
+    entity WhenTravelling{
+         departure: date future
+         returnDate: date future
+    }
+
+    entity WhoTravelling{
+            whosTraveling : WhosTravelling
+            dobOldest: date
+
+            planMember: bool
+            groupNumber: int min:1000 max:9999
+            idNumber: string
+    }
+
+    entity ChoosePlan{
         planType : PlanType
+
+    }
+
+    entity CoverageOptions{
         interestedExtra: bool
+        initialPaymentWithinLast72: bool
+        chosenExtra: bool
+        coverageLevel: CoverageLevel renderDropdown
+
     }
 
     entity Medical{
-        travellingForMedical: bool
-        travellingAgainstAdvice: bool
-        twoOrMoreStrokes: bool
-        icd : bool
-        homeOxygen : bool
-        terminal: bool
+        travellingForMedical: bool requiredFalse
+        travellingAgainstAdvice: bool requiredFalse
+        twoOrMoreStrokes: bool requiredFalse
+        icd : bool requiredFalse
+        homeOxygen : bool requiredFalse
+        kidneyDialysis: bool requiredFalse
+        terminal: bool requiredFalse
+        aids:bool requiredFalse
+    }
+
+    entity MustBeStable{
         ninetyDayStable: bool
      }
 
      entity Travelers{
-        traveler : string //Traveler many embedded
+        firstName:string opt min:2
+        lastName:string pattern:'^[\w\s-]+$'
+        gender: Gender renderDropdown
+        dob: date past
      }
+
+     entity ContactInfo{
+      street: string
+      city: string
+      postalCode: string pattern:'/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/'
+      phone: string
+      email: string
+      confirmEmail: string
+     }
+
+
 }
 
 

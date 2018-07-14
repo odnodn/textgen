@@ -11,9 +11,20 @@ import { BaseEditComponent } from '@app/base/base-edit.component';
     import {{ '{' + t + '}'}} from "@app/{{ t| fLower }}/{{ t | fLower }}";
 {% endfor %}
 
+{%  macro getValidators(prop) %}
+    {% if not prop.opt %} Validators.required, {% endif %}
+    {% for v in prop.validators %}
+        {% if  v.name in ['requiredFalse','future','past'] %} CustomValidators.{{ v.name }}, {% endif %}
+        {% if  v.name == 'min' or  v.name == 'max' %}
+            Validators.{{ v.name }}Length({{  v.value }}),
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+
 {% macro genFormControls(entity) %}
     {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
-        {{ prop.name }} : ['', [ {% if not prop.opt %} Validators.required {% endif %}]],
+        {{ prop.name }} : ['', [  {{ getValidators(prop) }} ]],
     {% endfor %}
     {% for prop in genUtils.getContained(entity) -%}
         {{ prop.name }} : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])
@@ -80,6 +91,4 @@ export class {{name}}AddComponent  extends BaseEditComponent<{{name}}> implement
     }
 
 }
-
-
 {% endautoescape %}

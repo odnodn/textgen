@@ -2,6 +2,7 @@
 from commons.GenUtils import GenUtils
 from commons.helpers import *
 import shutil
+from pathlib import Path
 
 
 utils = GenUtils()
@@ -65,9 +66,10 @@ class BaseUIGen:
         return self.types.get(s.name, s.name)
 
     def createJinjaEnv(self, currentFolder):
+
         #this_folder = dirname(__file__)
         self.jinja_env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(currentFolder),
+            loader=jinja2.FileSystemLoader(currentFolder , followlinks=True),
             trim_blocks=True,
             lstrip_blocks=True)
         self.jinja_env.filters['altype'] = self.translateType
@@ -82,6 +84,8 @@ class BaseUIGen:
         self.createJinjaEnv(self.currentFolder())
 
         lstTemplates = searching_all_files('templates')
+        # for t in lstTemplates:
+        #     print(t)
 
         for pck in model.elements:
 
@@ -184,7 +188,7 @@ class AngGen(BaseUIGen):
 
 if __name__ == "__main__":
     AngGen().main()
-    cmd = 'cp -r srcgen/ ~/dev/angforms/src/app'
+    cmd = 'cp -r srcgen/singleTravelWizard ~/dev/ionic/travel-single-angular/src/app'
     os.system(cmd)
 
 

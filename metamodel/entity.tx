@@ -51,7 +51,8 @@ Validator:
 	name='pattern' ':' svalue=STRING  ;
 
 Property:
-    name=ID ':' type=[Type] ('='defaultVal=defValue)?   (opt?='opt')? (many?='many')?  (embedded?='embedded')?  (ref?='ref')?  (unique?='unique')?  (bi?='bi')?  (validators+=Validator)*
+    name=ID ':' type=[Type] ('='defaultVal=defValue)?   (opt?='opt')? (many?='many')?  (embedded?='embedded')?  (ref?='ref')?  (unique?='unique')?  (bi?='bi')? (renderDropdown?='renderDropdown')
+     (validators+=Validator)*
 ;
 
 // Type can be SimpleType or Entity
