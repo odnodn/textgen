@@ -3,14 +3,20 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 {% set cname =  (entity.name  ) +'Component'  %}
 import { {{ cname }} } from './{{ name |fLower }}.component';
 
+import {ReactiveFormsModule, FormsModule} from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 describe('{{ cname }}', () => {
 let component: {{ cname }};
 let fixture: ComponentFixture<{{ cname }}>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-        declarations: [ {{ cname }} ]
-        })
+        declarations: [ {{ cname }} ],
+        imports: [ReactiveFormsModule, FormsModule,NgbModule.forRoot(), NgSelectModule],
+
+    })
         .compileComponents();
     }));
 
@@ -22,5 +28,9 @@ let fixture: ComponentFixture<{{ cname }}>;
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('form invalid when empty', () => {
+        expect(component.getTheForm().valid).toBeFalsy();
     });
 });
