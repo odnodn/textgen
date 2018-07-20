@@ -3,22 +3,27 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 {% for e in genUtils.getEntities(entity) -%}
-import { {{ e.name }}Component } from './{{ e.name }}/{{ e.name }}.component';
+import { {{ e.name }}Component } from './{{ e.name| fLower }}/{{ e.name| fLower }}.component';
 {% endfor %}
 
-import { {{ entity.name}}Component } from './{{ entity.name}}.component';
+import { {{ entity.name}}Component } from './{{ entity.name | fLower }}.component';
 
-import { NavigatorComponent } from './navigator/navigator.component';
-import { FinalMessageComponent } from './final-message/final-message.component';
+{#import { NavigatorComponent } from './navigator/navigator.component';#}
+{#import { FinalMessageComponent } from './final-message/final-message.component';#}
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgbModule,
+        NgSelectModule
     ],
-    declarations: [ {% for e in genUtils.getEntities(entity) -%} {{ e.name }}Component, {% endfor %} {{entity.name}}Component, NavigatorComponent, FinalMessageComponent]
+    declarations: [ {% for e in genUtils.getEntities(entity) -%} {{ e.name }}Component, {% endfor %} {{entity.name}}Component]
 ,exports:[
     {{entity.name}}Component
 ],

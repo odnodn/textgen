@@ -1,0 +1,44 @@
+package helpchild {
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+abs entity Person {
+    firstName: string
+    lastName: string
+    gender:Gender
+    dob:date
+}
+
+entity Child {
+    firstName: string
+    lastName: string
+    gender:Gender
+    dob:date
+
+
+    description: text
+    interests: string
+        parent: Parent opt
+
+}
+
+entity Parent {
+    firstName: string
+    lastName: string
+    gender:Gender
+    dob:date
+    //children : Child  many
+    email : string
+    city: string
+    country: string
+    bankInfo: string
+}
+
+
+
+
+}//end of package comm
+

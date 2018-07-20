@@ -56,5 +56,5 @@ class AngGen(BaseGen):
 
 if __name__ == "__main__":
     AngGen().main()
-    cmd = 'cp -r srcgen/ ~/dev/angforms/src/app'
+    cmd = 'cp -r srcgen/ ~/dev/ang/src/app'
     os.system(cmd)

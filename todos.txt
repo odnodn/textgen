@@ -8,3 +8,10 @@
 7. E2E
 8. test sample wizard
 9. arrays
+
+
+enums not working for anggen
+inheritance is not supported
+relationships imports not generated
+create view page
+if opt add ? in entity

@@ -1,0 +1,26 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+
+{% set cname =  (entity.name  ) +'Component'  %}
+import { {{ cname }} } from './{{ name |fLower }}.component';
+
+describe('{{ cname }}', () => {
+let component: {{ cname }};
+let fixture: ComponentFixture<{{ cname }}>;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+        declarations: [ {{ cname }} ]
+        })
+        .compileComponents();
+    }));
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent({{ cname }});
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+});

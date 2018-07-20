@@ -3,8 +3,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 
-import { {{name}}} from "../{{lname}}";
-import { {{name}}Service} from "../{{lname}}.service";
+{#import { {{name}}} from "../{{lname}}";#}
+{#import { {{name}}Service} from "../{{lname}}.service";#}
 import { BaseEditComponent } from '@app/base/base-edit.component';
 
 {% autoescape false %}
@@ -14,8 +14,8 @@ selector: 'app-{{name | fLower}}',
 templateUrl: './{{lname}}.component.html',
 styleUrls: ['./{{lname}}.component.css']
 })
-export class {{name}}Component  extends BaseEditComponent<{{name}}> implements OnInit {
-
+export class {{name}}Component  /* extends BaseEditComponent<{{name}}> implements OnInit */ {
+    entity:QuoteDataImpl = new QuoteDataImpl();
 }
 
 

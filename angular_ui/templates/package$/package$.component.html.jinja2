@@ -1,15 +1,19 @@
-<div class="row">
-    <div class="col-lg-5" [hidden]="wizardDone()">
-        <wizard-navigator  [currentInd]="currentInd" [steps]="steps"></wizard-navigator>
-    </div>
-
-    <div class="col-lg-7">
-        {% for entity in genUtils.getEntities(entity) -%}
-            {% set cname = (entity.parent.name|fLower ) + '-' + (entity.name |fLower )  %}
-            <{{cname}} [hidden]="!showMe({{loop.index - 1}} )" [entity]="entity" (stepComplete)="onNext($event)"></{{ cname }}>
-        {% endfor %}
-    </div>
-
-    <final-message [hidden]="!wizardDone()" [entity]="entity"></final-message>
+<div class="container">
+{#    <div class="col-lg-5" [hidden]="wizardDone()">#}
+{#        <wizard-navigator  [currentInd]="currentInd" [steps]="steps"></wizard-navigator>#}
+{#    </div>#}
+{##}
+{#    <div class="col-lg-7">#}
+        <wizard #w>
+            {% for entity in genUtils.getEntities(entity) -%}
+                {% set cname = (entity.parent.name|fLower ) + '-' + (entity.name |fLower )  %}
+            <wizard-step header="{{ entity.name }}">
+                <{{cname}} [entity]="entity" #dw></{{cname}}>
+            </wizard-step>
+            {% endfor %}
+        </wizard>
+{#    </div>#}
+{##}
+{#    <final-message [hidden]="!wizardDone()" [entity]="entity"></final-message>#}
 </div>
 
