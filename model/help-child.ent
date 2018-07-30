@@ -12,24 +12,16 @@ abs entity Person {
     dob:date
 }
 
-entity Child {
-    firstName: string
-    lastName: string
-    gender:Gender
-    dob:date
-
+entity Child extends Person {
 
     description: text
     interests: string
-        parent: Parent opt
+    parent: Parent opt
 
 }
 
-entity Parent {
-    firstName: string
-    lastName: string
-    gender:Gender
-    dob:date
+entity Parent extends Person{
+
     //children : Child  many
     email : string
     city: string

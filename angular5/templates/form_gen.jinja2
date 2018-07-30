@@ -21,7 +21,7 @@
 {% endmacro %}
 
 {% macro renderEntityProps(entity, containerForm, genUtils) %}
-    {% for prop in entity.properties -%}
+    {% for prop in genUtils.allProps(entity) -%}
         {% if genUtils.isManyEmbedded(prop) %}
             <div class="card card-block">
                 <h4 class="card-title">{{ prop.name | fUpper }}</h4>

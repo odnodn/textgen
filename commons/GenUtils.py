@@ -146,3 +146,21 @@ class GenUtils:
         #   "random(Long.class, range(1L, 100L))"
         else :	    #"string  #todo should return blurb for  large text
             return  "random(getUniqueNames())";
+
+    def getTestDataJS(self, prop):
+        if self.isEnum(prop) :
+            return prop.type.name + "." + prop.type.literals[0].name
+        elif (self.isPropOfType(prop ,"date")) :
+            return 'chance.birthday()'
+        elif(self.isPropOfType(prop ,"bool")):
+            return "chance.bool()"
+        elif(self.isPropOfType(prop ,"currency")) :
+            return "chance.integer({ min: 0, max: 20 })"
+        elif(self.isPropOfType(prop ,"int")):
+            return  "chance.integer({ min: 0, max: 20 })"
+        elif(self.isPropOfType(prop ,"text")):
+            return  "chance.paragraph()"
+        # elif(self.isPropOfType(prop ,"date"))   :
+        #   "random(Long.class, range(1L, 100L))"
+        else :	    #"string  #todo should return blurb for  large text
+            return  "chance.last()";
