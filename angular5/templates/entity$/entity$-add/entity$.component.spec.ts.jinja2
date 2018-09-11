@@ -31,7 +31,7 @@ import { {{ cname }} } from './{{ name |fLower }}.component';
         expect(errors).toEqual({});
 
         });
-        // {{ prop.name }} : ['', [  {{ getValidators(prop) }} ]],
+
     {% endfor %}
 {#    {% for prop in genUtils.getContained(entity) -%}#}
 {#        {{ prop.name }} : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])#}
