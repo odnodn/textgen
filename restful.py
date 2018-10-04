@@ -29,7 +29,10 @@ class HelloWorld(Resource):
             un = json_data[0]['firstName']
             pw = json_data[0]['lastName']
         except:
-            un = json_data[0]['businessName']
+            try:
+                un = json_data[0]['businessName']
+            except:
+                return []
 
         #if(un  == '' and pw == ''):  un = json_data[0]['businessName']
 

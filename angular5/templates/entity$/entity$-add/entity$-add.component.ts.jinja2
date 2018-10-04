@@ -1,4 +1,6 @@
 
+{% import 'templates/validator_gen.jinja2' as vg %}
+
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
@@ -11,20 +13,11 @@ import { BaseEditComponent } from '@app/base/base-edit.component';
     import {{ '{' + t + '}'}} from "@app/{{ t| fLower }}/{{ t | fLower }}";
 {% endfor %}
 
-{%  macro getValidators(prop) %}
-    {% if not prop.opt %} Validators.required, {% endif %}
-    {% for v in prop.validators %}
-        {% if  v.name in ['requiredFalse','future','past'] %} CustomValidators.{{ v.name }}, {% endif %}
-        {% if  v.name == 'min' or  v.name == 'max' %}
-            Validators.{{ v.name }}Length({{  v.value }}),
-        {% endif %}
-    {% endfor %}
-{% endmacro %}
 
 
 {% macro genFormControls(entity) %}
     {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
-        {{ prop.name }} : ['', [  {{ getValidators(prop) }} ]],
+        {{ prop.name }} : ['', [  {{ vg.getValidators(prop, genUtils) }} ]],
     {% endfor %}
     {% for prop in genUtils.getContained(entity) -%}
         {{ prop.name }} : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])
@@ -81,12 +74,10 @@ export class {{name}}AddComponent  extends BaseEditComponent<{{name}}> implement
         }
     {% endfor %}
 
+
+    getForm  () { return {{ formName }} };
+
     submit(){
-        Object.keys({{ formName }}.controls).forEach(field =>
-            {{ formName }}.get(field).markAsTouched()
-        );
-        console.log({{ formName }}.value)
-        //console.log("entity", this.entity)
         super.onSubmit(this.entity);
     }
 

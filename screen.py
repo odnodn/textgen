@@ -14,6 +14,6 @@ while True:
     pyautogui.screenshot('myscreen.png')
     cnt = cnt + 1
     print ("clciked " +  str(cnt))
-    for pos in pyautogui.locateAllOnScreen('remote.png'):
-        print(pos)
+    # for pos in pyautogui.locateAllOnScreen('remote.png'):
+    #     print(pos)
     time.sleep(60 * 7)

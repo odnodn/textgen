@@ -2,18 +2,19 @@
 
 
 {% macro propCommons(prop) %}
-    formControlName="{{ prop.name }}"  id="{{ prop.name }}-input"  [(ngModel)]="entity.{{ prop.name }}"
+    formControlName="{{ prop.name }}"  id="{{ prop.name }}-input"   class="form-control"
+    [(ngModel)]="entity.{{ prop.name }}"
 {% endmacro %}
 
 {%  macro createErrorMessage(prop, containerForm, genUtils) %}
-    {% set propGetter =  containerForm +'.get(' + "'" + prop.name  +"'"  +')'  %}
-    <div class="alert alert-danger" *ngIf="{{ containerForm }}.get('{{ prop.name }}').errors && {{ containerForm }}.get('{{ prop.name }}').touched">
+    {% set propGetter =  'f.' +  prop.name  %}
+    <div class="text text-danger" *ngIf="submitted && {{ propGetter }}.errors ">
         {% for v in prop.validators %}
             {% if  v.name =='requiredTrue' %}  <p *ngIf="{{ propGetter }}.errors.requiredTrue" translate>must_be_true !</p> {% endif %}
             {% if  v.name =='requiredFalse' %}  <p *ngIf="{{ propGetter }}.errors.requiredFalse" translate>must_be_false !</p> {% endif %}
             {% if  v.name =='future' %}  <p *ngIf="{{ propGetter }}.errors.future" translate>must_be_in_future</p> {% endif %}
             {% if  v.name =='pattern' %}  <p *ngIf="{{ propGetter }}.errors.pattern" translate>invalid_pattern !</p> {% endif %}
-            {% if  v.name =='min' %}  <p *ngIf="{{ propGetter }}.errors.min" translate>must_be_min  {{ v.value }}</p> {% endif %}
+            {% if  v.name =='min' or v.name =='max' %}  <p *ngIf="{{ propGetter }}.errors.{{ v.name }}" translate>must_be_{{ v.name }}  {{ v.value }}</p> {% endif %}
 
         {% endfor %}
         <p *ngIf="{{ propGetter}}.errors.required">Required !</p>
@@ -38,7 +39,7 @@
 
         {% if not prop.many %}
             <div class="form-group">
-                <label for="{{ prop.name }}-input"><span translate>{{ prop.name }}</span></label>
+                <label for="{{ prop.name }}-input"> {% if not prop.opt -%} * {%  endif %}<span translate>{{ prop.name|capitalize }}</span></label>
                 {% if genUtils.isSimple(prop) -%}
                     {% if genUtils.isEnum(prop) -%}
                         <ng-select {{ propCommons(prop) }}>
@@ -49,7 +50,7 @@
 
                     {% elif genUtils.isPropOfType(prop, "date") -%}
                         <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" {{ propCommons(prop) }}
+                            <input  placeholder="yyyy-mm-dd" {{ propCommons(prop) }}
                                    ngbDatepicker #d_{{ prop.name }}="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d_{{ prop.name }}.toggle()" type="button">
@@ -69,12 +70,12 @@
                         </div>
 
                     {% elif genUtils.isNumeric(prop) -%}
-                        <input type="number" class="form-control" {{ propCommons(prop) }}>
+                        <input type="number" {{ propCommons(prop) }} >
                     {% elif genUtils.isPropOfType(prop, "text") -%}
-                        <textarea formControlName="{{ prop.name }}"
+                        <textarea  {{ propCommons(prop) }} rows="8"
                         ></textarea>
                     {% else -%}
-                        <input type="text" class="form-control" {{ propCommons(prop) }}>
+                        <input type="text" {{ propCommons(prop) }}>
                     {% endif -%}
 
                 {% else -%}

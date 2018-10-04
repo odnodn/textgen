@@ -29,6 +29,13 @@ entity Parent extends Person{
     bankInfo: string
 }
 
+entity Quote {
+    tags: string
+    text: text
+    explanation: text
+    page: int opt max:1430
+}
+
 
 
 
