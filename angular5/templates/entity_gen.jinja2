@@ -1,0 +1,43 @@
+
+{% macro createEntity(entity, genUtils) -%}
+
+import { BaseEntity } from "@app/base/base";
+import * as _ from 'lodash';
+import * as Chance from 'chance';
+import * as Factory from 'factory.ts'
+
+{% for t in (genUtils.getOutgoingRefs(entity) + genUtils.getContained(entity) ) |map(attribute='type.name') | unique-%}
+    import {{ '{' + t + '}'}} from "@app/{{ t| fLower }}/{{ t | fLower }}";
+{% endfor %}
+
+
+{% for t in genUtils.getEnumProps(entity) |map(attribute='type.name') | unique-%}
+    import {{ '{' + t + '}' }} from "@app/enums/{{ t | fLower }}";
+{% endfor %}
+
+//change to class ?
+export  interface {{entity.name}} extends BaseEntity{
+{% for prop in genUtils.allProps(entity) -%}
+    {% if genUtils.isSimple(prop) -%}
+        {{ prop.name }} : {{ prop.type|altype }}
+    {% else -%}
+        {{ prop.name }} : {{ prop.type.name }}  {% if prop.many %} [] {% endif %}
+    {% endif %}
+{% endfor %}
+}
+
+let chance = new Chance();
+
+export const {{entity.name|  fLower}}Factory = Factory.makeFactory<{{entity.name}}>({
+id: Factory.each(i => ''+ i),
+{% for prop in genUtils.allProps(entity) -%}
+    {% if genUtils.isSimple(prop) -%}
+        {{ prop.name }} : {{ genUtils.getTestDataJS(prop) }},
+    {% else -%}
+        {{ prop.name }} : null
+    {% endif %}
+{% endfor %}
+
+});
+
+{% endmacro %}

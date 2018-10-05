@@ -2,24 +2,16 @@
 import { Component, OnInit } from '@angular/core';
 
 import { {{name}}} from "../{{lname}}";
-import { {{name}}Service} from "../{{lname}}.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import { BaseEditComponent } from '../../base/base-edit.component';
+
+import { BaseViewComponent } from '@app/base/base-view.component';
 
 
 @Component({
-selector: 'app-{{lname}}-edit',
-templateUrl: './{{lname}}-edit.component.html',
-styleUrls: ['./{{lname}}-edit.component.css']
+selector: '{{lname}}-view',
+templateUrl: './{{lname}}-view.component.html',
+styleUrls: ['./{{lname}}-view.component.css']
 })
-export class {{name}}EditComponent extends BaseEditComponent<{{name}}> implements OnInit {
-    {{lname}}: {{name}};
-    errorMessage: string;
+export class {{name}}ViewComponent extends BaseViewComponent<{{name}}> implements OnInit {
 
-    constructor(protected {{lname}}Service: {{name}}Service,
-    protected route: ActivatedRoute,
-    protected router: Router) {
-    super({{lname}}Service, route, router, '{{lname}}s')
-    }
 
 }

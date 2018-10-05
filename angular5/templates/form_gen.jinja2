@@ -3,12 +3,13 @@
 
 {% macro propCommons(prop) %}
     formControlName="{{ prop.name }}"  id="{{ prop.name }}-input"   class="form-control"
+    [ngClass]="{ 'is-invalid': submitted && f.{{ prop.name }}.errors }"
     [(ngModel)]="entity.{{ prop.name }}"
 {% endmacro %}
 
 {%  macro createErrorMessage(prop, containerForm, genUtils) %}
     {% set propGetter =  'f.' +  prop.name  %}
-    <div class="text text-danger" *ngIf="submitted && {{ propGetter }}.errors ">
+    <div class="invalid-feedback" *ngIf="submitted && {{ propGetter }}.errors ">
         {% for v in prop.validators %}
             {% if  v.name =='requiredTrue' %}  <p *ngIf="{{ propGetter }}.errors.requiredTrue" translate>must_be_true !</p> {% endif %}
             {% if  v.name =='requiredFalse' %}  <p *ngIf="{{ propGetter }}.errors.requiredFalse" translate>must_be_false !</p> {% endif %}
