@@ -3,12 +3,12 @@
 {% set formName =  (entity.name | fLower ) +'Form'  %}
 
 
-<div class="container-wrapper container d-flex justify-content-center align-items-center">
-    <div class="form-wrapper text-center" style="width: 80%; background-color: #eef ; padding: 1.5em">
-        <h2 class="text-center">Add/Edit {{ name }} </h2>
-        <form [formGroup]="{{ formName }}" (submit)="submit()" novalidate>
-            {{ fg.renderEntityProps(entity, formName, genUtils) }}
-            <button type="submit" class="btn btn-primary"><span translate>Next </span></button>
-        </form>
+<form [formGroup]="{{ formName }}" (submit)="submit()" >
+    {{ fg.renderEntityProps(entity, formName, genUtils) }}
+    <div class="abc-action-card-button">
+        <button type="submit" class="abc-blue-btn btn btn-lg px-5"
+                [disabled]="getTheForm().invalid" translate>Next
+            <i class="fas fa-chevron-right"></i>
+        </button>
     </div>
-</div>
+</form>

@@ -6,15 +6,15 @@
 {% endmacro %}
 
 {%  macro createErrorMessage(prop, containerForm, genUtils) %}
-    {% set propGetter =  containerForm +'.get(' + "'" + prop.name  +"'"  +')'  %}
-    <div class="alert alert-danger" *ngIf="{{ containerForm }}.get('{{ prop.name }}').errors && {{ containerForm }}.get('{{ prop.name }}').touched">
+    {% set propGetter =  'f.'   + prop.name      %}
+    <div class=" abc-small-text my-3 p-3" *ngIf="{{ propGetter}}.errors
+        && {{ propGetter}}.touched" >
         {% for v in prop.validators %}
             {% if  v.name =='requiredTrue' %}  <p *ngIf="{{ propGetter }}.errors.requiredTrue" translate>must_be_true !</p> {% endif %}
             {% if  v.name =='requiredFalse' %}  <p *ngIf="{{ propGetter }}.errors.requiredFalse" translate>must_be_false !</p> {% endif %}
             {% if  v.name =='future' %}  <p *ngIf="{{ propGetter }}.errors.future" translate>must_be_in_future</p> {% endif %}
             {% if  v.name =='pattern' %}  <p *ngIf="{{ propGetter }}.errors.pattern" translate>invalid_pattern !</p> {% endif %}
             {% if  v.name =='min' %}  <p *ngIf="{{ propGetter }}.errors.min" translate>must_be_min  {{ v.value }}</p> {% endif %}
-
         {% endfor %}
         <p *ngIf="{{ propGetter}}.errors.required">Required !</p>
     </div>
@@ -33,7 +33,7 @@
     {%  else %}
     <ng-select {{ propCommons(prop) }}>
         {% for literal in prop.type.literals -%}
-            <ng-option value="{{ literal.name|capitalize }}"><span translate>{{ literal.name }}</span></ng-option>
+            <ng-option value="{{ literal.name|capitalize }}">{{ literal.name  }}</ng-option>
         {% endfor %}
     </ng-select>
     {% endif %}
@@ -55,10 +55,14 @@
             </div>
         {% endif %}
 
+
+
         {% if not prop.many %}
             <div class="form-group">
-                <label for="{{ prop.name }}-input"><span translate>{{ prop.name }}</span></label>
-                {% if genUtils.isSimple(prop) -%}
+                <div class="form-group row">
+                <label for="{{ prop.name }}-input" class="col-sm-2 pr-0 offset-sm-1 col-form-label"><span translate>{{ entity.name }}_{{ prop.name }}</span></label>
+                 <div class="col-sm-5">
+                    {% if genUtils.isSimple(prop) -%}
                     {% if genUtils.isEnum(prop) -%}
                        {{ genEnum(prop) }}
 
@@ -75,10 +79,10 @@
                     {% elif genUtils.isPropOfType(prop, "bool") -%}
                         <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
                                 {{ propCommons(prop) }}>
-                            <label ngbButtonLabel class="btn-primary">
+                            <label ngbButtonLabel class="btn abc-btn-question-list abc-sm-width-full">
                                 <input ngbButton type="radio" [value]="true"> <span translate>Yes</span>
                             </label>
-                            <label ngbButtonLabel class="btn-primary">
+                            <label ngbButtonLabel class="btn abc-btn-question-list abc-sm-width-full">
                                 <input ngbButton type="radio" [value]="false"> <span translate>No</span>
                             </label>
                         </div>
@@ -103,6 +107,8 @@
                     {% endif %}
 
                 {% endif %}
+                 </div>
+                </div>
                 {{ createErrorMessage(prop, containerForm)  }}
             </div>
         {%  endif %}

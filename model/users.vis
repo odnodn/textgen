@@ -1,9 +1,9 @@
 package SingleTravelWizard{
 
     enum CoverageLevel {
-        ONE
-        TWO
-        TWOTHOSUAND_PLUS
+        ONE_K
+        TWO_K
+        THREE_K
     }
 
     enum PlanType  {
@@ -29,11 +29,9 @@ package SingleTravelWizard{
     }
 
     entity GettingStarted{
-
         haveCare: bool
         alreadyDeparted: bool requiredFalse
         over60: bool requiredFalse
-
     }
 
     entity WhenTravelling{
@@ -42,36 +40,24 @@ package SingleTravelWizard{
     }
 
     entity WhoTravelling{
-            whosTraveling : WhosTravelling
-            dobOldest: date
+        whosTraveling : WhosTravelling
+        dobOldest: date
 
-            planMember: bool
-            groupNumber: int min:1000 max:9999
-            idNumber: string
+        planMember: bool
+        groupNumber: int opt min:1000 max:9999
+        idNumber: string opt
     }
 
     entity ChoosePlan{
         planType : PlanType
-
     }
 
     entity CoverageOptions{
-        interestedExtra: bool
-        initialPaymentWithinLast72: bool
-        chosenExtra: bool
         coverageLevel: CoverageLevel renderDropdown
-
     }
 
     entity Medical{
         travellingForMedical: bool requiredFalse
-        travellingAgainstAdvice: bool requiredFalse
-        twoOrMoreStrokes: bool requiredFalse
-        icd : bool requiredFalse
-        homeOxygen : bool requiredFalse
-        kidneyDialysis: bool requiredFalse
-        terminal: bool requiredFalse
-        aids:bool requiredFalse
     }
 
     entity MustBeStable{
@@ -82,7 +68,7 @@ package SingleTravelWizard{
         firstName:string opt min:2
         lastName:string pattern:'^[\w\s-]+$'
         gender: Gender renderDropdown
-        dob: date past
+        dob: date
      }
 
      entity ContactInfo{
@@ -94,6 +80,12 @@ package SingleTravelWizard{
       confirmEmail: string
      }
 
+     entity PaymentInfo{
+       number: string
+       cvv: int min:100 max:999
+       name: string
+       expiry: string
+     }
 
 }
 

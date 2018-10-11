@@ -13,6 +13,7 @@ import { {{ entity.name}}Component } from './{{ entity.name | fLower }}.componen
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { WizardModule } from '@app/common-comps/wizard.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
         FormsModule,
         ReactiveFormsModule,
         NgbModule,
-        NgSelectModule
+        NgSelectModule,
+        WizardModule
     ],
     declarations: [ {% for e in genUtils.getEntities(entity) -%} {{ e.name }}Component, {% endfor %} {{entity.name}}Component]
 ,exports:[
