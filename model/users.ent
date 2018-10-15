@@ -52,8 +52,9 @@ entity QuoteData{
     interestedExtra: bool 
     initialPaymentWithinLast72: bool 
     coverageLevel: CoverageLevel
-    chosenExtra: bool 
-    travellingForMedical: bool 
+
+    travellingForMedical: bool
+
     travellingAgainstAdvice: bool 
     twoOrMoreStrokes: bool 
     icd : bool 
@@ -63,6 +64,11 @@ entity QuoteData{
     planTotal: currency
     trn: int
     traveler : Traveler many embedded
+
+    firstName:string opt min:2
+    lastName:string pattern:'^[\w\s-]+$'
+    gender: Gender renderDropdown
+    dob: date
 }
 
 

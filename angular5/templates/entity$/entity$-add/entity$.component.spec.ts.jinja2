@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+    import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 {% set cname =  (entity.name  ) +'Component'  %}
 import { {{ cname }} } from './{{ name |fLower }}.component';
@@ -46,6 +46,7 @@ import { QuoteDataImpl } from '@app/quote-data-impl';
 describe('{{ cname }}', () => {
 let component: {{ cname }};
 let fixture: ComponentFixture<{{ cname }}>;
+this.entity = {{ lname }}Factory.build();
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -73,21 +74,25 @@ let fixture: ComponentFixture<{{ cname }}>;
     {{  genFieldTest(entity) }}
 
 
-    it('submitting a form emits a user', () => {
+    it('submitting a form emits a valid entity', () => {
         expect(component.form.valid).toBeFalsy();
-        component.form.controls['email'].setValue("test@test.com");
-        component.form.controls['password'].setValue("123456789");
+
+        {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
+        component.getTheForm().controls['{{ prop.name }}'].setValue(this.entity.{{ prop.name }})
+        {% endfor %}
+
         expect(component.form.valid).toBeTruthy();
 
-        let user: User;
+        let emitted: any;
         // Subscribe to the Observable and store the user in a local variable.
-        component.stepComplete.subscribe((value) => user = value);
+        component.stepComplete.subscribe((x:any) => emitted = value);
 
         // Trigger the login function
         component.submit();
 
-        // Now we can check to make sure the emitted value is correct
-        expect(user.email).toBe("test@test.com");
-        expect(user.password).toBe("123456789");
+        {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
+            expect(user.{{ prop.name }}).toBe(this.entity.{{ prop.name }});
+        {% endfor %}
+
     });
 });

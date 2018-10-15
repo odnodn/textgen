@@ -73,21 +73,21 @@ let fixture: ComponentFixture<{{ cname }}>;
     {{  genFieldTest(entity) }}
 
 
-    it('submitting a form emits a user', () => {
-        expect(component.form.valid).toBeFalsy();
-        component.form.controls['email'].setValue("test@test.com");
-        component.form.controls['password'].setValue("123456789");
-        expect(component.form.valid).toBeTruthy();
-
-        let user: User;
-        // Subscribe to the Observable and store the user in a local variable.
-        component.stepComplete.subscribe((value) => user = value);
-
-        // Trigger the login function
-        component.submit();
-
-        // Now we can check to make sure the emitted value is correct
-        expect(user.email).toBe("test@test.com");
-        expect(user.password).toBe("123456789");
-    });
+{#    it('submitting a form emits a valid entity', () => {#}
+{#        expect(component.form.valid).toBeFalsy();#}
+{#        component.form.controls['email'].setValue("test@test.com");#}
+{#        component.form.controls['password'].setValue("123456789");#}
+{#        expect(component.form.valid).toBeTruthy();#}
+{##}
+{#        let user: any;#}
+{#        // Subscribe to the Observable and store the user in a local variable.#}
+{#        component.stepComplete.subscribe((value:any) => user = value);#}
+{##}
+{#        // Trigger the login function#}
+{#        component.submit();#}
+{##}
+{#        // Now we can check to make sure the emitted value is correct#}
+{#        expect(user.email).toBe("test@test.com");#}
+{#        expect(user.password).toBe("123456789");#}
+{#    });#}
 });
