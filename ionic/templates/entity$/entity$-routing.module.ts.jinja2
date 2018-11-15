@@ -1,0 +1,21 @@
+
+
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import { {{name}}ListComponent} from './{{lname}}-list/{{lname}}-list.component';
+import { {{name}}AddComponent} from './{{lname}}-add/{{lname}}-add.component';
+import { {{name}}EditComponent} from './{{lname}}-edit/{{lname}}-edit.component';
+
+const {{lname}}Routes: Routes = [
+  {path: '{{lname}}s', component: {{name}}ListComponent},
+  {path: '{{lname}}s/add', component: {{name}}AddComponent},
+  {path: '{{lname}}s/:id/edit', component: {{name}}AddComponent}
+];
+
+@NgModule({
+  imports: [RouterModule.forChild({{lname}}Routes)],
+  exports: [RouterModule]
+})
+
+export class {{name}}RoutingModule {
+}

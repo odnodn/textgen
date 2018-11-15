@@ -1,0 +1,17 @@
+
+import { Component, OnInit } from '@angular/core';
+
+import { {{name}}} from "../{{lname}}";
+
+import { BaseViewComponent } from '@app/base/base-view.component';
+
+
+@Component({
+selector: '{{lname}}-view',
+templateUrl: './{{lname}}-view.component.html',
+styleUrls: ['./{{lname}}-view.component.css']
+})
+export class {{name}}ViewComponent extends BaseViewComponent<{{name}}> implements OnInit {
+
+
+}

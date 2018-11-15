@@ -1,0 +1,24 @@
+import { Component, OnInit } from '@angular/core';
+import { BaseEditComponent } from '@app/base/base-edit.component';
+import { {{name}} } from '@app/{{name}}/{{name}}';
+import { {{name}}Service } from '@app/{{name}}/{{name}}.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
+@Component({
+  selector: 'app-{{name}}-manage',
+  templateUrl: './entity$-manage.component.html.jinja2',
+  styleUrls: ['./entity$-manage.component.scss.jinja2']
+})
+export class {{name}}ManageComponent extends BaseEditComponent<{{name}}> implements OnInit {
+
+  constructor(protected {{name}}Service: {{name}}Service, 
+    protected route: ActivatedRoute, protected router: Router) {
+    super({{name}}Service, route, router, '{{name}}s')
+    //this.createForm();
+  }
+
+  ngOnInit() {
+    super.ngOnInit()
+  }
+
+}

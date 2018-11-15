@@ -65,7 +65,7 @@ package SingleTravelWizard{
      }
 
      entity Travelers{
-        firstName:string opt min:2
+        firstName:string  min:2
         lastName:string pattern:'^[\w\s-]+$'
         gender: Gender renderDropdown
         dob: date
@@ -75,7 +75,7 @@ package SingleTravelWizard{
       street: string
       city: string
       postalCode: string pattern:'/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/'
-      phone: string
+      phone: string pattern:'/^[0-9]{10}/'
       email: string
       confirmEmail: string
      }

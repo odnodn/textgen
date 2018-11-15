@@ -2,44 +2,28 @@
 
 
 {% macro propCommons(prop) %}
-    formControlName="{{ prop.name }}"  id="{{ prop.name }}-input"  [ngModel]="entity.{{ prop.name }}" [ngClass]="{ 'is-invalid': submitted && f.{{ prop.name }}.errors }"
+    formControlName="{{ prop.name }}"  id="{{ prop.name }}-input"   class="form-control"
+    [ngClass]="{ 'is-invalid': submitted && f.{{ prop.name }}.errors }"
+    [(ngModel)]="entity.{{ prop.name }}"
 {% endmacro %}
 
 {%  macro createErrorMessage(prop, containerForm, genUtils) %}
-    {% set propGetter =  'f.'   + prop.name      %}
-    <div *ngIf="submitted && {{ propGetter}}.errors" class="invalid-feedback" >
+    {% set propGetter =  'f.' +  prop.name  %}
+    <div class="invalid-feedback" *ngIf="submitted && {{ propGetter }}.errors ">
         {% for v in prop.validators %}
             {% if  v.name =='requiredTrue' %}  <p *ngIf="{{ propGetter }}.errors.requiredTrue" translate>must_be_true !</p> {% endif %}
             {% if  v.name =='requiredFalse' %}  <p *ngIf="{{ propGetter }}.errors.requiredFalse" translate>must_be_false !</p> {% endif %}
             {% if  v.name =='future' %}  <p *ngIf="{{ propGetter }}.errors.future" translate>must_be_in_future</p> {% endif %}
             {% if  v.name =='pattern' %}  <p *ngIf="{{ propGetter }}.errors.pattern" translate>invalid_pattern !</p> {% endif %}
-            {% if  v.name =='min' %}  <p *ngIf="{{ propGetter }}.errors.min" translate>must_be_min  {{ v.value }}</p> {% endif %}
-        {% endfor %}
-        <p *ngIf="{{ propGetter}}.errors.required">This is required.</p>
-    </div>
-{% endmacro %}
+            {% if  v.name =='min' or v.name =='max' %}  <p *ngIf="{{ propGetter }}.errors.{{ v.name }}" translate>must_be_{{ v.name }}  {{ v.value }}</p> {% endif %}
 
-{% macro genEnum(prop) %}
-    {% if not prop.renderDropdown  %}
-    <div>
-        {% for literal in prop.type.literals -%}
-            <label class="container"><span translate>{{ literal.name }}</span>
-                <input value="{{ literal.name|capitalize }}" type="radio" name="{{ prop.name }}" {{ propCommons(prop) }}>
-                <span class="checkmark"></span>
-            </label>
         {% endfor %}
+        <p *ngIf="{{ propGetter}}.errors.required">Required !</p>
     </div>
-    {%  else %}
-    <select {{ propCommons(prop) }}>
-        {% for literal in prop.type.literals -%}
-            <option value="{{ literal.name|capitalize }}">{{ literal.name  }}</option>
-        {% endfor %}
-    </select>
-    {% endif %}
 {% endmacro %}
 
 {% macro renderEntityProps(entity, containerForm, genUtils) %}
-    {% for prop in entity.properties -%}
+    {% for prop in genUtils.allProps(entity) -%}
         {% if genUtils.isManyEmbedded(prop) %}
             <div class="card card-block">
                 <h4 class="card-title">{{ prop.name | fUpper }}</h4>
@@ -54,19 +38,20 @@
             </div>
         {% endif %}
 
-
-
         {% if not prop.many %}
-            <div class="form-group">
-                <label translate>{{ entity.name }}_{{ prop.name }}</label>
-
-                    {% if genUtils.isSimple(prop) -%}
+            <ion-item>
+                <ion-label for="{{ prop.name }}-input"> {% if not prop.opt -%} * {%  endif %}<span translate>{{ prop.name|capitalize }}</span></ion-label>
+                {% if genUtils.isSimple(prop) -%}
                     {% if genUtils.isEnum(prop) -%}
-                       {{ genEnum(prop) }}
+                        <ng-select {{ propCommons(prop) }}>
+                            {% for literal in prop.type.literals -%}
+                                <ng-option value="{{ literal.name|capitalize }}">{{ literal.name }}</ng-option>
+                            {% endfor %}
+                        </ng-select>
 
                     {% elif genUtils.isPropOfType(prop, "date") -%}
                         <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" {{ propCommons(prop) }}
+                            <ion-input  placeholder="yyyy-mm-dd" {{ propCommons(prop) }}
                                    ngbDatepicker #d_{{ prop.name }}="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d_{{ prop.name }}.toggle()" type="button">
@@ -77,21 +62,21 @@
                     {% elif genUtils.isPropOfType(prop, "bool") -%}
                         <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
                                 {{ propCommons(prop) }}>
-                            <label ngbButtonLabel class="btn abc-btn-question-list abc-sm-width-full">
+                            <label ngbButtonLabel class="btn-primary">
                                 <input ngbButton type="radio" [value]="true"> <span translate>Yes</span>
                             </label>
-                            <label ngbButtonLabel class="btn abc-btn-question-list abc-sm-width-full">
+                            <label ngbButtonLabel class="btn-primary">
                                 <input ngbButton type="radio" [value]="false"> <span translate>No</span>
                             </label>
                         </div>
 
                     {% elif genUtils.isNumeric(prop) -%}
-                        <input type="number" class="form-control" {{ propCommons(prop) }}>
+                        <input type="number" {{ propCommons(prop) }} >
                     {% elif genUtils.isPropOfType(prop, "text") -%}
-                        <textarea formControlName="{{ prop.name }}"
+                        <textarea  {{ propCommons(prop) }} rows="8"
                         ></textarea>
                     {% else -%}
-                        <input type="text" class="form-control" {{ propCommons(prop) }}>
+                        <input type="text" {{ propCommons(prop) }}>
                     {% endif -%}
 
                 {% else -%}
@@ -105,9 +90,8 @@
                     {% endif %}
 
                 {% endif %}
-                    {{ createErrorMessage(prop, containerForm)  }}
-
-            </div>
+                {{ createErrorMessage(prop, containerForm)  }}
+            </ion-item>
         {%  endif %}
 
     {% endfor %}

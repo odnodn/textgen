@@ -1,0 +1,54 @@
+{% import 'templates/entity_gen.jinja2' as fg %}
+
+import { browser, element, by } from 'protractor';
+
+import { BasePO, txtByCss } from '../base.po';
+
+{{  fg.createEntity(entity, genUtils) }}
+
+export class Manage{{name}}s extends BasePO{
+
+    entity: {{name}} = {{lname}}Factory.build();
+    name = '{{lname}}s'
+
+    getEntity(){ return this.entity;}
+    getName(){return this.name}
+}
+
+describe('manage{{name}}', () => {
+    let page: Manage{{name}}s;
+
+    beforeEach(() => {
+        page = new Manage{{name}}s();
+    });
+
+    it('should display add  page and create entty', () => {
+        page.navigateTo();
+        expect(browser.getCurrentUrl()).toContain('/{{lname}}s/add');
+        page.submit();
+    });
+});
+
+
+export class List{{name}}s  {
+    name = '{{lname}}s'
+    getName(){ return this.name }
+
+    constructor(){
+    browser.get(`/${this.getName()}`);
+    }
+}
+
+describe('list{{name}}', () => {
+    let page: List{{name}}s;
+
+    beforeEach(() => {
+        page = new List{{name}}s();
+    });
+
+    it('should display add  page and create entty', () => {
+        //page.navigateTo();
+        expect(browser.getCurrentUrl()).toContain('/{{lname}}s');
+        expect(txtByCss("h2")).toContain("{{name}}s")
+    });
+})

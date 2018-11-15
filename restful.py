@@ -4,11 +4,16 @@
 
 from flask import Flask,jsonify, request
 from flask_restful import Resource, Api, reqparse
+from flask_cors import CORS
 
 parser = reqparse.RequestParser()
 
+
 app = Flask(__name__)
+CORS(app)
+
 api = Api(app)
+
 
 class HelloWorld(Resource):
 
@@ -48,6 +53,25 @@ class HelloWorld(Resource):
 
         print("got "  + un)
         return []
+
+class validate_Address(Resource) :
+
+    def post(self):
+        json_data = request.get_json(force=True)
+        un = int(json_data['UnitNumber'])
+
+        res = True if un < 14 else False
+
+        return {'valid': not res}
+
+    def get(self):
+        # json_data = request.get_json(force=True)
+        # print(json_data)
+        # un = ""
+        return {'valid':True}
+
+
+api.add_resource(validate_Address, '/rso/rs/address/validateunacceptableaddress')
 
 api.add_resource(HelloWorld, '/rso/rs/validatenames')
 

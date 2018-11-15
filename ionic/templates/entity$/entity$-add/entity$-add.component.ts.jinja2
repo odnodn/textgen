@@ -1,28 +1,23 @@
 
+{% import 'templates/validator_gen.jinja2' as vg %}
+
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import {ActivatedRoute, Router} from "@angular/router";
 
-import { DataInputWidget } from '@app/base/DataInputWidget';
-import { CustomValidators } from '@app/base/custom-validators';
+import { {{name}}} from "../{{lname}}";
 
+import { BaseFormComponent } from '@app/base/base-form.component';
 
-{%  macro getValidators(prop) %}
-    {% if not prop.opt %} Validators.required, {% endif %}
-    {% for v in prop.validators %}
-        {% if  v.name in ['requiredFalse','future','past'] %} CustomValidators.{{ v.name }}, {% endif %}
-        {% if  v.name == 'min' or  v.name == 'max' %}
-            Validators.{{ v.name }}Length({{  v.value }}),
-        {% endif %}
-        {% if  v.name == 'pattern' %}
-            Validators.pattern('{{  v.value }}'),
-        {% endif %}
-    {% endfor %}
-{% endmacro %}
+{% for t in (genUtils.getOutgoingRefs(entity) + genUtils.getContained(entity) ) |map(attribute='type.name') | unique-%}
+    import {{ '{' + t + '}'}} from "@app/{{ t| fLower }}/{{ t | fLower }}";
+{% endfor %}
+
 
 
 {% macro genFormControls(entity) %}
     {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
-        {{ prop.name }} : ['', [  {{ getValidators(prop) }} ]],
+        {{ prop.name }} : ['', [  {{ vg.getValidators(prop, genUtils) }} ]],
     {% endfor %}
     {% for prop in genUtils.getContained(entity) -%}
         {{ prop.name }} : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])
@@ -32,31 +27,28 @@ import { CustomValidators } from '@app/base/custom-validators';
 
 {% autoescape false %}
 
-{% set cname = (entity.parent.name|fLower ) + '-' + (entity.name |fLower )  %}
-
 @Component({
-selector: '{{cname}}',
-templateUrl: './{{lname}}.component.html',
-styleUrls: ['./{{lname}}.component.css']
+selector: 'app-{{lname}}-add',
+templateUrl: './{{lname}}-add.component.html',
+styleUrls: ['./{{lname}}-add.component.css']
 })
-export class {{name}}Component extends DataInputWidget implements OnInit  {
+export class {{name}}AddComponent  extends BaseFormComponent<{{name}}> implements OnInit {
 
+    //{{lname}}: {{name}};
 
     public {{ entity.name | fLower }}Form: FormGroup;
-    {% set formName = 'this.' +  (entity.name | fLower ) +'Form'  %}
 
     {% for prop in genUtils.getOutgoingRefs(entity) -%}
         {{ prop.name }} : {{ prop.type.name }}[]
     {% endfor %}
 
-    ngOnInit(){}
 
-    getTheForm():FormGroup  { return  {{ formName }} }
-
-    constructor(private fb: FormBuilder) {
+    constructor( private fb: FormBuilder) {
         super()
         this.createForm();
     }
+
+    {% set formName = 'this.' +  (entity.name | fLower ) +'Form'  %}
 
     private createForm(): void {
         {{ formName }}= this.fb.group({
@@ -82,7 +74,12 @@ export class {{name}}Component extends DataInputWidget implements OnInit  {
         }
     {% endfor %}
 
+
+    getForm  () { return {{ formName }} };
+
+    submit(){
+        super.onSubmit(this.entity);
+    }
+
 }
-
-
 {% endautoescape %}

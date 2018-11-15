@@ -48,7 +48,7 @@ Validator:
 	name= 'requiredFalse'|
 	name = 'future'|
 	name = 'past'  |
-	name='pattern' ':' svalue=STRING  ;
+	name='pattern' ':' value=STRING  ;
 
 Property:
     name=ID ':' type=[Type] ('='defaultVal=defValue)?   (opt?='opt')? (many?='many')?  (embedded?='embedded')?  (ref?='ref')?  (unique?='unique')?  (bi?='bi')? (renderDropdown?='renderDropdown')

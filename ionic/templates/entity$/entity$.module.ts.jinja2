@@ -1,0 +1,35 @@
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { {{name}}Service} from './{{lname}}.service';
+import { {{name}}ListComponent } from './{{lname}}-list/{{lname}}-list.component';
+import { {{name}}AddComponent } from './{{lname}}-add/{{lname}}-add.component';
+import { {{name}}EditComponent } from './{{lname}}-edit/{{lname}}-edit.component';
+import { {{name}}RoutingModule} from './{{lname}}-routing.module';
+import { NgSelectModule,NG_SELECT_DEFAULT_CONFIG } from '@ng-select/ng-select';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpModule } from '@angular/http';
+
+//import { JsonSchemaFormModule }               from 'angular2-json-schema-form';
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgSelectModule,
+    NgbModule,
+    {{name}}RoutingModule,
+    HttpModule
+  ],
+  declarations: [
+    {{name}}ListComponent,
+    {{name}}AddComponent,
+    {{name}}EditComponent],
+  exports: [
+    {{name}}ListComponent,
+    {{name}}AddComponent,
+  ],
+  providers: [{{name}}Service]
+})
+export class {{name}}Module {
+}

@@ -1,0 +1,18 @@
+{% import 'templates/form_gen.jinja2' as fg %}
+
+{% set formName =  (entity.name | fLower ) +'Form'  %}
+
+<div class="container-fluid bg-light py-3">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0"> {{ '{{' }} !entity.id ? 'Add':'Edit' {{ '}}' }}{{ name }} </h4>
+        </div>
+        <div class="card-body">
+
+            <form [formGroup]="{{ formName }}" (submit)="submit()" novalidate>
+                {{ fg.renderEntityProps(entity, formName, genUtils) }}
+                <button type="submit" class="btn btn-primary"><span translate>Submit</span></button>
+            </form>
+        </div>
+    </div>
+</div>
