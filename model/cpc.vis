@@ -1,0 +1,105 @@
+package CustomAddress{
+
+    enum Province {
+        AB
+        BC
+        MB
+        NB
+        NL
+        NT
+        NS
+        NU
+        ON
+        PE
+        QC
+        SK
+        YT
+    }
+
+    enum RrType{
+        RR
+        SS
+        MR
+    }
+
+    enum Installation{
+            ONE
+            TWO
+    }
+
+    enum Street {
+        ONE
+    }
+
+    enum UnitDesignator{
+           Apartment
+          Suite
+          Unit
+           Back
+           Basement
+           Floor
+           Front
+           Lobby
+           Lower
+           Penthouse
+           Rear
+           Room
+           Side
+           Station
+           Upper
+           Logement
+           Pièce
+           Porte
+           TOWNHOUSE
+           Lot
+        }
+
+      enum Suffix{
+                E
+                W
+                N
+                S
+                NE
+                NW
+                SW
+                SE
+            }
+
+    entity PostalCode{
+        postalCode:string pattern:'[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d'
+    }
+
+    entity Rural{
+        lot:int
+        concession:string
+        site:int
+        compartment:int
+        ruralRouteType: RrType renderDropdown
+        installation:  Installation renderDropdown
+   }
+
+    entity Civic{
+        unitDesignator:UnitDesignator opt renderDropdown
+        unitNumber:int opt
+        streetNumber:int
+        suffix:Suffix opt renderDropdown
+        streetName: Street renderDropdown
+    }
+
+    entity POBox {
+        number:int
+        installation:Installation renderDropdown
+    }
+
+    entity GeneralDelivery{
+        deliveryMode:string opt
+        installation:string opt
+    }
+
+    entity City{
+         city:string
+         province:Province renderDropdown
+    }
+
+
+  }

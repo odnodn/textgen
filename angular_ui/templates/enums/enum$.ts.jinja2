@@ -1,6 +1,10 @@
 
 export enum {{ entity.name }}{
     {% for literal in entity.literals -%}
-         '{{ literal.name|capitalize }}',
+        '{{ literal.name|capitalize }}',
     {% endfor %}
+
+{#{% for literal in entity.literals -%}#}
+{#    <option value="{{ literal.name|capitalize }}">  {{ "{{'UD." }}{{literal.name |capitalize}}{{"'|translate}}" }}</option>#}
+{#{% endfor %}#}
 }

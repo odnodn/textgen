@@ -71,11 +71,21 @@
                         </div>
 
                     {% elif genUtils.isNumeric(prop) -%}
-                        <input type="number" {{ propCommons(prop) }} >
+                        <input type="number" {{ propCommons(prop) }} >`
                     {% elif genUtils.isPropOfType(prop, "text") -%}
                         <textarea  {{ propCommons(prop) }} rows="8"
                         ></textarea>
+                    {% elif genUtils.isPropOfType(prop, "file") -%}
+                        <input type="file"   accept=".png,.jpg"  (change)="upload($event)" {{ propCommons(prop) }} >
+                        <progress
+                                max="100"
+                                *ngIf="(uploadProgress | async); let uploadProgressPercentage"
+                                [value]="uploadProgressPercentage"
+                        ><span>{{ uploadProgressPercentage }}%</span></progress>
+
+
                     {% else -%}
+                        {{prop.type.name  }}
                         <input type="text" {{ propCommons(prop) }}>
                     {% endif -%}
 

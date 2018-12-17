@@ -47,6 +47,7 @@ def get_entity_mm( metaModel, debug=False,):
         'int': SimpleType(None, 'int'),
         'string': SimpleType(None, 'string'),
         'text': SimpleType(None, 'text'),
+        'file': SimpleType(None, 'file'),
         'bool': SimpleType(None, 'bool'),
         'date': SimpleType(None, 'date'),
         'dateTime': SimpleType(None, 'dateTime'),

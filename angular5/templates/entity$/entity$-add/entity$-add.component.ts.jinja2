@@ -74,12 +74,15 @@ export class {{name}}AddComponent  extends BaseFormComponent<{{name}}> implement
         }
     {% endfor %}
 
+    ngOnInit() {
+
+    }
 
     getForm  () { return {{ formName }} };
 
-    submit(){
-        super.onSubmit(this.entity);
-    }
+{#    submit(){#}
+{#        super.onSubmit(this.entity);#}
+{#    }#}
 
 }
 {% endautoescape %}

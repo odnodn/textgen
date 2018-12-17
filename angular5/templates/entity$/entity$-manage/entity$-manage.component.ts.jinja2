@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseEditComponent } from '@app/base/base-edit.component';
-import { {{name}} } from '@app/{{name}}/{{name}}';
-import { {{name}}Service } from '@app/{{name}}/{{name}}.service';
+import { {{name}} } from '@app/{{lname}}/{{lname}}';
+import { {{name}}Service } from '@app/{{lname}}/{{lname}}.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-{{name}}-manage',
-  templateUrl: './entity$-manage.component.html.jinja2',
-  styleUrls: ['./entity$-manage.component.scss.jinja2']
+  selector: 'app-{{lname}}-manage',
+  templateUrl: './{{ lname }}-manage.component.html.',
+  styleUrls: ['./{{ lname }}-manage.component.scss']
 })
 export class {{name}}ManageComponent extends BaseEditComponent<{{name}}> implements OnInit {
 
