@@ -49,7 +49,7 @@ class HelloWorld(Resource):
         print("got "  + un)
         return []
 
-api.add_resource(HelloWorld, '/rso/rs/validatenames')
+#api.add_resource(HelloWorld, '/rso/rs/validatenames')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=5026)

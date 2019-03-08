@@ -13,6 +13,10 @@ import { CustomValidators } from '@app/base/custom-validators';
         {% if  v.name == 'min' or  v.name == 'max' %}
             Validators.{{ v.name }}Length({{  v.value }}),
         {% endif %}
+        {% if  v.name == 'pattern' %}
+            Validators.{{ v.name }}("{{v.svalue}}"),
+        {% endif %}
+
     {% endfor %}
 {% endmacro %}
 

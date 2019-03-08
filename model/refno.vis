@@ -1,0 +1,9 @@
+ package AddRetailTransaction{
+
+ entity AddTransaction{
+        referenceNumber:string pattern:'\\d{8}'
+        postalCode:string pattern:'[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d'
+        email:string pattern:'^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
+  }
+
+  }

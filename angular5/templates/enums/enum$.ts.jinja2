@@ -2,5 +2,8 @@
 export enum {{ entity.name }}{
     {% for literal in entity.literals -%}
          '{{ literal.name|capitalize }}',
+
     {% endfor %}
+
 }
+

@@ -101,5 +101,11 @@ package CustomAddress{
          province:Province renderDropdown
     }
 
+    entity Intl {
+        addressLine1: string
+        addressLine2: string opt
+        addressLine3: string opt
+    }
+
 
   }

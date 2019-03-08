@@ -7,7 +7,7 @@
 
 {%  macro createErrorMessage(prop, containerForm, genUtils) %}
     {% set propGetter =  'f.'   + prop.name      %}
-    <div class=" abc-small-text my-3 p-3" *ngIf="{{ propGetter}}.errors
+    <div class="rso_err_lbl" *ngIf="{{ propGetter}}.errors
         && {{ propGetter}}.touched" >
         {% for v in prop.validators %}
             {% if  v.name =='requiredTrue' %}  <p *ngIf="{{ propGetter }}.errors.requiredTrue" translate>must_be_true !</p> {% endif %}
@@ -59,8 +59,10 @@
 
         {% if not prop.many %}
             <div class="form-group">
-                <div class="form-group row">
-                <label for="{{ prop.name }}-input" class="col-sm-2 pr-0 offset-sm-1 col-form-label"><span translate>{{ entity.name }}_{{ prop.name }}</span></label>
+                <div class="row">
+                <label for="{{ prop.name }}-input" class="large-9 medium-9 small-12 columns">
+                   {{ '{{' }} "{{ entity.name | upper }}.{{ prop.name | upper }}" | translate {{ '}}' }}
+                </label>
                  <div class="col-sm-5">
                     {% if genUtils.isSimple(prop) -%}
                     {% if genUtils.isEnum(prop) -%}
