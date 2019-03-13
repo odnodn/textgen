@@ -1,0 +1,83 @@
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+
+import { {{ entity.name }}Component } from "./{{ entity.name }}.component";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { TranslateModule } from "@ngx-translate/core";
+import { {{ entity.name }}Service } from "./add-transaction.service";
+
+import { RouterTestingModule } from "@angular/router/testing";
+
+import { of, Subject, throwError } from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { WizardModule } from "../../commons/wizard.module";
+import { {{ entity.name }}Component } from "./{{ entity.name }}/{{ entity.name }}.component";
+import { MicroflowsModule } from "../microflows.module";
+import { RouterModule } from "@angular/router";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+
+export const valid{{ entity.name }}Payload = {
+
+};
+
+export class Mock{{ entity.name }}Service {
+submit(entity) {}
+}
+
+fdescribe("AddRetailTransacitonComponent", () => {
+let component: {{ entity.name }}Component;
+let fixture: ComponentFixture<{{ entity.name }}Component>;
+    let {{ entity.name }}Service: {{ entity.name }}Service;
+
+    beforeEach(async(() => {
+    TestBed.configureTestingModule({
+    declarations: [{{ entity.name }}Component, {{ entity.name }}Component],
+    imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    WizardModule,
+    MicroflowsModule,
+    RouterTestingModule,
+    HttpClientTestingModule,
+    TranslateModule.forRoot()
+    ],
+    providers: [
+    { provide: {{ entity.name }}Service, useClass: Mock{{ entity.name }}Service }
+    ]
+    }).compileComponents();
+    }));
+
+    beforeEach(() => {
+    fixture = TestBed.createComponent({{ entity.name }}Component);
+    component = fixture.componentInstance;
+
+    {{ entity.name }}Service = fixture.debugElement.injector.get(
+    {{ entity.name }}Service
+    );
+
+    spyOn({{ entity.name }}Service, "submit").and.callFake(
+    e =>
+    console.log("for tst", e) || e.referenceNumber[0] === "1"
+    ? of(1).toPromise()
+    : throwError(new Error("invalid reference number")).toPromise()
+    );
+    fixture.detectChanges();
+    });
+
+    it("should create", () => {
+        expect(component).toBeTruthy();
+    });
+
+    it("should call done successfully", async () => {
+        await component.done(valid{{ entity.name }}Payload);
+        expect(component.detailMessage).toEqual("Transaction has been added !");
+    });
+
+    it("should throw error when calling done with invlaid payload", async () => {
+        valid{{ entity.name }}Payload.referenceNumber = "23456779";
+        await component.done(valid{{ entity.name }}Payload);
+        expect(component.detailMessage).toEqual(
+        "Error adding transaction Error: invalid reference number"
+        );
+    });
+
+    });

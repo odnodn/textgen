@@ -5,7 +5,14 @@
     formControlName="{{ prop.name }}"  id="{{ prop.name }}-input"  [ngModel]="entity.{{ prop.name }}"
 {% endmacro %}
 
-{%  macro createErrorMessage(prop, containerForm, genUtils) %}
+
+{% macro rsoName(entity, prop) %}
+    {{ '{{' }} "{{ entity.name | upper }}.{{ prop.name | upper }}" | translate {{ '}}' }}
+{% endmacro %}
+
+
+
+{%  macro createErrorMessage(entity, prop, containerForm, genUtils) %}
     {% set propGetter =  'f.'   + prop.name      %}
     <div class="rso_err_lbl" *ngIf="{{ propGetter}}.errors
         && {{ propGetter}}.touched" >
@@ -13,10 +20,10 @@
             {% if  v.name =='requiredTrue' %}  <p *ngIf="{{ propGetter }}.errors.requiredTrue" translate>must_be_true !</p> {% endif %}
             {% if  v.name =='requiredFalse' %}  <p *ngIf="{{ propGetter }}.errors.requiredFalse" translate>must_be_false !</p> {% endif %}
             {% if  v.name =='future' %}  <p *ngIf="{{ propGetter }}.errors.future" translate>must_be_in_future</p> {% endif %}
-            {% if  v.name =='pattern' %}  <p *ngIf="{{ propGetter }}.errors.pattern" translate>invalid_pattern !</p> {% endif %}
+            {% if  v.name =='pattern' %}  <p *ngIf="{{ propGetter }}.errors.pattern" > {{  rsoName(entity, prop)  }} {{ '{{ "GEN.IS_INVALID" | translate }}' }}  </p> {% endif %}
             {% if  v.name =='min' %}  <p *ngIf="{{ propGetter }}.errors.min" translate>must_be_min  {{ v.value }}</p> {% endif %}
         {% endfor %}
-        <p *ngIf="{{ propGetter}}.errors.required">Required !</p>
+        <p *ngIf="{{ propGetter}}.errors.required">{{  '{{ "AWS.REQUIRED" | translate }}' }}</p>
     </div>
 {% endmacro %}
 
@@ -61,7 +68,7 @@
             <div class="form-group">
                 <div class="row">
                 <label for="{{ prop.name }}-input" class="large-9 medium-9 small-12 columns">
-                   {{ '{{' }} "{{ entity.name | upper }}.{{ prop.name | upper }}" | translate {{ '}}' }}
+                  {{  rsoName(entity, prop)  }}
                 </label>
                  <div class="col-sm-5">
                     {% if genUtils.isSimple(prop) -%}
@@ -111,7 +118,7 @@
                 {% endif %}
                  </div>
                 </div>
-                {{ createErrorMessage(prop, containerForm)  }}
+                {{ createErrorMessage(entity, prop, containerForm)  }}
             </div>
         {%  endif %}
 

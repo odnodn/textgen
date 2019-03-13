@@ -19,17 +19,38 @@ import { {{ cname }} } from './{{ name |fLower }}.component';
         {%  if not prop.opt %}
         expect(fld.valid).toBeFalsy();
 
+
         //  field is required
         errors = fld.errors || {};
         expect(errors['required']).toBeTruthy();
         {% endif %}
 
-        {%  if not prop.opt %}
-        // Set field to something
+        {% for v in prop.validators %}
+            {% if  v.name =='pattern' %}
+        fld.setValue("to");
+        errors = fld.errors || {};
+        expect(errors['required']).toBeFalsy();
+        expect(errors['pattern']).toBeTruthy();
+            {% endif %}
+            {% if  v.name =='min' %}
         fld.setValue("to");
         errors = fld.errors || {};
         expect(errors['required']).toBeFalsy();
         expect(errors['minlength']).toBeTruthy();
+            {% endif %}
+        {% endfor %}
+
+        {%  if prop.validators.min %}
+        // Set field to something
+
+        {% endif %}
+
+        {%  if prop.validators.pattern %}
+            // Set field to something
+            fld.setValue("to");
+            errors = fld.errors || {};
+            expect(errors['required']).toBeFalsy();
+            expect(errors['pattern']).toBeTruthy();
         {% endif %}
 
         // Set field to something correct

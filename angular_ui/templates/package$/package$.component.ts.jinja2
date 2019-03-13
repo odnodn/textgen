@@ -2,10 +2,12 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
+import { {{ entity.name  }}Service } from "./{{ lname  }}.service";
 
 {#import { {{name}}} from "../{{lname}}";#}
-{#import { {{name}}Service} from "../{{lname}}.service";#}
-import { BaseEditComponent } from '@app/base/base-edit.component';
+{#import { {{name}}
+} from "../{{lname}}.service";#}
+{#import { BaseEditComponent } from '@app/base/base-edit.component';#}
 
 {% autoescape false %}
 
@@ -14,9 +16,22 @@ selector: 'app-{{name | fLower}}',
 templateUrl: './{{lname}}.component.html',
 styleUrls: ['./{{lname}}.component.css']
 })
-export class {{name}}Component  /* extends BaseEditComponent<{{name}}> implements OnInit */ {
-    entity:QuoteDataImpl = new QuoteDataImpl();
-}
+export class {{name}}Component  {
+    entity: any = {};
+    detailMessage = "";
 
+    constructor(private {{ entity.name | fLower }}Service: {{ entity.name  }}Service) {}
+
+    ngOnInit() {}
+
+    async done(entity: any) {
+        this.entity = entity
+        console.log("submitting ", entity);
+        await this.{{ entity.name | fLower }}Service
+        .submit(entity)
+        .then(x => (this.detailMessage = "Transaction has been added !"))
+        .catch(err => (this.detailMessage = "Error adding transaction " + err));
+    }
+}
 
 {% endautoescape %}

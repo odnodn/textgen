@@ -1,0 +1,23 @@
+import { Injectable } from "@angular/core";
+import { of } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+
+@Injectable({
+providedIn: "root"
+})
+export class {{ entity.name  }}Service {
+    constructor(private http: HttpClient ) {}
+
+    createUrl = entity =>
+        `${this.env.getRsoDomain()}/rs/transactions/${
+        entity.referenceNumber
+        }/addTransaction`;
+
+    submit(entity) {
+        console.log("url is " + this.createUrl(entity));
+
+        return this.http
+        .post(this.createUrl(entity), entity, {})
+        .toPromise();
+    }
+}
