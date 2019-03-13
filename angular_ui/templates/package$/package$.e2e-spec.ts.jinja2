@@ -1,0 +1,47 @@
+
+import * as _ from "lodash";
+import { browser, by, element } from "protractor";
+
+export class {{ name  }}Page {
+navigateTo() {
+return browser.get("/#/{{ lname }}");
+}
+getForm = () => element(by.id("{{ lname  }}-form"));
+
+getElement = el => element(by.id(el + "-input"));
+getSubmitButton = () => element(by.id("submit"));
+}
+
+export const valid{{ name  }}Payload = {
+
+};
+
+describe("Login tests", () => {
+let page: {{ name  }}Page;
+let entity = valid{{ name  }}Payload;
+
+beforeEach(() => {
+    page = new {{ name  }}Page();
+    page.navigateTo();
+});
+
+it(" form should be invalid", () => {
+    let invalidEntity = _.cloneDeep(entity);
+    //invalidEntity.email = "xxx";
+
+    _.forOwn(invalidEntity, (value, key) => {
+    page.getElement(key).sendKeys(value);
+    });
+
+    let form = page.getForm().getAttribute("class");
+    expect(form).toContain("ng-invalid");
+});
+
+it(" form should be valid", () => {
+    _.forOwn(entity, (value, key) => {
+    page.getElement(key).sendKeys(value);
+    });
+    page.getSubmitButton().click();
+    expect(page.getForm()).toBeNull();
+});
+});

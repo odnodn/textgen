@@ -12,50 +12,51 @@ import { {{ cname }} } from './{{ name |fLower }}.component';
 
 {% macro genFieldTest(entity) %}
     {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
-        it('{{ prop.name }} field validity', () => {
-        let errors = {};
-        let fld = component.getTheForm().controls['{{ prop.name }}'];
 
         {%  if not prop.opt %}
-        expect(fld.valid).toBeFalsy();
+            it('{{ prop.name }} field required validity', () => {
+                let errors = {};
+                let fld = component.getTheForm().controls['{{ prop.name }}'];
 
-
-        //  field is required
-        errors = fld.errors || {};
-        expect(errors['required']).toBeTruthy();
+                expect(fld.valid).toBeFalsy();
+                errors = fld.errors || {};
+                expect(errors['required']).toBeTruthy();
+            });
         {% endif %}
 
         {% for v in prop.validators %}
             {% if  v.name =='pattern' %}
-        fld.setValue("to");
-        errors = fld.errors || {};
-        expect(errors['required']).toBeFalsy();
-        expect(errors['pattern']).toBeTruthy();
+                it('{{ prop.name }} field required validity', () => {
+                let errors = {};
+                let fld = component.getTheForm().controls['{{ prop.name }}'];
+
+                fld.setValue("to");
+                errors = fld.errors || {};
+                expect(errors['required']).toBeFalsy();
+                expect(errors['pattern']).toBeTruthy();
+                });
+
             {% endif %}
             {% if  v.name =='min' %}
-        fld.setValue("to");
-        errors = fld.errors || {};
-        expect(errors['required']).toBeFalsy();
-        expect(errors['minlength']).toBeTruthy();
+
+                it('{{ prop.name }} field min validity', () => {
+                let errors = {};
+                let fld = component.getTheForm().controls['{{ prop.name }}'];
+
+                fld.setValue("to");
+                errors = fld.errors || {};
+                expect(errors['required']).toBeFalsy();
+                expect(errors['minLength']).toBeTruthy();
+                });
+
             {% endif %}
         {% endfor %}
 
-        {%  if prop.validators.min %}
-        // Set field to something
 
-        {% endif %}
-
-        {%  if prop.validators.pattern %}
-            // Set field to something
-            fld.setValue("to");
-            errors = fld.errors || {};
-            expect(errors['required']).toBeFalsy();
-            expect(errors['pattern']).toBeTruthy();
-        {% endif %}
-
+       it('{{ prop.name }} field should be valid', () => {
         // Set field to something correct
         fld.setValue(entity.{{ prop.name }});
-        errors = fld.errors || {};
+        let errors = fld.errors || {};
         expect(errors).toEqual({});
 
         });
