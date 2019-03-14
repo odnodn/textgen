@@ -45,6 +45,8 @@ defValue:  STRING|INT;
 Validator:
 	name='min' ':' value=INT|
 	name='max' ':' value=INT|
+	name='minLength' ':' value=INT|
+    name='maxLength' ':' value=INT|
 	name= 'requiredFalse'|
 	name = 'future'|
 	name = 'past'  |

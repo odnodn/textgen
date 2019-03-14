@@ -7,6 +7,8 @@ import * as _ from "lodash";
 
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 
+import { valid{{ entity.name }}Payload } from "../{{ lname | spinal  }}.component.spec";
+
 {% set cname =  (entity.name  ) +'Component'  %}
 import { {{ cname }} } from './{{ name |fLower }}.component';
 
@@ -24,37 +26,22 @@ import { {{ cname }} } from './{{ name |fLower }}.component';
             });
         {% endif %}
 
-        {% for v in prop.validators %}
-            {% if  v.name =='pattern' %}
-                it('{{ prop.name }} field required validity', () => {
+        {% for v in prop.validators -%}
+            it('{{ prop.name }} field {{ v.name }} validity', () => {
                 let errors = {};
                 let fld = component.getTheForm().controls['{{ prop.name }}'];
 
                 fld.setValue("to");
                 errors = fld.errors || {};
                 expect(errors['required']).toBeFalsy();
-                expect(errors['pattern']).toBeTruthy();
-                });
-
-            {% endif %}
-            {% if  v.name =='min' %}
-
-                it('{{ prop.name }} field min validity', () => {
-                let errors = {};
-                let fld = component.getTheForm().controls['{{ prop.name }}'];
-
-                fld.setValue("to");
-                errors = fld.errors || {};
-                expect(errors['required']).toBeFalsy();
-                expect(errors['minLength']).toBeTruthy();
-                });
-
-            {% endif %}
+                expect(errors['{{ v.name }}']).toBeTruthy();
+            });
         {% endfor %}
 
 
        it('{{ prop.name }} field should be valid', () => {
         // Set field to something correct
+        let fld = component.getTheForm().controls['{{ prop.name }}'];
         fld.setValue(entity.{{ prop.name }});
         let errors = fld.errors || {};
         expect(errors).toEqual({});
@@ -74,16 +61,8 @@ import { {{ cname }} } from './{{ name |fLower }}.component';
 describe('{{ cname }}', () => {
 let component: {{ cname }};
 let fixture: ComponentFixture<{{ cname }}>;
+let entity = valid{{ name }}Payload;
 
-const entity = {
-{% for prop in genUtils.allProps(entity) -%}
-    {% if genUtils.isSimple(prop) -%}
-        {{ prop.name }} : {{ genUtils.getTestDataJS(prop) }},
-    {% else -%}
-        {{ prop.name }} : null
-    {% endif %}
-{% endfor %}
-};
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
