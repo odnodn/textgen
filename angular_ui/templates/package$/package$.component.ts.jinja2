@@ -4,6 +4,7 @@ import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import { {{ entity.name  }}Service } from "./{{  lname | spinal  }}.service";
 
+
 {#import { {{name}}} from "../{{lname}}";#}
 {#import { {{name}}
 } from "../{{lname}}.service";#}
@@ -13,14 +14,15 @@ import { {{ entity.name  }}Service } from "./{{  lname | spinal  }}.service";
 
 @Component({
 selector: 'app-{{name | fLower}}',
-templateUrl: './{{lname}}.component.html',
-styleUrls: ['./{{lname}}.component.css']
+templateUrl: './{{lname | spinal}}.component.html',
+styleUrls: ['./{{lname | spinal }}.component.css']
 })
 export class {{name}}Component  {
     entity: any = {};
     detailMessage = "";
 
-    constructor(private {{ entity.name | fLower }}Service: {{ entity.name  }}Service) {}
+    constructor(private route: ActivatedRoute,
+        private {{ entity.name | fLower }}Service: {{ entity.name  }}Service) {}
 
     ngOnInit() {}
 

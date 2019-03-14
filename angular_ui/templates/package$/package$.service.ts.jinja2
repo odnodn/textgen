@@ -6,15 +6,20 @@ import { HttpClient } from "@angular/common/http";
 providedIn: "root"
 })
 export class {{ entity.name  }}Service {
+
+    readonly END_POINT = '{{ lname }}'
+
     constructor(private http: HttpClient ) {}
 
+
     createUrl = entity =>
-        `${this.env.getRsoDomain()}/rs/transactions/${
+        `${this.env.getRsoDomain()}/${this.TRANSACTION_ENDPOINT}/${
         entity.referenceNumber
-        }/addTransaction`;
+        }/${this.END_POINT}`;
+
 
     submit(entity) {
-        console.log("url is " + this.createUrl(entity));
+        console.log("sending payload to url ", entity , this.createUrl(entity));
 
         return this.http
         .post(this.createUrl(entity), entity, {})

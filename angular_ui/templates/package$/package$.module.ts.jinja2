@@ -3,17 +3,20 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 {% for e in genUtils.getEntities(entity) -%}
-import { {{ e.name }}Component } from './{{ e.name| fLower }}/{{ e.name| fLower }}.component';
+import { {{ e.name }}Component } from '../{{ name| spinal }}/{{ e.name| spinal }}/{{ e.name| spinal }}.component';
 {% endfor %}
 
-import { {{ entity.name}}Component } from './{{ entity.name | fLower }}.component';
+import { {{ entity.name}}Component } from './{{ entity.name | spinal }}.component';
 
 {#import { NavigatorComponent } from './navigator/navigator.component';#}
 {#import { FinalMessageComponent } from './final-message/final-message.component';#}
+import { CommonComponentsModule } from "../../commons/commons.module";
+import { WizardModule } from "../../commons/wizard.module";
+import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { HttpLoaderFactory } from "../../commons/httploaderfactory";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { WizardModule } from '@app/common-comps/wizard.module';
+
 
 
 @NgModule({
@@ -21,9 +24,16 @@ import { WizardModule } from '@app/common-comps/wizard.module';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        NgbModule,
-        NgSelectModule,
-        WizardModule
+        WizardModule,
+        CommonComponentsModule,
+
+        TranslateModule.forRoot({
+        loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+        }
+        })
     ],
     declarations: [ {% for e in genUtils.getEntities(entity) -%} {{ e.name }}Component, {% endfor %} {{entity.name}}Component]
 ,exports:[

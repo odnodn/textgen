@@ -2,8 +2,12 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
-import { DataInputWidget } from '@app/base/DataInputWidget';
-import { CustomValidators } from '@app/base/custom-validators';
+{#import { DataInputWidget } from '@app/base/DataInputWidget';#}
+{#import { CustomValidators } from '@app/base/custom-validators';#}
+
+{#For cp only#}
+import { DataInputWidget } from '../../../base/data-input-widget';
+import { CustomValidators } from '../../../commons/custom-validators';
 
 
 {%  macro getValidators(prop) %}
@@ -37,8 +41,8 @@ import { CustomValidators } from '@app/base/custom-validators';
 
 @Component({
 selector: '{{cname}}',
-templateUrl: './{{lname}}.component.html',
-styleUrls: ['./{{lname}}.component.css']
+templateUrl: './{{lname | spinal}}.component.html',
+styleUrls: ['./{{lname | spinal }}.component.css']
 })
 export class {{name}}Component extends DataInputWidget implements OnInit  {
 

@@ -7,10 +7,10 @@ import * as _ from "lodash";
 
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 
-import { valid{{ entity.name }}Payload } from "../{{ lname | spinal  }}.component.spec";
+import { valid{{ entity.parent.name }}Payload } from "../{{ entity.parent.name | spinal  }}.component.spec";
 
 {% set cname =  (entity.name  ) +'Component'  %}
-import { {{ cname }} } from './{{ name |fLower }}.component';
+import { {{ cname }} } from './{{ name | spinal }}.component';
 
 {% macro genFieldTest(entity) %}
     {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
@@ -59,14 +59,15 @@ import { {{ cname }} } from './{{ name |fLower }}.component';
 
 
 describe('{{ cname }}', () => {
-let component: {{ cname }};
-let fixture: ComponentFixture<{{ cname }}>;
-let entity = valid{{ name }}Payload;
+
+    let component: {{ cname }};
+    let fixture: ComponentFixture<{{ cname }}>;
+    let entity = valid{{ entity.parent.name }}Payload
 
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-        declarations: [ {{ cname }} ],
+        //declarations: [ {{ cname }} ],
         imports: [ReactiveFormsModule,
 FormsModule,
 TranslateModule.forRoot()
