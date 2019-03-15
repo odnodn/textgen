@@ -2,15 +2,19 @@ import { Injectable } from "@angular/core";
 import { of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 
+import { BaseMicroflowService } from "../base-microflow-service";
+import { EnvironmentService } from "../../core/services/environment.service";
+
+
 @Injectable({
 providedIn: "root"
 })
-export class {{ entity.name  }}Service {
+export class {{ name }}Service extends BaseMicroflowService {
 
     readonly END_POINT = '{{ lname }}'
-
-    constructor(private http: HttpClient ) {}
-
+    constructor(private http: HttpClient, private env: EnvironmentService) {
+        super(http, env);
+    }
 
     createUrl = entity =>
         `${this.env.getRsoDomain()}/${this.TRANSACTION_ENDPOINT}/${

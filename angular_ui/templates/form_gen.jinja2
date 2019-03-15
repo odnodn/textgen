@@ -21,9 +21,11 @@
             {% if  v.name =='requiredFalse' %}  <p *ngIf="{{ propGetter }}.errors.requiredFalse" translate>must_be_false !</p> {% endif %}
             {% if  v.name =='future' %}  <p *ngIf="{{ propGetter }}.errors.future" translate>must_be_in_future</p> {% endif %}
             {% if  v.name =='pattern' %}  <p *ngIf="{{ propGetter }}.errors.pattern" > {{  rsoName(entity, prop)  }} {{ '{{ "GEN.IS_INVALID" | translate }}' }}  </p> {% endif %}
-            {% if  v.name =='min' %}  <p *ngIf="{{ propGetter }}.errors.min" translate>must_be_min  {{ v.value }}</p> {% endif %}
+            {% if  v.name in ('minLength', 'maxLength', 'min','max') %}  <p *ngIf="{{ propGetter }}.errors.{{ v.name |  lower }}" translate>must_be_  {{ v.value }}</p> {% endif %}
         {% endfor %}
+        {% if not prop.opt %}
         <p *ngIf="{{ propGetter}}.errors.required">{{  '{{ "AWS.REQUIRED" | translate }}' }}</p>
+        {%  endif %}
     </div>
 {% endmacro %}
 
@@ -77,13 +79,14 @@
 
                     {% elif genUtils.isPropOfType(prop, "date") -%}
                         <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" {{ propCommons(prop) }}
-                                   ngbDatepicker #d_{{ prop.name }}="ngbDatepicker">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" (click)="d_{{ prop.name }}.toggle()" type="button">
-                                    <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
-                                </button>
-                            </div>
+                            <input class="form-control" placeholder="yyyy-mm-dd"
+                                    {{ propCommons(prop) }} >
+{#                                   ngbDatepicker #d_{{ prop.name }}="ngbDatepicker">#}
+{#                            <div class="input-group-append">#}
+{#                                <button class="btn btn-outline-secondary" (click)="d_{{ prop.name }}.toggle()" type="button">#}
+{#                                    <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>#}
+{#                                </button>#}
+{#                            </div>#}
                         </div>
                     {% elif genUtils.isPropOfType(prop, "bool") -%}
                         <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"

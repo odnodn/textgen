@@ -11,8 +11,8 @@ package LinkTransaction{
 package Cancel{
 
    entity CancelForm{
-         reason:string maxLength: 30
-    }
+         reason:string opt maxLength: 30
+   }
 
 }
 

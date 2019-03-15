@@ -34,7 +34,7 @@ import { {{ cname }} } from './{{ name | spinal }}.component';
                 fld.setValue("to");
                 errors = fld.errors || {};
                 expect(errors['required']).toBeFalsy();
-                expect(errors['{{ v.name }}']).toBeTruthy();
+                expect(errors['{{ v.name | lower }}']).toBeTruthy();
             });
         {% endfor %}
 

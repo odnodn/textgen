@@ -14,11 +14,11 @@ import { CustomValidators } from '../../../commons/custom-validators';
     {% if not prop.opt %} Validators.required, {% endif %}
     {% for v in prop.validators %}
         {% if  v.name in ['requiredFalse','future','past'] %} CustomValidators.{{ v.name }}, {% endif %}
-        {% if  v.name == 'min' or  v.name == 'max' %}
-            Validators.{{ v.name }}Length({{  v.value }}),
+        {% if  v.name in('minLength', 'maxLength', 'min','max' ) %}
+            Validators.{{ v.name }}({{  v.value }}),
         {% endif %}
         {% if  v.name == 'pattern' %}
-            Validators.{{ v.name }}("{{v.svalue}}"),
+            Validators.{{ v.name }}("{{v.value}}"),
         {% endif %}
 
     {% endfor %}

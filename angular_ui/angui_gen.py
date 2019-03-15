@@ -190,6 +190,7 @@ class AngGen(BaseUIGen):
     def massageOutputFileName(self, opFileName):
         try:
             fn, *rest = opFileName.split('.')
+            if(fn.startswith('__') or len(rest) == 0 ) : return None
             return GenUtils.spinal(fn) + "." + (".").join(rest)
         except:
             print(sys.exc_info()[1])
