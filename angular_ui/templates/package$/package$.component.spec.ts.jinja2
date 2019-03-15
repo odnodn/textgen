@@ -42,7 +42,7 @@ submit(entity) {}
 fdescribe("{{ name }}Component", () => {
 let component: {{ entity.name }}Component;
 let fixture: ComponentFixture<{{ entity.name }}Component>;
-    let {{ entity.name }}Service: {{ entity.name }}Service;
+    let {{lname }}Service: {{ entity.name }}Service;
 
     beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -67,11 +67,9 @@ let fixture: ComponentFixture<{{ entity.name }}Component>;
     fixture = TestBed.createComponent({{ entity.name }}Component);
     component = fixture.componentInstance;
 
-    {{ entity.name }}Service = fixture.debugElement.injector.get(
-    {{ entity.name }}Service
-    );
+    {{ lname }}Service = fixture.debugElement.injector.get({{ entity.name }}Service);
 
-    spyOn({{ entity.name }}Service, "submit").and.callFake(
+    spyOn({{ lname }}Service, "submit").and.callFake(
     e =>
     console.log("for tst", e) || e.referenceNumber[0] === "1"
     ? of(1).toPromise()

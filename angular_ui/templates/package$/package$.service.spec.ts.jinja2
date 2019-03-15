@@ -12,66 +12,59 @@ import { valid{{ entity.name  }}Payload } from "./{{ lname | spinal  }}.componen
 import { HttpClientModule } from "@angular/common/http";
 
 fdescribe("{{ entity.name  }}Service", () => {
-let httpMock: HttpTestingController;
-let environmentService: MockEnvService;
-let spy: any;
-let {{ lname  }}Service: {{ entity.name  }}Service;
+    let httpMock: HttpTestingController;
+    let environmentService: MockEnvService;
+    let spy: any;
+    let {{ lname  }}Service: {{ entity.name  }}Service;
 
-beforeEach(() => {
-TestBed.configureTestingModule({
-imports: [HttpClientTestingModule],
-providers: [{ provide: EnvironmentService, useClass: MockEnvService }]
-});
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        providers: [{ provide: EnvironmentService, useClass: MockEnvService }]
+    });
 
-{{ lname  }}Service = TestBed.get({{ entity.name  }}Service);
-environmentService = TestBed.get(EnvironmentService);
+    {{ lname  }}Service = TestBed.get({{ entity.name  }}Service);
+    environmentService = TestBed.get(EnvironmentService);
 
-httpMock = TestBed.get(HttpTestingController);
+    httpMock = TestBed.get(HttpTestingController);
 });
 
 it("should be created", inject(
-[EnvironmentService],
-(service: {{ entity.name  }}Service) => {
-// spy = spyOn(environmentService, "getRsoDomain").and.returnValue("/rso");
-expect(service).toBeTruthy();
-}
+    [EnvironmentService],
+    (service: {{ entity.name  }}Service) => {
+    expect(service).toBeTruthy();
+    }
 ));
 
 it("should successfully {{ entity.name  }} a valid transaction", () => {
-{{ lname  }}Service.submit(valid{{ entity.name  }}Payload).then(x => {
-console.log(x);
-expect(req.request.method).toBe("POST");
-expect(x).toEqual("{status:OK}");
-});
-const req = httpMock.expectOne(
-`http://localhost:8080/rso/rs/transactions/${
-valid{{ entity.name  }}Payload.referenceNumber
-}/{{ lname  }}`
-);
-req.flush("{status:OK}");
-httpMock.verify();
+    {{ lname  }}Service.submit(valid{{ entity.name  }}Payload).then(x => {
+    console.log(x);
+    expect(req.request.method).toBe("POST");
+    expect(x).toEqual("{status:OK}");
+    });
+    const req = httpMock.expectOne(
+        {{ lname  }}Service.createUrl(valid{{  entity.name }}Payload )
+    );
+    req.flush("{status:OK}");
+    httpMock.verify();
 });
 
 it("should return error if server fails", () => {
-{{ lname  }}Service.submit(valid{{ entity.name  }}Payload).then((x: any) => {
-expect(req.request.method).toBe("POST");
-expect(x.status).toEqual(404);
-});
-const req = httpMock.expectOne(
-`http://localhost:8080/rso/rs/transactions/${
-valid{{ entity.name  }}Payload.referenceNumber
-}/{{ lname  }}`
-);
-req.flush({ status: 404, type: "ERROR", body: "there was an error" });
-httpMock.verify();
+    {{ lname  }}Service.submit(valid{{ entity.name  }}Payload).then((x: any) => {
+        expect(req.request.method).toBe("POST");
+        expect(x.status).toEqual(404);
+    });
+    const req = httpMock.expectOne({{ lname  }}Service.createUrl(valid{{  entity.name }}Payload ));
+    req.flush({ status: 404, type: "ERROR", body: "there was an error" });
+    httpMock.verify();
 });
 
 it("should create valid url", () => {
-let url = `http://localhost:8080/rso/rs/transactions/${
-valid{{ entity.name  }}Payload.referenceNumber
-}/{{ lname  }}`;
-expect({{ lname  }}Service.createUrl(valid{{ entity.name  }}Payload)).toEqual(
-url
-);
+    let url = `http://localhost:8080/rso/rs/transactions/${
+    valid{{ entity.name  }}Payload.referenceNumber
+    }/{{ lname  }}`;
+    expect({{ lname  }}Service.createUrl(valid{{ entity.name  }}Payload)).toEqual(
+    url
+    );
 });
 });
