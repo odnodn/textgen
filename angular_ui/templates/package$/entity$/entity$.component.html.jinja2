@@ -3,10 +3,10 @@
 {% set formName =  (entity.name | fLower ) +'Form'  %}
 
 
-<form [formGroup]="{{ formName }}" (submit)="submit()" >
+<form [formGroup]="{{ formName }}" (submit)="submit()" id="{{ formName }}" >
     {{ fg.renderEntityProps(entity, formName, genUtils) }}
     <div class="abc-action-card-button">
-        <button type="submit" class="abc-blue-btn btn btn-lg px-5"
+        <button type="submit" class="abc-blue-btn btn btn-lg px-5" id="{{ formName }}-submit"
                 [disabled]="getTheForm().invalid" translate>Next
             <i class="fas fa-chevron-right"></i>
         </button>

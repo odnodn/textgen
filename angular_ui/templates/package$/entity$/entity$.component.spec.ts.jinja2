@@ -1,33 +1,49 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import * as chance from 'chance';
+import { TranslateModule } from "@ngx-translate/core";
+
+import { By } from "@angular/platform-browser";
+import * as _ from "lodash";
+
+import {ReactiveFormsModule, FormsModule} from '@angular/forms';
+
+import { valid{{ entity.parent.name }}Payload } from "../{{ entity.parent.name | spinal  }}.component.spec";
 
 {% set cname =  (entity.name  ) +'Component'  %}
-import { {{ cname }} } from './{{ name |fLower }}.component';
+import { {{ cname }} } from './{{ name | spinal }}.component';
 
 {% macro genFieldTest(entity) %}
     {% for prop in genUtils.getAllSimpleProps(entity) + genUtils.getOutgoingRefs(entity) -%}
-        it('{{ prop.name }} field validity', () => {
-        let errors = {};
-        let fld = component.getTheForm().controls['{{ prop.name }}'];
 
         {%  if not prop.opt %}
-        expect(fld.valid).toBeFalsy();
+            it('{{ prop.name }} field required validity', () => {
+                let errors = {};
+                let fld = component.getTheForm().controls['{{ prop.name }}'];
 
-        //  field is required
-        errors = fld.errors || {};
-        expect(errors['required']).toBeTruthy();
+                expect(fld.valid).toBeFalsy();
+                errors = fld.errors || {};
+                expect(errors['required']).toBeTruthy();
+            });
         {% endif %}
 
-        {%  if not prop.opt %}
-        // Set field to something
-        fld.setValue("to");
-        errors = fld.errors || {};
-        expect(errors['required']).toBeFalsy();
-        expect(errors['minlength']).toBeTruthy();
-        {% endif %}
+        {% for v in prop.validators -%}
+            it('{{ prop.name }} field {{ v.name }} validity', () => {
+                let errors = {};
+                let fld = component.getTheForm().controls['{{ prop.name }}'];
 
+                fld.setValue("to");
+                errors = fld.errors || {};
+                expect(errors['required']).toBeFalsy();
+                expect(errors['{{ v.name }}']).toBeTruthy();
+            });
+        {% endfor %}
+
+
+       it('{{ prop.name }} field should be valid', () => {
         // Set field to something correct
-        fld.setValue("toronto");
-        errors = fld.errors || {};
+        let fld = component.getTheForm().controls['{{ prop.name }}'];
+        fld.setValue(entity.{{ prop.name }});
+        let errors = fld.errors || {};
         expect(errors).toEqual({});
 
         });
@@ -38,19 +54,24 @@ import { {{ cname }} } from './{{ name |fLower }}.component';
 {#    {% endfor %}#}
 {%  endmacro %}
 
-import {ReactiveFormsModule, FormsModule} from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { QuoteDataImpl } from '@app/quote-data-impl';
+
+
+
 
 describe('{{ cname }}', () => {
-let component: {{ cname }};
-let fixture: ComponentFixture<{{ cname }}>;
+
+    let component: {{ cname }};
+    let fixture: ComponentFixture<{{ cname }}>;
+    let entity = valid{{ entity.parent.name }}Payload
+
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-        declarations: [ {{ cname }} ],
-        imports: [ReactiveFormsModule, FormsModule,NgbModule.forRoot(), NgSelectModule],
+        //declarations: [ {{ cname }} ],
+        imports: [ReactiveFormsModule,
+FormsModule,
+TranslateModule.forRoot()
+],
 
     })
         .compileComponents();
@@ -73,21 +94,30 @@ let fixture: ComponentFixture<{{ cname }}>;
     {{  genFieldTest(entity) }}
 
 
-{#    it('submitting a form emits a valid entity', () => {#}
-{#        expect(component.form.valid).toBeFalsy();#}
-{#        component.form.controls['email'].setValue("test@test.com");#}
-{#        component.form.controls['password'].setValue("123456789");#}
-{#        expect(component.form.valid).toBeTruthy();#}
-{##}
-{#        let user: any;#}
-{#        // Subscribe to the Observable and store the user in a local variable.#}
-{#        component.stepComplete.subscribe((value:any) => user = value);#}
-{##}
-{#        // Trigger the login function#}
-{#        component.submit();#}
-{##}
-{#        // Now we can check to make sure the emitted value is correct#}
-{#        expect(user.email).toBe("test@test.com");#}
-{#        expect(user.password).toBe("123456789");#}
-{#    });#}
+    it("submitting the form emits valid entity", () => {
+        expect(component.getTheForm().valid).toBeFalsy();
+        component.entity = entity;
+
+        _.forOwn(entity, (value, key) => {
+            component.getTheForm().controls[key].setValue(value);
+        });
+
+        expect(component.getTheForm().valid).toBeTruthy();
+
+        let output: any;
+
+        // Subscribe to the Observable and store the output in a local variable.
+        component.stepComplete.subscribe(value => {
+        output = value;
+        console.log(value);
+        });
+
+        // Trigger the output function
+        component.submit();
+        fixture.detectChanges();
+
+        // Now we can check to make sure the emitted value is correct
+        expect(output).toEqual(entity);
+    });
+
 });

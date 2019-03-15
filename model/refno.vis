@@ -1,0 +1,26 @@
+package LinkTransaction{
+
+ entity LinkTransactionForm{
+        referenceNumber:string pattern:'\\d{8}'
+        postalCode:string pattern:'[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d'
+        email:string pattern:'^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
+  }
+
+}
+
+package Cancel{
+
+   entity CancelForm{
+         reason:string maxLength: 30
+    }
+
+}
+
+package Extend{
+
+   entity ExtendForm{
+         start: date future
+         end: date future
+    }
+
+}

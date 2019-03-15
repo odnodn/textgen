@@ -22,6 +22,7 @@ class AngGen(BaseGen):
         'date' : 'Date',
         'bool' : 'boolean',
         'text' : 'string',
+        'file':'string',
         'currency': 'number'
     }
 

@@ -32,9 +32,26 @@ package CustomAddress{
     }
 
     enum UnitDesignator{
-            Unit
-            Apartment
-            Apt
+           Apartment
+          Suite
+          Unit
+           Back
+           Basement
+           Floor
+           Front
+           Lobby
+           Lower
+           Penthouse
+           Rear
+           Room
+           Side
+           Station
+           Upper
+           Logement
+           Pièce
+           Porte
+           TOWNHOUSE
+           Lot
         }
 
       enum Suffix{
@@ -82,6 +99,12 @@ package CustomAddress{
     entity City{
          city:string
          province:Province renderDropdown
+    }
+
+    entity Intl {
+        addressLine1: string
+        addressLine2: string opt
+        addressLine3: string opt
     }
 
 

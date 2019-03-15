@@ -10,12 +10,13 @@ abs entity Person {
     lastName: string
     gender:Gender
     dob:date
+    image: file opt
 }
 
 entity Child extends Person {
 
-    description: text
-    interests: string
+    description: text opt
+    interests: string opt
     parent: Parent opt
 
 }

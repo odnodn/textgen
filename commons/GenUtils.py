@@ -8,6 +8,7 @@ config = configparser.ConfigParser()
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(str(Path(ROOT_DIR).parent), 'config.ini')
+import re
 
 class GenUtils:
 
@@ -104,6 +105,15 @@ class GenUtils:
     @staticmethod
     def toFirstUpper( name):
         return name if name == ''  else name[0].upper() + name[1:]
+
+
+    @staticmethod
+    def camelCaseSplitter(x):
+        return re.findall(r'[A-Z|a-z](?:[a-z]+|[A-Z]*(?=[A-Z]|$))', x)
+
+    @staticmethod
+    def spinal(x):
+        return  stringcase.spinalcase(x) #'-'.join(GenUtils.camelCaseSplitter(x)).lower()
 
     @staticmethod
     def asCollection(prop):

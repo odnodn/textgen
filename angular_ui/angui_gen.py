@@ -3,6 +3,7 @@ from commons.GenUtils import GenUtils
 from commons.helpers import *
 import shutil
 from pathlib import Path
+import sys
 
 
 utils = GenUtils()
@@ -18,6 +19,7 @@ from abc import ABC, abstractmethod
 from os import mkdir
 
 import shutil
+import stringcase
 
 this_folder = dirname(__file__)
 metaModel = '../metamodel/entity.tx'
@@ -77,6 +79,7 @@ class BaseUIGen:
         self.jinja_env.filters['fUpper'] = GenUtils.toFirstUpper
         self.jinja_env.filters['plural'] = GenUtils.asCollection
         self.jinja_env.filters['humanize'] = GenUtils.humanize
+        self.jinja_env.filters['spinal'] = GenUtils.spinal
 
 
     def doGenerate(self,  model):
@@ -116,15 +119,14 @@ class BaseUIGen:
         # print('trying to load template ' + str(t))
 
         filename = filename.replace(typename + '$', entity.name)
-        tname = self.getGeneratedFileName(entity, filename, lname, pck, t, typename)
-        print(tname)
+        fldr = self.getGeneratedFileName(entity, filename, lname, pck, t, typename)
+
 
         if not filename.startswith(typename) and '$' in filename:
             print("ret " + filename + " " + typename)
             return
 
-        stemPackName = tname.split('/')[len(tname.split('/')) - 1]  #TODO : wont work on windows
-
+        stemPackName = fldr.split('/')[len(fldr.split('/')) - 1]  #TODO : wont work on windows
 
         #print(stemPackName)
         if(len(filterPacks) == 0 or stemPackName in filterPacks ) :
@@ -140,7 +142,10 @@ class BaseUIGen:
                                   fqnRepo = createFqn('repository'),
                                   fqnService = createFqn('service'),
                                   name=entity.name, lname= lname, genUtils=GenUtils() )
-            writeToFile(f'srcgen/{tname}',self.massageOutputFileName(filename) , out)
+            opFileName  = self.massageOutputFileName(filename)
+            if(opFileName):
+                opfldr = stringcase.spinalcase(fldr)
+                writeToFile(f'srcgen/{opfldr}', opFileName , out)
 
     def getGeneratedFileName(self, entity, filename, lname, pck, t, typename):
         tname = str(t.parent).replace(typename + '$', lname)
@@ -183,7 +188,13 @@ class AngGen(BaseUIGen):
         return dirname(__file__)
 
     def massageOutputFileName(self, opFileName):
-        return GenUtils.toFirstLower(opFileName)
+        try:
+            fn, *rest = opFileName.split('.')
+            return GenUtils.spinal(fn) + "." + (".").join(rest)
+        except:
+            print(sys.exc_info()[1])
+            return None
+
 
 
 if __name__ == "__main__":
