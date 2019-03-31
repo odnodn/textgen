@@ -1,0 +1,48 @@
+package helpchild {
+
+        enum Gender {
+        MALE
+        FEMALE
+        }
+
+        abs entity Person {
+            firstName: string
+            lastName: string
+            gender:Gender
+            dob:date
+           // image: file opt
+        }
+
+        entity Patient extends Person {
+            pmf: text opt
+            fmh: string opt
+        }
+
+        entity Physician extends Person{
+            specialty: string
+        }
+
+        entity ScriptItem {
+            drug: string
+            frequency: string
+            duration : int
+            refills  : int
+        }
+
+        entity MeasurementType {
+            name: string
+            frequency: string
+            min : int
+            max  : int
+        }
+
+
+        entity Measurement {
+            measurementType: MeasurementType
+            patient: Patient
+            value: int
+        }
+
+
+        }//end of package comm
+

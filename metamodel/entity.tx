@@ -28,12 +28,12 @@ EntityModelOld:
 
 cls:
        ('extends' superType=[Entity|QualifiedName])? '{'
-        properties+=Property // Each entity has one or more properties.
+        (properties+=Property)* // Each entity has one or more properties.
     '}'
 ;
 
 Entity:  (abs?='abs')? 'entity' name=ID ('extends' superType=[Entity|QualifiedName])? '{'
-                                 properties+=Property // Each entity has one or more properties.
+                                 (properties+=Property)* // Each entity has one or more properties.
                              '}';
 
 AbsEntity : 'abs_entity' name=ID ('extends' superType=[Entity|QualifiedName])? '{'

@@ -92,6 +92,9 @@ class GenUtils:
     def isNumeric(self , property):
         return self.isPropInTypes( property, ['int','currency', 'double'] )
 
+    def getBasicTag(self):
+        return "ion-item" if  self.getConfig("variant") == 'ionic' else 'div'
+
     def prefix(self): return ''
 
     @staticmethod

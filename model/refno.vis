@@ -24,3 +24,26 @@ package Extend{
     }
 
 }
+
+package ChangeNames{
+
+   entity changeNamePage{
+
+    }
+
+}
+
+package ChangeDestination{
+
+    entity AddressForm{
+
+    }
+
+    entity Pay{
+
+    }
+
+    entity Verify {
+
+    }
+}

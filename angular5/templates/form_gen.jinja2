@@ -1,26 +1,76 @@
 
 
-
 {% macro propCommons(prop) %}
     formControlName="{{ prop.name }}"  id="{{ prop.name }}-input"   class="form-control"
     [ngClass]="{ 'is-invalid': submitted && f.{{ prop.name }}.errors }"
-    [(ngModel)]="entity.{{ prop.name }}"
 {% endmacro %}
 
 {%  macro createErrorMessage(prop, containerForm, genUtils) %}
     {% set propGetter =  'f.' +  prop.name  %}
-    <div class="invalid-feedback" *ngIf="submitted && {{ propGetter }}.errors ">
+    <{{ genUtils.getBasicTag() }} class="invalid-feedback" *ngIf="submitted && {{ propGetter }}.errors ">
         {% for v in prop.validators %}
             {% if  v.name =='requiredTrue' %}  <p *ngIf="{{ propGetter }}.errors.requiredTrue" translate>must_be_true !</p> {% endif %}
             {% if  v.name =='requiredFalse' %}  <p *ngIf="{{ propGetter }}.errors.requiredFalse" translate>must_be_false !</p> {% endif %}
             {% if  v.name =='future' %}  <p *ngIf="{{ propGetter }}.errors.future" translate>must_be_in_future</p> {% endif %}
-            {% if  v.name =='pattern' %}  <p *ngIf="{{ propGetter }}.errors.pattern" translate>invalid_pattern !</p> {% endif %}
-            {% if  v.name =='min' or v.name =='max' %}  <p *ngIf="{{ propGetter }}.errors.{{ v.name }}" translate>must_be_{{ v.name }}  {{ v.value }}</p> {% endif %}
-
+            {% if  v.name =='pattern' %}  <p *ngIf="{{ propGetter }}.errors.pattern" > {{  prop.name  }}  is invalid   </p> {% endif %}
+            {% if  v.name in ('minLength', 'maxLength', 'min','max') %}  <p *ngIf="{{ propGetter }}.errors.{{ v.name |  lower }}" translate>must_be_  {{ v.value }}</p> {% endif %}
         {% endfor %}
         <p *ngIf="{{ propGetter}}.errors.required">Required !</p>
-    </div>
+    </{{ genUtils.getBasicTag() }}>
 {% endmacro %}
+
+
+{% macro renderEntityPropsIonic(entity, containerForm, genUtils) %}
+    {% for prop in genUtils.allProps(entity) -%}
+        {% if not prop.many %}
+
+            <ion-item>
+                <ion-label position="stacked">{{ prop.name | humanize }} {% if not prop.opt -%} * {%  endif %}</ion-label>
+                {% if genUtils.isSimple(prop) -%}
+                    {{ renderInputControl(prop, containerForm, genUtils)  }}
+                {% else %}
+                    {{ renderAssociated(prop, containerForm, genUtils)  }}
+                {% endif %}
+            </ion-item>
+            {{ createErrorMessage(prop, containerForm, genUtils)  }}
+
+        {%  endif %}
+    {% endfor %}
+{% endmacro %}
+
+
+{%  macro renderAssociated(prop, containerForm, genUtils) %}
+    <ion-select placeholder="Select One" {{ propCommons(prop) }}>
+        <ion-select-option *ngFor="let e of {{ prop.name }}List$ | async" value="{{ '{{e.id'}}{{'}}'}}">{{ '{{e.name'}}{{'}}' }}</ion-select-option>
+    </ion-select>
+{% endmacro %}
+
+
+{% macro renderInputControl(prop, containerForm, genUtils) %}
+    {% if genUtils.isEnum(prop) -%}
+        <ion-select placeholder="Select One">
+            {% for literal in prop.type.literals -%}
+                <ion-select-option value="{{ literal.name|capitalize }}">{{ literal.name }}</ion-select-option>
+            {% endfor %}
+        </ion-select>
+    {% elif genUtils.isPropOfType(prop, "date") -%}
+        <ion-datetime display-format="MMM DD, YYYY"></ion-datetime>
+    {% elif genUtils.isPropOfType(prop, "bool") -%}
+        <ion-toggle {{ propCommons(prop) }} ></ion-toggle>
+    {% elif genUtils.isNumeric(prop) -%}
+        <ion-input  type="number" {{ propCommons(prop) }} ></ion-input>
+    {% elif genUtils.isPropOfType(prop, "text") -%}
+        <ion-textarea  {{ propCommons(prop) }}></ion-textarea>
+    {% elif genUtils.isPropOfType(prop, "file") -%}
+        <p> TODO FILE </p>
+    {% else -%}
+        <ion-input {{ propCommons(prop) }} type="text"> </ion-input>
+    {% endif -%}
+{% endmacro %}
+
+
+
+
 
 {% macro renderEntityProps(entity, containerForm, genUtils) %}
     {% for prop in genUtils.allProps(entity) -%}

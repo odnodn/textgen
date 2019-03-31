@@ -3,12 +3,39 @@
 {% set formName =  (entity.name | fLower ) +'Form'  %}
 
 
-<form [formGroup]="{{ formName }}" (submit)="submit()" id="{{ formName }}" >
-    {{ fg.renderEntityProps(entity, formName, genUtils) }}
-    <div class="abc-action-card-button">
-        <button type="submit" class="abc-blue-btn btn btn-lg px-5" id="{{ formName }}-submit"
-                [disabled]="getTheForm().invalid" translate>Next
-            <i class="fas fa-chevron-right"></i>
-        </button>
-    </div>
-</form>
+{#<form [formGroup]="{{ formName }}" (submit)="submit()" id="{{ formName }}" >#}
+{#    {{ fg.renderEntityProps(entity, formName, genUtils) }}#}
+{#    <div class="abc-action-card-button">#}
+{#        <button type="submit" class="abc-blue-btn btn btn-lg px-5" id="{{ formName }}-submit"#}
+{#                [disabled]="getTheForm().invalid" translate>Next#}
+{#            <i class="fas fa-chevron-right"></i>#}
+{#        </button>#}
+{#    </div>#}
+{#</form>#}
+
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Create Note</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+    <form [formGroup]="formGroup">
+        <ion-list>
+            {{ fg.renderEntityPropsIonic(entity, formName, genUtils) }}
+        </ion-list>
+        <ion-row class="signin">
+            <ion-col>
+                <ion-button
+                        (click)="submit()"
+                        color="primary"
+                        shape="full"
+                        expand="block"
+                >Add</ion-button
+                >
+            </ion-col>
+        </ion-row>
+    </form>
+</ion-content>
