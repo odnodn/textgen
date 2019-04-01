@@ -14,8 +14,8 @@ package helpchild {
         }
 
         entity Patient extends Person {
-            pmf: text opt
-            fmh: string opt
+            medicalHistory: text opt
+            familyHistory: text opt
         }
 
         entity Physician extends Person{

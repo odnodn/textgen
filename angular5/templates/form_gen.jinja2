@@ -48,13 +48,13 @@
 
 {% macro renderInputControl(prop, containerForm, genUtils) %}
     {% if genUtils.isEnum(prop) -%}
-        <ion-select placeholder="Select One">
+        <ion-select placeholder="Select One" {{ propCommons(prop) }}>
             {% for literal in prop.type.literals -%}
                 <ion-select-option value="{{ literal.name|capitalize }}">{{ literal.name }}</ion-select-option>
             {% endfor %}
         </ion-select>
     {% elif genUtils.isPropOfType(prop, "date") -%}
-        <ion-datetime display-format="MMM DD, YYYY"></ion-datetime>
+        <ion-datetime display-format="MMM DD, YYYY" {{ propCommons(prop) }}></ion-datetime>
     {% elif genUtils.isPropOfType(prop, "bool") -%}
         <ion-toggle {{ propCommons(prop) }} ></ion-toggle>
     {% elif genUtils.isNumeric(prop) -%}
