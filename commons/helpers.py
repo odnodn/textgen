@@ -54,6 +54,7 @@ def get_entity_mm( metaModel, debug=False,):
         'currency': SimpleType(None, 'currency')
     }
     entity_mm = metamodel_from_file(join(this_folder, metaModel),
+                                    autokwd=True,
                                     classes=[SimpleType],
                                     builtins=type_builtins,
                                     debug=debug)

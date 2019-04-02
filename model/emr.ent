@@ -6,16 +6,18 @@ package helpchild {
         }
 
         abs entity Person {
-            firstName: string
-            lastName: string
+            firstname: string
+            lastname: string
             gender:Gender
-            dob:date
+            birthday:date
+            phone:string
            // image: file opt
         }
 
         entity Patient extends Person {
             medicalHistory: text opt
             familyHistory: text opt
+            reff: string
         }
 
         entity Physician extends Person{
