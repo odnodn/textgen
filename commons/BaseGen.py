@@ -35,7 +35,11 @@ class BaseGen:
         # Create output folder
         srcgen_folder = join(this_folder, 'srcgen')
 
-        shutil.rmtree(srcgen_folder)
+
+        try:
+            shutil.rmtree(srcgen_folder)
+        except:
+            print('error deleting folder')
 
         if not exists(srcgen_folder):
             mkdir(srcgen_folder)

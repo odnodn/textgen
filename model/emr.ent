@@ -15,9 +15,10 @@ package helpchild {
         }
 
         entity Patient extends Person {
+            //insurance:string opt
             medicalHistory: text opt
             familyHistory: text opt
-            reff: string
+            //reff: string
         }
 
         entity Physician extends Person{
