@@ -1,17 +1,29 @@
-
 import { Component, OnInit } from '@angular/core';
 
-import { {{name}}} from "../{{lname}}";
-
-import { BaseViewComponent } from '@app/base/base-view.component';
-
+import { ActivatedRoute } from '@angular/router';
+import { {{ name}}Service } from '../../../services/{{ lname}}s.service';
 
 @Component({
-selector: '{{lname}}-view',
-templateUrl: './{{lname}}-view.component.html',
-styleUrls: ['./{{lname}}-view.component.css']
+selector: 'app-{{ lname}}-details',
+templateUrl: './{{ lname}}-details.page.html',
+styleUrls: ['./{{ lname}}-details.page.scss'],
 })
-export class {{name}}ViewComponent extends BaseViewComponent<{{name}}> implements OnInit {
+export class {{ name}}View implements OnInit {
+    entity = null
+    id = null;
+
+    constructor(private activatedRoute: ActivatedRoute,
+    private {{ lname}}Service: {{ name}}Service) { }
+
+    ngOnInit() {
+        // Get the ID that was passed with the URL
+        this.id = this.activatedRoute.snapshot.paramMap.get('id');
+
+        // Get the information from the API
+        this.{{ lname}}Service.getDetails(this.id).subscribe(result => {
+        this.entity = result;
+        });
+    }
 
 
 }

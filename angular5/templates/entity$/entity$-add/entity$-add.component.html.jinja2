@@ -19,7 +19,7 @@
 
 <ion-header>
     <ion-toolbar>
-        <ion-title>Create Note</ion-title>
+        <ion-title>{{ '{{' }} !entity.id ? 'Add':'Edit' {{ '}}' }}{{ name }}</ion-title>
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>

@@ -13,7 +13,7 @@ import jinja2
 import os
 
 
-class IonicGen(BaseGen):
+class AngGen(BaseGen):
 
     types = {
         'integer': 'number',
@@ -22,8 +22,10 @@ class IonicGen(BaseGen):
         'date' : 'Date',
         'bool' : 'boolean',
         'text' : 'string',
+        'file':'string',
         'currency': 'number'
     }
+
 
 
     def getMyPath(self):
@@ -54,6 +56,6 @@ class IonicGen(BaseGen):
 
 
 if __name__ == "__main__":
-    IonicGen().main()
+    AngGen().main()
     # cmd = 'cp -r srcgen/ ~/dev/ang/src/app'
     # os.system(cmd)

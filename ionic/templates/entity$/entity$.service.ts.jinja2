@@ -1,16 +1,31 @@
 
 
-import {Injectable} from '@angular/core';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
-import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs';
-import { {{name}} } from './{{lname}}';
-import { BaseService } from '../base/base.service';
+import { Injectable } from '@angular/core';
 
-@Injectable()
-export class {{name}}Service extends BaseService<{{name}}>{
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { BaseService } from '../base/baseservice';
+import { MessageService } from '../base/message-service';
 
-  constructor(protected _http: Http ) {
-    super(_http, '{{lname}}s')
-  }
-}
+
+
+@Injectable({
+providedIn: 'root'
+})
+export class PatientService extends BaseService<{{ name }}>{
+
+    endpoint = '{{ lname | plural }}'
+
+    /**
+    * Constructor of the Service with Dependency Injection
+    * @param http The standard Angular HttpClient to make requests
+    */
+    constructor(protected http: HttpClient,
+    protected messageService:MessageService) {
+    super(http, messageService)
+    }
+
+
+    }
