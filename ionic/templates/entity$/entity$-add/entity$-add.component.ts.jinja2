@@ -6,7 +6,7 @@ import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
-import { {{name}}Service } from "../../services{{lname}}s.service";
+import { {{name}}Service } from "../{{lname}}.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { BaseAddEditPage } from '../../../base/base-add-edit-page';
 
@@ -25,7 +25,7 @@ import { BaseAddEditPage } from '../../../base/base-add-edit-page';
         {{ prop.name }} : ['', [  {{ vg.getValidators(prop, genUtils) }} ]],
     {% endfor %}
     {% for prop in genUtils.getContained(entity) -%}
-        {{ prop.name }} : this.fb.array([ this.create{{ prop.name | fUpper }}Controls() ])
+        {{ prop.name }} : this.formBuilder.array([ this.create{{ prop.name | fUpper }}Controls() ])
     {% endfor %}
 {%  endmacro %}
 
@@ -35,38 +35,36 @@ import { BaseAddEditPage } from '../../../base/base-add-edit-page';
 @Component({
 selector: 'app-{{lname}}-add',
 templateUrl: './{{lname}}-add.component.html',
-styleUrls: ['./{{lname}}-add.component.css']
+styleUrls: ['./{{lname}}-add.component.scss']
 })
 export class {{name}}AddComponent  extends  BaseAddEditPage implements OnInit {
-
-    public {{ entity.name | fLower }}Form: FormGroup;
 
     {% for prop in genUtils.getOutgoingRefs(entity) -%}
         {{ prop.name }} : {{ prop.type.name }}[]
     {% endfor %}
 
-
     constructor(
-    protected formBuilder: FormBuilder,
-    protected  service:{{ name }}Service,
-    protected activatedRoute: ActivatedRoute,
-    protected location: Location
+        protected formBuilder: FormBuilder,
+        protected service: ChronicConditionService,
+        protected activatedRoute: ActivatedRoute,
+        protected location: Location,
+        protected router: Router
     ) {
-        super(formBuilder, service, activatedRoute, location)
+        super(formBuilder, service, activatedRoute, location, router);
     }
 
 
     {% set formName = 'this.' +  (entity.name | fLower ) +'Form'  %}
 
-    private createForm(): void {
-        {{ formName }}= this.fb.group({
+    createForm(): void {
+        this.form = this.formBuilder.group({
         {{ genFormControls(entity) }}
         });
     }
 
     {% for prop in genUtils.getContained(entity) -%}
     create{{ prop.name | fUpper }}Controls(){
-        return this.fb.group({
+        return this.formBuilder.group({
         {{ genFormControls(prop.type) }}
             });
     }
@@ -86,8 +84,10 @@ export class {{name}}AddComponent  extends  BaseAddEditPage implements OnInit {
 
     }
 
-    getForm  () { return {{ formName }} };
+    getForm  () { return this.form };
 
 
 }
 {% endautoescape %}
+
+

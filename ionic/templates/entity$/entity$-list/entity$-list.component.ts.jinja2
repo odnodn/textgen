@@ -1,9 +1,11 @@
 
 import { Component, OnInit } from "@angular/core";
-import { {{ name}}Service } from "../../{{ lname}}.service";
+import { {{ name}}Service } from "../{{ lname}}.service";
 import { Observable } from "rxjs";
 import { BaseListPage } from "../../../base/base-list-page";
 import { ActivatedRoute } from "@angular/router";
+
+import { ChronicCondition } from '../../../entities/{{ name | spinal }}.model';
 
 @Component({
 selector: "app-{{ lname}}s",

@@ -64,8 +64,9 @@ class BaseGen:
         self.jinja_env.filters['altype'] = self.translateType
         self.jinja_env.filters['fLower'] = GenUtils.toFirstLower
         self.jinja_env.filters['fUpper'] = GenUtils.toFirstUpper
-        self.jinja_env.filters['plural'] = GenUtils.asCollection
+        self.jinja_env.filters['plural'] = GenUtils.plural
         self.jinja_env.filters['humanize'] = GenUtils.humanize
+        self.jinja_env.filters['spinal'] = GenUtils.spinal
 
 
     def doGenerate(self,  model):

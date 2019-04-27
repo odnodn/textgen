@@ -3,7 +3,7 @@ from commons.GenUtils import GenUtils
 from commons.helpers import *
 from angular5.ang_gen import AngGen
 
-modelFile = '../model/users.ent'
+
 from commons.BaseGen import  BaseGen
 
 
@@ -11,7 +11,9 @@ utils = GenUtils()
 
 
 class IonicGen(AngGen):
-    pass
+
+    def currentFolder(self):
+        return dirname(__file__)
 
 
 if __name__ == "__main__":

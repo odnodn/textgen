@@ -1,8 +1,8 @@
-package helpchild {
+package emr {
 
         enum Gender {
-        MALE
-        FEMALE
+            MALE
+            FEMALE
         }
 
         abs entity Person {
@@ -48,9 +48,7 @@ package helpchild {
 
         entity ChronicCondition {
             name: string
-
         }
-
 
         }//end of package comm
 

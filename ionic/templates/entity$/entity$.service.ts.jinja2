@@ -1,22 +1,18 @@
-
-
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-import { BaseService } from '../base/baseservice';
-import { MessageService } from '../base/message-service';
+
+import { environment } from '../../../environments/environment';
+import { BaseService } from '../../base/baseservice';
+import { MessageService } from '../../base/message-service';
 
 
 
 @Injectable({
 providedIn: 'root'
 })
-export class PatientService extends BaseService<{{ name }}>{
+export class {{name}}Service extends BaseService<{{ name }}>{
 
-    endpoint = '{{ lname | plural }}'
+    endpoint = '{{ name  | plural }}'
 
     /**
     * Constructor of the Service with Dependency Injection
@@ -24,8 +20,8 @@ export class PatientService extends BaseService<{{ name }}>{
     */
     constructor(protected http: HttpClient,
     protected messageService:MessageService) {
-    super(http, messageService)
+        super(http, messageService)
     }
 
 
-    }
+}

@@ -122,6 +122,10 @@ class GenUtils:
     def asCollection(prop):
         return GenUtils.toFirstLower(prop.type.name) + 's'
 
+    @staticmethod
+    def plural(str):
+        return GenUtils.toFirstLower(str) + 's'
+
     def findBackRef(self, property):
         print(property.__class__.__name__)
         container = property.parent
