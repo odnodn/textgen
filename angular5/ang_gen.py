@@ -7,10 +7,8 @@ from commons.BaseGen import  BaseGen
 
 
 utils = GenUtils()
-topLevelPackage = 'com.bfwg'
 
-import jinja2
-import os
+
 
 
 class AngGen(BaseGen):

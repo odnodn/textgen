@@ -1,0 +1,45 @@
+{% import 'templates/form_gen.jinja2' as fg %}
+
+{% set formName =  (entity.name | fLower ) +'Form'  %}
+
+{#<div class="container-fluid bg-light py-3">#}
+{#    <div class="card">#}
+{#        <div class="card-header">#}
+{#            <h4 class="mb-0"> {{ '{{' }} !entity.id ? 'Add':'Edit' {{ '}}' }}{{ name }} </h4>#}
+{#        </div>#}
+{#        <div class="card-body">#}
+{##}
+{#            <form [formGroup]="{{ formName }}" (submit)="submit()" novalidate>#}
+{#                {{ fg.renderEntityPropsIonic(entity, formName, genUtils) }}#}
+{#                <button type="submit" class="btn btn-primary"><span translate>Submit</span></button>#}
+{#            </form>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{ '{{' }} !entity.id ? 'Add':'Edit' {{ '}}' }}{{ name }}</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+    <form [formGroup]="form">
+        <ion-list>
+            {{ fg.renderEntityPropsIonic(entity, formName, genUtils) }}
+        </ion-list>
+        <ion-row class="signin">
+            <ion-col>
+                <ion-button
+                        (click)="submit()"
+                        color="primary"
+                        shape="full"
+                        expand="block"
+                >Add</ion-button
+                >
+            </ion-col>
+        </ion-row>
+    </form>
+</ion-content>

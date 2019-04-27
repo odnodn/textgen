@@ -46,6 +46,11 @@ package helpchild {
             value: int
         }
 
+        entity ChronicCondition {
+            name: string
+
+        }
+
 
         }//end of package comm
 

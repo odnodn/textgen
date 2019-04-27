@@ -1,3 +1,45 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{ entity?.displayName }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-fab-button *ngIf="editAllowed()" color="primary"  [routerLink]="['/patients/edit/' ,  id]">
+        <ion-icon name="create"></ion-icon>
+    </ion-fab-button>
+
+    <ion-card *ngIf="entity">
+        <ion-card-header>
+            <ion-card-title>
+                {{ entity.displayName }}
+            </ion-card-title>
+            <ion-card-subtitle>
+                {{ entity.displayTill }}
+            </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content text-center>
+            {% for prop in genUtils.allProps(entity) -%}
+                {{ '{{' }} entity.{{prop.name}} {{ '}}' }}
+            {% endfor %}
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>
+
+
+
+
+
+
+
+
+
+
+
 <div class="card">
     <div class="card-header">
         <h4 class="mb-0">  {{ '{{' }} entity.id  {{ '}}' }} -  {{ '{{' }}

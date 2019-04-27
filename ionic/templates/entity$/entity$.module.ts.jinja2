@@ -6,27 +6,27 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 
-import { AddEditPatientComponent } from './add-edit-patients/add-edit-patients.component';
-import { PatientDetailsPage } from './patient-details/patient-details.page';
-import { PatientsPage } from './patient-list/patients.page';
+import { AddEdit{{name}}Component } from './add-edit-{{lname}}s/add-edit-{{lname}}s.component';
+import { {{name}}DetailsPage } from './{{lname}}-details/{{lname}}-details.page';
+import { {{name}}ListPage } from './{{lname}}-list/{{lname}}s.page';
 
 const routes: Routes = [
 {
 path: '',
-component: PatientListPage,
+component: {{name}}ListPage,
 pathMatch: 'full'
 },
 {
 path: 'view/:id',
-component: PatientDetailsPage
+component: {{name}}DetailsPage
 },
 {
 path: 'edit/:id',
-component: AddEditPatientComponent
+component: AddEdit{{name}}Component
 },
 {
 path: 'add',
-component: AddEditPatientComponent
+component: AddEdit{{name}}Component
 }
 ];
 
@@ -38,6 +38,6 @@ ReactiveFormsModule,
 IonicModule,
 RouterModule.forChild(routes)
 ],
-declarations: [PatientsPage, AddEditPatientComponent, PatientDetailsPage]
+declarations: [{{name}}sPage, AddEdit{{name}}Component, {{name}}DetailsPage]
 })
-export class PatientsPageModule {}
+export class {{name}}sPageModule {}
