@@ -8,9 +8,9 @@ import { ActivatedRoute } from "@angular/router";
 import { ChronicCondition } from '../../../entities/{{ name | spinal }}.model';
 
 @Component({
-selector: "app-{{ lname}}s",
-templateUrl: "./{{ lname}}s.page.html",
-styleUrls: ["./{{ lname}}s.page.scss"]
+selector: "app-{{lname}}s",
+templateUrl: "./{{lname}}-list.component.html",
+styleUrls: ["./{{lname}}s-list.component.scss"]
 })
 export class {{ name }}ListPage extends BaseListPage<{{ name }}> implements OnInit {
 results: Observable<any>;

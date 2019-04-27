@@ -1,32 +1,33 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { Routes, RouterModule } from "@angular/router";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
 
-import { AddEdit{{name}}Component } from './add-edit-{{lname}}s/add-edit-{{lname}}s.component';
-import { {{name}}DetailsPage } from './{{lname}}-details/{{lname}}-details.page';
-import { {{name}}ListPage } from './{{lname}}-list/{{lname}}s.page';
+import { {{name}}ListPage } from './chronicCondition-list/chronicCondition-list.component';
+import { {{name}}View } from './chronicCondition-view/chronicCondition-view.component';
+import { {{name}}AddComponent } from './chronicCondition-add/chronicCondition-add.component';
+
 
 const routes: Routes = [
 {
-path: '',
+path: "",
 component: {{name}}ListPage,
-pathMatch: 'full'
+pathMatch: "full"
 },
 {
-path: 'view/:id',
-component: {{name}}DetailsPage
+path: "view/:id",
+component: {{name}}View
 },
 {
-path: 'edit/:id',
-component: AddEdit{{name}}Component
+path: "edit/:id",
+component: {{name}}AddComponent
 },
 {
-path: 'add',
-component: AddEdit{{name}}Component
+path: "add",
+component: {{name}}AddComponent
 }
 ];
 
@@ -38,6 +39,10 @@ ReactiveFormsModule,
 IonicModule,
 RouterModule.forChild(routes)
 ],
-declarations: [{{name}}sPage, AddEdit{{name}}Component, {{name}}DetailsPage]
+declarations: [
+{{name}}ListPage,
+{{name}}AddComponent,
+{{name}}View
+]
 })
 export class {{name}}sPageModule {}
